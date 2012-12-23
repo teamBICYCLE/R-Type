@@ -36,11 +36,14 @@ bool	WinThread::start(std::function<void*(void*)> routine, void *arg)
 
 bool	WinThread::terminate(void)
 {
-	if (TerminateThread(_threadHandle, EXIT_SUCCESS))
-	{
-		cleanUp();
-		return true;
-	}
+    if (_isRunning)
+    {
+        if (TerminateThread(_threadHandle, EXIT_SUCCESS))
+        {
+            cleanUp();
+            return true;
+        }
+    }
 	return false;
 }
 
