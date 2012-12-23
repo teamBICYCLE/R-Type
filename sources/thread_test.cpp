@@ -14,7 +14,11 @@
     # include "WinThread.hh"
 #endif
 std::queue<std::string>	g_work_queue;
+#ifdef  __gnu_linux__
 IMutex				*g_work_queue_crit_section = new UnixMutex();
+#elif   _WIN32
+IMutex				*g_work_queue_crit_section = new WinMutex();
+#endif
 
 void	fill_work_queue(void)
 {
@@ -46,7 +50,11 @@ void		*thread_routine(void *arg)
 			(*nb_tasks)++;
 		}
 		g_work_queue_crit_section->unlock();
+#ifdef __gnu_linux__
 		usleep(((rand() % 801) + 200) * 1000);
+#elif _WIN32
+		Sleep((rand() % 801) + 200);
+#endif
 	}
 	std::cout << "Thread " << id << " : I'm out of here! I did all those " << *nb_tasks << " tasks." << std::endl;
 	return nb_tasks;
