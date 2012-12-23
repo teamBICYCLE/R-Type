@@ -1,12 +1,20 @@
+#ifdef  __gnu_linux__
+    # include <unistd.h>
+#endif
 #include <ctime>
 #include <iostream>
 #include <string>
 #include <queue>
-#include "WinMutex.hh"
-#include "WinThread.hh"
-
+#include <stdexcept>
+#ifdef  __gnu_linux__
+    # include "UnixMutex.hh"
+    # include "UnixThread.hh"
+#elif   _WIN32
+    # include "WinMutex.hh"
+    # include "WinThread.hh"
+#endif
 std::queue<std::string>	g_work_queue;
-WinMutex				g_work_queue_crit_section;
+IMutex				*g_work_queue_crit_section = new UnixMutex();
 
 void	fill_work_queue(void)
 {
@@ -29,7 +37,7 @@ void		*thread_routine(void *arg)
 
 	while (work_available)
 	{
-		g_work_queue_crit_section.lock();
+		g_work_queue_crit_section->lock();
 		work_available = (g_work_queue.empty() == false);
 		if (work_available)
 		{
@@ -37,18 +45,21 @@ void		*thread_routine(void *arg)
 			g_work_queue.pop();
 			(*nb_tasks)++;
 		}
-		g_work_queue_crit_section.unlock();
-		Sleep((rand() % 801) + 200);
+		g_work_queue_crit_section->unlock();
+		usleep(((rand() % 801) + 200) * 1000);
 	}
 	std::cout << "Thread " << id << " : I'm out of here! I did all those " << *nb_tasks << " tasks." << std::endl;
-	delete arg;
 	return nb_tasks;
 }
 
 int	main(int argc, char *argv[])
 {
 	int		nb_threads = 2;
+#ifdef _WIN32
 	WinThread	*threads = nullptr;
+#elif __gnu_linux__
+	UnixThread	*threads = nullptr;
+#endif
 
 	srand(time(nullptr));
 	try {
@@ -59,7 +70,11 @@ int	main(int argc, char *argv[])
 		std::cout << "Nb threads: " << nb_threads << std::endl;
 		fill_work_queue();
 		std::cout << "Creating threads..." << std::endl;
+#if _WIN32
 		threads = new WinThread[nb_threads];
+#elif __gnu_linux__
+		threads = new UnixThread[nb_threads];
+#endif
 		for (int i = 0; i < nb_threads; i++)
 		{
 			int *id = new int(i + 1);
