@@ -17,6 +17,9 @@ class   UnixMutex : public IMutex
 
     private:
         pthread_mutex_t _mutex;
+		/**
+		*	Lock counter to handle multiple (un)lock on the mutex.
+		*/
         int             _lockCount;
 };
 
