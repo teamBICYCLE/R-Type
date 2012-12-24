@@ -16,11 +16,8 @@ class   UnixMutex : public IMutex
         virtual bool	trylock(void);
 
     private:
-        pthread_mutex_t _mutex;
-		/**
-		*	Lock counter to handle multiple (un)lock on the mutex.
-		*/
-        int             _lockCount;
+        pthread_mutex_t     _mutex;
+        pthread_mutexattr_t _mutexAttr;
 };
 
 #endif /* !__UNIXMUTEX_HH__ */
