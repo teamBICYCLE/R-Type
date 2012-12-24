@@ -45,7 +45,7 @@ void	waitABit()
 
 void		*thread_routine(void *arg)
 {
-	int		id = *static_cast<int*>(arg);
+	int		*id = static_cast<int*>(arg);
 	int		*nb_tasks = new int(0);
 	bool	work_available = true;
 
@@ -56,7 +56,7 @@ void		*thread_routine(void *arg)
 		work_available = (g_work_queue.empty() == false);
 		if (work_available)
 		{
-			std::cout << "Thread " << id << " : J'aime les " << g_work_queue.front() << " !" << std::endl;
+			std::cout << "Thread " << *id << " : J'aime les " << g_work_queue.front() << " !" << std::endl;
 			g_work_queue.pop();
 			(*nb_tasks)++;
 		}
@@ -67,48 +67,51 @@ void		*thread_routine(void *arg)
 		Sleep((rand() % 801) + 200);
 #endif
 	}
-	std::cout << "Thread " << id << " : I'm out of here! I did all those " << *nb_tasks << " tasks." << std::endl;
+	std::cout << "Thread " << *id << " : I'm out of here! I did all those " << *nb_tasks << " tasks." << std::endl;
+    delete id;
 	return nb_tasks;
 }
 
 void	*lock_test_routine(void *arg)
 {
-	int	id = *static_cast<int*>(arg);
+	int	*id = static_cast<int*>(arg);
 
 	waitABit();
-	std::cout << "Thread " << id << " locking..." << std::endl;
+	std::cout << "Thread " << *id << " locking..." << std::endl;
 	g_work_queue_crit_section->lock();
-	std::cout << "Thread " << id << " locked! Sleeping, then unlocking..." << std::endl;
+	std::cout << "Thread " << *id << " locked! Sleeping, then unlocking..." << std::endl;
 	waitABit();
-	std::cout << "Thread " << id << " unlocking..." << std::endl;
+	std::cout << "Thread " << *id << " unlocking..." << std::endl;
 	g_work_queue_crit_section->unlock();
+    delete id;
 	return new int(0);
 }
 
 void	*multiple_lock_test_routine(void *arg)
 {
-	int	id = *static_cast<int*>(arg);
+	int	*id = static_cast<int*>(arg);
 
 	waitABit();
-	std::cout << "Thread " << id << " locking..." << std::endl;
+	std::cout << "Thread " << *id << " locking..." << std::endl;
 	g_work_queue_crit_section->lock();
-	std::cout << "Thread " << id << " locked! Sleeping, then locking two times now..." << std::endl;
+	std::cout << "Thread " << *id << " locked! Sleeping, then locking two times now..." << std::endl;
 	waitABit();
 	g_work_queue_crit_section->lock();
 	g_work_queue_crit_section->lock();
-	std::cout << "Thread " << id << " done! Unlocking and leaving now..." << std::endl;
+	std::cout << "Thread " << *id << " done! Unlocking and leaving now..." << std::endl;
 	g_work_queue_crit_section->unlock();
 	g_work_queue_crit_section->unlock();
 	g_work_queue_crit_section->unlock();
+    delete id;
 	return new int(0);
 }
 
 void	*trylock_test_routine(void *arg)
 {
-	int	id = *static_cast<int*>(arg);
+	int	*id = static_cast<int*>(arg);
 	
 	waitABit();
-	std::cout << "Thread " << id << " trylocking..." << std::endl;
+	std::cout << "Thread " << *id << " trylocking..." << std::endl;
 	if (g_work_queue_crit_section->trylock())
 	{
 		std::cout << "Success! Sleeping..." << std::endl;
@@ -117,7 +120,8 @@ void	*trylock_test_routine(void *arg)
 	}
 	else
 		std::cout << "Failure..." << std::endl;
-	std::cout << "Thread " << id << " leaving!" << std::endl;
+	std::cout << "Thread " << *id << " leaving!" << std::endl;
+    delete id;
 	return new int(0);
 }
 
@@ -132,9 +136,10 @@ void	run_routine(std::function<void*(void*)> routine, WinThread *threads, int nb
 	}
 	for (int i = 0; i < nb_threads; i++)
 	{
-		int	*ret = new int(0);
+		int	*ret = nullptr;
 		threads[i].wait((void**)&ret);
 		std::cout << "Thread " << i + 1 << " returned with " << *ret << std::endl;
+        delete ret;
 	}
 	std::cout << "----------------------------------------------" << std::endl;
 }
@@ -145,12 +150,14 @@ void	run_routine(std::function<void*(void*)> routine, UnixThread *threads, int n
 	{
 		int *id = new int(i + 1);
 		threads[i].start(routine, id);
+		waitABit();
 	}
 	for (int i = 0; i < nb_threads; i++)
 	{
-		int	*ret = new int(0);
+		int	*ret = nullptr;
 		threads[i].wait((void**)&ret);
 		std::cout << "Thread " << i + 1 << " returned with " << *ret << std::endl;
+        delete ret;
 	}
 	std::cout << "----------------------------------------------" << std::endl;
 }
@@ -184,6 +191,8 @@ int	main(int argc, char *argv[])
 		run_routine(&lock_test_routine, threads, nb_threads);
 		run_routine(&multiple_lock_test_routine, threads, nb_threads);
 		std::cout << "All work is done!" << std::endl;
+        delete [] threads;
+        delete g_work_queue_crit_section;
 		return EXIT_SUCCESS;
 	} catch (std::exception& error) {
 		std::cerr << "Exception caught: " << error.what() << std::endl;
