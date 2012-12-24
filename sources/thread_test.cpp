@@ -144,7 +144,7 @@ void	run_routine(std::function<void*(void*)> routine, UnixThread *threads, int n
 	for (int i = 0; i < nb_threads; i++)
 	{
 		int *id = new int(i + 1);
-		threads[i].start(&thread_routine, id);
+		threads[i].start(routine, id);
 	}
 	for (int i = 0; i < nb_threads; i++)
 	{
@@ -152,6 +152,7 @@ void	run_routine(std::function<void*(void*)> routine, UnixThread *threads, int n
 		threads[i].wait((void**)&ret);
 		std::cout << "Thread " << i + 1 << " returned with " << *ret << std::endl;
 	}
+	std::cout << "----------------------------------------------" << std::endl;
 }
 #endif
 
