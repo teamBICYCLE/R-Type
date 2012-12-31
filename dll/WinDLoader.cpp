@@ -1,3 +1,4 @@
+#include <iostream>
 #include "WinDLoader.hh"
 
 WinDLoader::WinDLoader(const std::string &filename)
@@ -10,9 +11,5 @@ WinDLoader::WinDLoader(const std::string &filename)
 WinDLoader::~WinDLoader()
 {
     if (FreeLibrary(_handle) != 0)
-    {
-        std::ostringstream os;
-        os << GetLastError();
-        throw std::logic_error(os.str());
-    }
+        std::cerr << "Error while closing DLL: " << GetLastError() << std::endl;
 }

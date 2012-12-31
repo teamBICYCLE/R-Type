@@ -1,4 +1,5 @@
 #include <dlfcn.h>
+#include <iostream>
 #include "UnixDLoader.hh"
 
 UnixDLoader::UnixDLoader(const std::string &filename)
@@ -11,5 +12,5 @@ UnixDLoader::UnixDLoader(const std::string &filename)
 UnixDLoader::~UnixDLoader(void)
 {
 	if (dlclose(_handle) != 0)
-		throw std::logic_error(dlerror());
+		std::cerr << "Error while closing the shared library: " << dlerror() << std::endl;
 }
