@@ -9,14 +9,13 @@
 
 #include "Tcp.hh"
 #include <stdexcept>
-
-#define linux_LOL__
-#ifdef linux_LOL__
+#ifdef __gnu_linux__
 #include <errno.h>
 #include <unistd.h>
 #include <string.h>
 #include <sys/socket.h>
-#elif WIN32_MDR__
+#include <netinet/ip.h>
+#elif _WIN32
 
 #endif
 
@@ -32,7 +31,6 @@ namespace network {
         Tcp::Tcp(int socketDescriptor)
         : _socket(socketDescriptor)
         {
-
         }
 
         Tcp::~Tcp()
@@ -48,23 +46,35 @@ namespace network {
             }
         }
 
+        void Tcp::bind(const IAddr & addr)
+        {
+            for (auto hint : addr.infos()) {
+               if (::bind(_socket, static_cast<const sockaddr *>(hint->get()), hint->size())
+                   != -1)
+                   return;
+            }
+            throw std::runtime_error("No valid host for " + std::get<0>(addr.get()) + ":" + std::get<1>(addr.get()));
+        }
+
         std::shared_ptr<ITcpSocket> Tcp::accept(IAddr & pair)
         {
             int fd;
 
             errno = 0;
-            fd = ::accept(_socket, static_cast<sockaddr *>(pair.raw()), nullptr); // TODO: change nullptr to fill Addr
+            fd = ::accept(_socket, nullptr, nullptr);
             if (fd == -1) throw std::runtime_error(strerror(errno));
             return std::shared_ptr<ITcpSocket>(new Tcp(fd));
         }
 
         void Tcp::connect(const IAddr & pair)
         {
-            errno = 0;
-            if (::connect(_socket, static_cast<const sockaddr *>(pair.raw()), 0) == -1) {
-                throw std::runtime_error(strerror(errno));
+            for (auto hint : pair.infos()) {
+               if (::connect(_socket, static_cast<const sockaddr *>(hint->get()), hint->size())
+                   != -1)
+                   return;
             }
-        }
+            throw std::runtime_error("No valid host for " + std::get<0>(pair.get()) + ":" + std::get<1>(pair.get()));
+       }
 
         int Tcp::recv(char * packet, int maxPacketSize)
         {

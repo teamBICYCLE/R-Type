@@ -8,40 +8,134 @@
  */
 
 #include "Addr.hh"
+#include <stdexcept>
+#include <iostream>
+#include <string.h>
+#ifdef __gnu_linux__
+# include <sys/types.h>
+# include <sys/socket.h>
+# include <netinet/ip.h>
+# include <netdb.h>
+#elif _WIN32
+
+#endif
 
 namespace network {
-    Addr::Addr()
+    /*
+     * AddrInfo implementation
+     */
+
+    AddrInfo::AddrInfo(void * addrinfo)
+    : _raw(static_cast<CROSSPLATEFORM(struct addrinfo*,)>(addrinfo))
+    {
+    }
+
+    AddrInfo::~AddrInfo()
     {}
 
-    Addr::Addr(const std::string & ip, short port)
+    void*   AddrInfo::get()
     {
-        set(ip, port);
+        return _raw->ai_addr;
     }
 
-    Addr::~Addr() {}
-
-    void Addr::set(const std::string & ip, short port)
+    int    AddrInfo::size() const
     {
+        return _raw->ai_addrlen;
+    }
+
+    /*
+     * Addr implementation
+     */
+    Addr::Addr()
+    : _special(static_cast<SpecialIp>(-1))
+    , _infosRes(nullptr)
+    {
+    }
+
+    Addr::~Addr() {
+        if (_infosRes) freeaddrinfo(_infosRes);
+    }
+
+    Addr::Addr(const std::string & ip, const std::string & port,
+               const std::string & proto)
+    : _special(static_cast<SpecialIp>(-1))
+    , _infosRes(nullptr)
+    {
+        set(ip, port, proto);
+    }
+
+    Addr::Addr(SpecialIp ip, const std::string & port,
+               const std::string & proto)
+    : _special(static_cast<SpecialIp>(-1))
+    , _infosRes(nullptr)
+    {
+        set(ip, port, proto);
+    }
+
+
+    void Addr::set(SpecialIp ip, const std::string & port,
+                   const std::string & proto)
+    {
+        _special = ip;
+        _port = port;
+        _proto = proto;
+    }
+
+    void Addr::set(const std::string & ip, const std::string & port,
+                   const std::string & proto)
+    {
+        _special = static_cast<SpecialIp>(-1);
         _ip = ip;
         _port = port;
+        _proto = proto;
     }
 
-    std::pair<std::string, short> Addr::get() const
+    std::tuple<std::string, std::string, std::string> Addr::get() const
     {
-        return std::make_pair(_ip, _port);
+        switch (_special) {
+            case ADDR_ANY:
+                return std::make_tuple("ADDR_ANY", _port, _proto);
+                break;
+            case ADDR_BROADCAST:
+                return std::make_tuple("ADDR_BROADCAST", _port, _proto);
+                break;
+            default:
+                return std::make_tuple(_ip, _port, _proto);
+                break;
+        }
     }
 
-    void *Addr::raw()
+    std::vector<std::auto_ptr<IAddrInfo>> Addr::infos() const
     {
-        return Addr::raw();
-    }
+        // Free _infosRes from previous call
+        if (_infosRes) freeaddrinfo(_infosRes); _infosRes = nullptr;
 
-    const void* Addr::raw() const {
-        return &_raw;
-    }
+        // Set the hint structure if ADDR_ANY is needed (suitable for bind)
+        struct addrinfo hint;
+        const char * node = _ip.c_str();
 
-    int Addr::rawSize() const
-    {
-        return sizeof(_raw);
+        memset(&hint, 0, sizeof(hint));
+        if (_special == ADDR_ANY) {
+            hint.ai_flags = AI_PASSIVE;
+            node = nullptr;
+        }
+        protoent *protoent = getprotobyname(_proto.c_str());
+
+        if (!protoent) {
+            throw std::runtime_error("`" + _proto + "` No such protocol");
+        }
+        hint.ai_protocol = protoent->p_proto;
+
+        // Request addrinfo and prepare return vector
+        std::vector<std::auto_ptr<IAddrInfo>> ret;
+        int err;
+
+        if ((err = getaddrinfo(node, _port.c_str(), &hint, &_infosRes))) {
+            throw std::runtime_error(gai_strerror(err));
+        }
+        for (addrinfo *res = _infosRes; res != nullptr; res = res->ai_next) {
+            ret.push_back(std::auto_ptr<IAddrInfo>(new AddrInfo(res)));
+        }
+        return ret;
     }
 }

@@ -12,15 +12,21 @@
 
 #include "IAddr.hh"
 
-class IUdpSocket {
-public:
-    virtual ~IUdpSocket() {}
+namespace network {
+    namespace sockets {
+        class IUdpSocket {
+            public:
+                virtual ~IUdpSocket() {}
 
-    virtual void bind(const IAddr & pair) = 0;
+                virtual void bind(const IAddr & pair) = 0;
 
-    virtual int send(const char * packet, int packetSize, const IAddr & pair) = 0;
+                virtual int send(const char * packet, int packetSize,
+                                 const IAddr & pair) = 0;
 
-    virtual int recv(char * packet, int maxPacketSize, IAddr & pair) = 0;
-};
+                virtual int recv(char * packet, int maxPacketSize,
+                                 IAddr & pair) = 0;
+        };
+    }
+}
 
 #endif /* !_IUDPSOCKET_H__ */

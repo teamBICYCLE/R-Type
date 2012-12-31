@@ -11,20 +11,39 @@
 #define _IADDR_H__
 
 #include <string>
+#include <tuple>
+#include <vector>
+#include <memory>
+
+namespace network {
+enum SpecialIp {
+      ADDR_ANY = 0
+    , ADDR_BROADCAST
+};
+
+class IAddrInfo {
+public:
+    virtual ~IAddrInfo() {}
+
+    virtual void* get() = 0;
+
+    virtual int size() const = 0;
+};
 
 class IAddr {
 public:
     virtual ~IAddr() {}
 
-    virtual void set(const std::string & ip, short port) = 0;
+    virtual void set(SpecialIp ip, const std::string & port,
+                     const std::string & proto) = 0;
 
-    virtual std::pair<std::string, short> get() const = 0;
+    virtual void set(const std::string & ip, const std::string & port,
+                     const std::string & proto) = 0;
 
-    virtual void *raw() = 0;
+    virtual std::tuple<std::string, std::string, std::string> get() const = 0;
 
-    virtual const void *raw() const = 0;
-
-    virtual int rawSize() const = 0;
+    virtual std::vector<std::auto_ptr<IAddrInfo>> infos() const = 0;
 };
+}
 
 #endif /* !_IADDR_H__ */

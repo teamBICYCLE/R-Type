@@ -13,19 +13,25 @@
 #include <memory>
 #include "IAddr.hh"
 
-class ITcpSocket {
-public:
-    virtual ~ITcpSocket() {}
+namespace network {
+    namespace sockets {
+        class ITcpSocket {
+            public:
+                virtual ~ITcpSocket() {}
 
-    virtual void listen(int queueLenght) = 0;
+                virtual void listen(int queueLenght) = 0;
 
-    virtual std::shared_ptr<ITcpSocket> accept(IAddr & pair) = 0;
+                virtual std::shared_ptr<ITcpSocket> accept(IAddr & pair) = 0;
 
-    virtual void connect(const IAddr & pair) = 0;
+                virtual void connect(const IAddr & pair) = 0;
 
-    virtual int recv(char * packet, int maxPacketSize) = 0;
+                virtual void bind(const IAddr & addr) = 0;
 
-    virtual int send(const char * packet, int packetSize) = 0;
-};
+                virtual int recv(char * packet, int maxPacketSize) = 0;
+
+                virtual int send(const char * packet, int packetSize) = 0;
+        };
+    }
+}
 
 #endif /* !_ITCPSOCKET_H__ */

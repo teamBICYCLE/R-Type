@@ -12,6 +12,9 @@
 
 #include "ITcpSocket.hh"
 #include "IAddr.hh"
+#ifdef __gnu_linux__
+# include <sys/socket.h>
+#endif
 
 namespace network {
     namespace sockets {
@@ -24,6 +27,8 @@ namespace network {
                 virtual ~Tcp();
 
                 virtual void listen(int queueLenght);
+
+                virtual void bind(const IAddr & addr);
 
                 virtual std::shared_ptr<ITcpSocket> accept(IAddr & pair);
 

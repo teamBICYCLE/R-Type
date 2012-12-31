@@ -12,38 +12,53 @@
 
 #include "IAddr.hh"
 #include <string>
-
-#define _linux_LOL__
-#ifdef _linux_LOL__
-#include <sys/socket.h>
-#include <netdb.h>
-#elif WIN32
-
+#include "crossplateform_utils.h"
+#ifdef __gnu_linux__
+# include <netdb.h>
 #endif
 
 namespace network {
+using ::addrinfo;
+class AddrInfo : public IAddrInfo {
+public:
+    AddrInfo(void * addrinfo);
+
+    virtual ~AddrInfo();
+
+    virtual void *get();
+
+    virtual int size() const;
+
+private:
+    CROSSPLATEFORM(addrinfo, win) *_raw;
+};
+
 class Addr : public IAddr {
 public:
     Addr();
 
-    Addr(const std::string & ip, short port);
+    Addr(const std::string & ip, const std::string & port, const std::string & proto);
+
+    Addr(SpecialIp ip, const std::string & port, const std::string & proto);
 
     virtual ~Addr();
 
-    virtual void set(const std::string & ip, short port);
+    virtual void set(const std::string & ip, const std::string & port,
+                     const std::string & proto);
 
-    virtual std::pair<std::string, short> get() const;
+    virtual void set(SpecialIp ip, const std::string & port,
+                     const std::string & proto);
 
-    virtual const void *raw() const;
+    virtual std::tuple<std::string, std::string, std::string> get() const;
 
-    virtual void *raw();
-
-    virtual int rawSize() const;
+    virtual std::vector<std::auto_ptr<IAddrInfo>> infos() const;
 
 private:
+    SpecialIp   _special;
     std::string _ip;
-    short       _port;
-    sockaddr    _raw;
+    std::string _port;
+    std::string _proto;
+    mutable addrinfo *_infosRes;
 };
 }
 

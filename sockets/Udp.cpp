@@ -18,17 +18,31 @@ namespace network {
 
         void Udp::bind(const IAddr & pair)
         {
-
+            for (auto hint : addr.infos()) {
+               if (::bind(_socket, static_cast<const sockaddr *>(hint->get()), hint->size())
+                   != -1)
+                   return;
+            }
+            throw std::runtime_error("No valid host for " + std::get<0>(addr.get()) + ":" + std::get<1>(addr.get()));
         }
 
         int Udp::send(const char * packet, int packetSize, const IAddr & pair)
         {
-            return 0;
+            int ret;
+
+            //ret = ::sendto(_socket, packet, packetSize, 0);
+            if (ret == -1) throw std::runtime_error(strerror(errno));
+            return ret;
         }
 
         int Udp::recv(char * packet, int maxPacketSize, IAddr & pair)
         {
-            return 0;
+            int ret;
+
+            errno = 0;
+            //ret = ::recvfrom(_socket, packet, maxPacketSize, 0, addr, sizeof(addr));
+            if (ret == -1) throw std::runtime_error(strerror(errno));
+            return ret;
         }
     }
 }
