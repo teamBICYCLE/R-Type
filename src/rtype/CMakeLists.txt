@@ -14,7 +14,8 @@ list(APPEND ${PROJECT_NAME}_SOURCES
     main.cpp
 )
 
-add_executable(${PROJECT_NAME}
+add_executable(${PROJECT_NAME} 
+	${GUI_TYPE} # Prevent windows from spawning a terminal window
     ${${PROJECT_NAME}_HEADERS}
     ${${PROJECT_NAME}_SOURCES}
 )
