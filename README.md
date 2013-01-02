@@ -30,6 +30,8 @@ Ajoutez une variable via CMake-GUI nomee `SFML_ROOT` qui contient le path vers l
 3. Une solution visual studio doit maintenant se trouver dans le votre dossier de build. Ouvrez la, et normalement, ca
 **compile**. Faites une compile en Debug et une autre en Release, vous devriez maintenant avoir a la racine du projet un
 dossier `./bin/` avec `Release` et `Debug` dedans. Collez-y respectivement les `.dll` qui se trouvent dans `*dossier-de-build-sfml*/lib/Release` et `*dossier-de-build-sfml*/lib/Debug`.
+Une derniere chose, il faut prendre les dll qu'il y a dans `*dossier-de-build-sfml*/extlib/x86` pour les mettre dans les
+deux dossiers precedents aussi (C'est les libs externes utiles pour la SFML)
 
 ET VOILA, C'EST BLEU !
 ======================
