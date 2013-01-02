@@ -6,17 +6,17 @@
 ################################################################################
 
 list(APPEND ${PROJECT_NAME}_HEADERS
-    crossplateform_utils.h
-    Addr.hh
-    IAddr.hh  
-    ITcpSocket.hh  
-    IUdpSocket.hh  
-    Tcp.hh  
-    Udp.hh
+    ${CMAKE_CURRENT_LIST_DIR}/crossplateform_utils.h
+    ${CMAKE_CURRENT_LIST_DIR}/Addr.hh
+    ${CMAKE_CURRENT_LIST_DIR}/IAddr.hh  
+    ${CMAKE_CURRENT_LIST_DIR}/ITcpSocket.hh  
+    ${CMAKE_CURRENT_LIST_DIR}/IUdpSocket.hh  
+    ${CMAKE_CURRENT_LIST_DIR}/Tcp.hh  
+    ${CMAKE_CURRENT_LIST_DIR}/Udp.hh
 )
 
 list(APPEND ${PROJECT_NAME}_SOURCES
-    Addr.cpp
-    Tcp.cpp
-    Udp.cpp      
+    ${CMAKE_CURRENT_LIST_DIR}/Addr.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/Tcp.cpp
+    #${CMAKE_CURRENT_LIST_DIR}/Udp.cpp      
 )

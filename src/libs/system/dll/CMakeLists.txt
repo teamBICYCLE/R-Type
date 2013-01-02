@@ -5,23 +5,22 @@
 # this stuff is worth it, you can buy me a beer in return Thomas Duplomb
 ################################################################################
 
+if(UNIX)
 list(APPEND ${PROJECT_NAME}_HEADERS
-    IThread.hh
-    UnixThread.hh
-    WinThread.hh
-    IMutex.hh
-    UnixMutex.hh
-    WinMutex.hh
+    ${CMAKE_CURRENT_LIST_DIR}/UnixDLoader.hh
 )
-
-list(APPEND ${PROJECT_NAME}_SOURCES
-    UnixThread.cpp
-    WinThread.cpp      
-    UnixMutex.cpp
-    WinMutex.cpp    
-    PARENT_SCOPE
+elseif(WIN32)
+list(APPEND ${PROJECT_NAME}_HEADERS
+    ${CMAKE_CURRENT_LIST_DIR}/WinDLoader.hh
 )
+endif()
 
 if(UNIX)
-    target_link_libraries(${PROJECT_NAME} pthread)
-endif(UNIX)
+list(APPEND ${PROJECT_NAME}_SOURCES
+    ${CMAKE_CURRENT_LIST_DIR}/UnixDLoader.cpp
+)
+elseif(WIN32)
+list(APPEND ${PROJECT_NAME}_SOURCES
+    ${CMAKE_CURRENT_LIST_DIR}/WinDLoader.cpp  
+)
+endif()
