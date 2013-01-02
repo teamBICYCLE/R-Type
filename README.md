@@ -9,3 +9,24 @@ A Team Bicycle Project (c)
 - Thomas Duplomb
 - Geoffroy Lafontaine
 - Romain Sylvian
+
+Compiler sur windows
+--------------------
+
+1. Telechargez les sources de la SFML [ici](https://github.com/LaurentGomila/SFML/tarball/master). Extrayez-les ou vous
+voulez, mais sachez qu'elles vont devoir y rester.
+Suivez [ce tuto](http://www.sfml-dev.org/tutorials/2.0/compile-with-cmake.php) pour compiler les sources. Pensez a
+compiler en Release ET aussi en Debug. Vous devriez avoir maintenant dans le dossier de build un dossier `./lib/Release/`
+et un `./lib/Debug/`. Prenez tout les `.lib` dans ce dossier et balancez les dans 
+`C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\lib`.
+
+2. Avec CMake-gui, ajoutez le dossier ou vous avez cloner R-Type. Pour le repertoire de build, le mieux est d'en creer
+un dedie dans le dossier du clone.
+Ajoutez une variable via CMake-GUI nomee `SFML_ROOT` qui contient le path vers le dossier de la SFML. Apres : Configure+Generate.
+![ScreenShot](https://github.com/tomahh/R-Type/raw/master/CMakeRType.png)
+
+3. Une solution visual studio doit maintenant se trouver dans le votre dossier de build. Ouvrez la, et normalement, ca
+**compile**. Faites une compile en Debug et une autre en Release, vous devriez maintenant avoir a la racine du projet un
+dossier `./bin/` avec `Release` et `Debug` dedans. Collez-y respectivement les `.dll` qui se trouvent dans `SFML-build/lib/Release` et `SFML-build/lib/Debug`.
+
+ET VOILA, C'EST BLEU !
