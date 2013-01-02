@@ -16,6 +16,7 @@
 #include "Log.hh"
 #include <iostream>
 
+namespace TBSystem {
 namespace log {
     Logger emergency(Logger::EMERGENCY);
     Logger alert(Logger::ALERT);
@@ -25,5 +26,6 @@ namespace log {
     Logger notice(Logger::NOTICE);
     Logger info(Logger::INFO);
     Logger debug(Logger::DEBUG);
+}
 }
 

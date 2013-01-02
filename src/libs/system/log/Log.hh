@@ -1,6 +1,7 @@
 #include <string>
 #include "Logger.hh"
 
+namespace TBSystem {
 namespace log {
     extern Logger emergency;
     extern Logger alert;
@@ -11,4 +12,4 @@ namespace log {
     extern Logger info;
     extern Logger debug;
 }
-
+}

@@ -1,6 +1,7 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <system/threads/WinMutex.hh>
+#include <system/log/Log.hh>
 using namespace std;
 
 #ifdef _WIN32
@@ -24,6 +25,7 @@ int main(int argc, char* argv[])
     shape.setFillColor(sf::Color::Green);
 	WinMutex mut;
 
+	TBSystem::log::notice << "Test some stuff out" << TBSystem::log::endl;
     while (window.isOpen())
     {
         sf::Event event;

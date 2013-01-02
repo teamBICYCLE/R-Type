@@ -9,7 +9,11 @@
 
 #include "Logger.hh"
 #include <iostream>
+#ifdef _WIN32
+# include <Windows.h>
+#endif
 
+namespace TBSystem {
 namespace log {
 Logger::Logger(int level)
 : _level(level)
@@ -20,8 +24,19 @@ Logger::Logger(int level)
 Logger::~Logger() {}
 
 Logger & Logger::operator<<(const log::modifier & s) {
-    _outstream() << std::endl;
-    _newline = true;
+	switch (s) {
+	case log::endl:
+		_line << std::endl;
+#ifdef __gnu_linux__
+		_outstream() << _line;
+#elif defined _WIN32
+		OutputDebugString(_line.str().c_str());
+#endif
+		_newline = true;
+		break;
+	default:
+		break;
+	}
     return *this;
 }
 
@@ -35,5 +50,6 @@ std::ostream & Logger::_outstream() const {
     else {
         return std::cerr; // TODO: std::cnull
     }
+}
 }
 }

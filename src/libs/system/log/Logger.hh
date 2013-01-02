@@ -8,8 +8,9 @@
  */
 
 #include <string>
-#include <iostream>
+#include <sstream>
 
+namespace TBSystem {
 namespace log {
 enum modifier {
     endl
@@ -28,27 +29,28 @@ public:
         , DEBUG
     };
 
-
     Logger(int level = 6);
     ~Logger();
 
     template <typename T>
     Logger &   operator<<(const T & s) {
         if (_newline) {
-            _outstream() << std::string("BONJOUR ! Ceci est un message de log: ");
+            _line << std::string("BONJOUR ! Ceci est un message de log: ");
             _newline = false;
         }
-        _outstream() << s;
+        _line << s;
         return *this;
     }
 
     Logger &   operator<<(const log::modifier & s);
 
 private:
-    std::ostream & _outstream() const;
+    std::ostream &		_outstream() const;
+	std::stringstream	_line;
 
 private:
     int _level;
     bool _newline;
 };
+}
 }
