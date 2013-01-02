@@ -22,7 +22,9 @@ include_directories(
 
 set(EXECUTABLE_OUTPUT_PATH "${CMAKE_SOURCE_DIR}/bin/")
 set(LIBRARY_OUTPUT_PATH "${CMAKE_SOURCE_DIR}/bin/libs/")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+if(UNIX)
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+endif()
 
 ################################################################################
 # Build project
