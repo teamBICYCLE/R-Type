@@ -5,18 +5,14 @@
 # this stuff is worth it, you can buy me a beer in return Thomas Duplomb
 ################################################################################
 
-project(system)
-
-include(dll/CMakeLists.txt)
-include(network/CMakeLists.txt)
-include(threads/CMakeLists.txt)
-include(log/CMakeLists.txt)
-
-add_library(${PROJECT_NAME}
-    ${${PROJECT_NAME}_HEADERS}
-    ${${PROJECT_NAME}_SOURCES}
+list(APPEND ${PROJECT_NAME}_HEADERS
+    ${CMAKE_CURRENT_LIST_DIR}/Logger.hh
+    ${CMAKE_CURRENT_LIST_DIR}/Log.hh
+    ${CMAKE_CURRENT_LIST_DIR}/Config.hh
 )
 
-if(UNIX)
-    target_link_libraries(${PROJECT_NAME} pthread)
-endif(UNIX)
+list(APPEND ${PROJECT_NAME}_SOURCES
+    ${CMAKE_CURRENT_LIST_DIR}/Logger.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/Log.cpp
+)
+
