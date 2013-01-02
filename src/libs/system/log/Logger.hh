@@ -8,6 +8,7 @@
  */
 
 #include <string>
+#include <iostream>
 
 namespace log {
 enum modifier {
@@ -40,6 +41,7 @@ public:
         _outstream() << s;
         return *this;
     }
+
     Logger &   operator<<(const log::modifier & s);
 
 private:
