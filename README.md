@@ -18,7 +18,9 @@ voulez, mais sachez qu'elles vont devoir y rester.
 Suivez [ce tuto](http://www.sfml-dev.org/tutorials/2.0/compile-with-cmake.php) pour compiler les sources. Pensez a
 compiler en Release ET aussi en Debug. Vous devriez avoir maintenant dans le dossier de build un dossier `./lib/Release/`
 et un `./lib/Debug/`. Prenez tout les `.lib` dans ce dossier et balancez les dans 
-`C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\lib`.
+`C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\lib` ainsi que a la racine du dossier de la SFML dans un dossier
+`lib/`. Prenez aussi tout les `.dll` des dossiers Release/Debug pour le mettre dans un dossier `bin/` a la racine du projet
+SFML aussi.
 
 2. Avec CMake-gui, ajoutez le dossier ou vous avez cloner R-Type. Pour le repertoire de build, le mieux est d'en creer
 un dedie dans le dossier du clone.
