@@ -125,6 +125,7 @@ namespace network {
             throw std::runtime_error("`" + _proto + "` No such protocol");
         }
         hint.ai_protocol = protoent->p_proto;
+        hint.ai_family = AF_UNSPEC;
 
         // Request addrinfo and prepare return vector
         std::vector<std::auto_ptr<IAddrInfo>> ret;

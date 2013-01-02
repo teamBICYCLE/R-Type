@@ -9,12 +9,21 @@
 
 #include "Tcp.hh"
 #include <stdexcept>
+#include "system/log/Log.hh"
 #ifdef __gnu_linux__
 #include <errno.h>
 #include <unistd.h>
 #include <string.h>
 #include <sys/socket.h>
 #include <netinet/ip.h>
+
+
+// Test purpuse
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+
+
 #elif _WIN32
 
 #endif
@@ -69,11 +78,26 @@ namespace network {
         void Tcp::connect(const IAddr & pair)
         {
             for (auto hint : pair.infos()) {
-               if (::connect(_socket, static_cast<const sockaddr *>(hint->get()), hint->size())
-                   != -1)
-                   return;
+                sockaddr_in * _hint = static_cast<sockaddr_in*>(hint->get());
+                char addrstr[127];
+
+                memset(addrstr, 0, sizeof(addrstr));
+                inet_ntop(_hint->sin_family,
+                          static_cast<const void*>(&_hint->sin_addr),
+                          addrstr, sizeof(addrstr));
+                log::info << "Trying to connect to "
+                    << addrstr << ":" << ntohs(_hint->sin_port) << "... ";
+
+                if (::connect(_socket, static_cast<const sockaddr *>(hint->get()), hint->size())
+                    != -1) {
+                    log::info << "SUCCESS" << log::endl;
+                    return;
+                }
+                log::info << "FAIL" << log::endl;
             }
-            throw std::runtime_error("No valid host for " + std::get<0>(pair.get()) + ":" + std::get<1>(pair.get()));
+            throw std::runtime_error("No valid host found for " +
+                                     std::get<0>(pair.get())
+                                     + ":" + std::get<1>(pair.get()));
        }
 
         int Tcp::recv(char * packet, int maxPacketSize)
