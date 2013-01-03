@@ -1,7 +1,10 @@
 #include <iostream>
+#include <string>
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <system/threads/WinMutex.hh>
 #include <system/log/Log.hh>
+#include "RTypeConfig.h"
 using namespace std;
 
 #ifdef _WIN32
@@ -20,7 +23,9 @@ int WINAPI WinMain(HINSTANCE hInstance,
 int main(int argc, char* argv[]) 
 #endif
 {
-    sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
+	sf::RenderWindow window(sf::VideoMode(800, 600), "RType v" 
+		+ std::to_string(RTYPE_VERSION_MAJOR) + "." + std::to_string(RTYPE_VERSION_MINOR));
+	sf::SoundBuffer buffer;
     sf::CircleShape shape(100.f);
     shape.setFillColor(sf::Color::Green);
 	WinMutex mut;

@@ -7,6 +7,15 @@
 
 project(r-type)
 
+set (RTYPE_VERSION_MAJOR 0)
+set (RTYPE_VERSION_MINOR 1)
+configure_file (
+  "${PROJECT_SOURCE_DIR}/RTypeConfig.h.in"
+  "${PROJECT_BINARY_DIR}/RTypeConfig.h"
+  )
+
+include_directories("${PROJECT_BINARY_DIR}")
+
 list(APPEND ${PROJECT_NAME}_HEADERS
 )
 
