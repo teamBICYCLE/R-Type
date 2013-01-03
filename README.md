@@ -33,5 +33,8 @@ dossier `./bin/` avec `Release` et `Debug` dedans. Collez-y respectivement les `
 Une derniere chose, il faut prendre les dll qu'il y a dans `*dossier-de-build-sfml*/extlib/x86` pour les mettre dans les
 deux dossiers precedents aussi (C'est les libs externes utiles pour la SFML)
 
+4. Pour pouvoir lancer un projet directement avec un F5, fait un clic droit sur son nom dans la fenetre "Solution explorer"
+et selectionnez `Set as Startup project`. Il devrait maintenant apparaitre en **gras**.
+
 ET VOILA, C'EST BLEU !
 ======================
