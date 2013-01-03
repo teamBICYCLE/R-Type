@@ -7,6 +7,8 @@
  * -----------------------------------------------------------------------------
  */
 
+#ifndef     _LOGGER_HH_
+#define		_LOGGER_HH_
 #include <string>
 #include <sstream>
 
@@ -54,3 +56,4 @@ private:
 };
 }
 }
+#endif // _LOGGER_HH_

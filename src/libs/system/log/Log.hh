@@ -1,3 +1,6 @@
+#ifndef     _LOG_HH_
+#define		_LOG_HH_
+
 #include <string>
 #include "Logger.hh"
 
@@ -13,3 +16,4 @@ namespace log {
     extern Logger debug;
 }
 }
+#endif // _LOG_HH_
