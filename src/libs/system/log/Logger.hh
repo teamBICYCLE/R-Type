@@ -11,6 +11,7 @@
 #define		_LOGGER_HH_
 #include <string>
 #include <sstream>
+#include <ostream>
 
 namespace TBSystem {
 namespace log {
@@ -45,6 +46,12 @@ public:
     }
 
     Logger &   operator<<(const log::modifier & s);
+
+    template <class charT, class traits>
+    Logger &   operator<<(std::basic_ostream<charT,traits>& endl)
+    {
+        (void)endl;
+    }
 
 private:
     std::ostream &		_outstream() const;

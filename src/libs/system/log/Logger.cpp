@@ -28,7 +28,9 @@ Logger & Logger::operator<<(const log::modifier & s) {
 	case log::endl:
 		_line << std::endl;
 #ifdef __gnu_linux__
-		_outstream() << _line;
+		std::cout << "line = " << _line << std::endl;
+		_outstream() << _line.str();
+		_outstream().flush();
 #elif defined _WIN32
 		OutputDebugString(_line.str().c_str());
 #endif
