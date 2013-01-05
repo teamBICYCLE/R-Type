@@ -25,10 +25,10 @@ int WINAPI WinMain(HINSTANCE hInstance,
                    LPSTR lpCmdLine,
                    int nCmdShow)
 #elif defined __gnu_linux__
-int main(int argc, char* argv[]) 
+int main(int argc, char* argv[])
 #endif
 {
-	sf::RenderWindow window(sf::VideoMode(800, 600), "RType v" 
+	sf::RenderWindow window(sf::VideoMode(800, 600), "RType v"
 		+ std::to_string(RTYPE_VERSION_MAJOR) + "." + std::to_string(RTYPE_VERSION_MINOR));
 	sf::SoundBuffer buffer;
     sf::CircleShape shape(100.f);
@@ -40,7 +40,7 @@ int main(int argc, char* argv[])
 #endif
 
 	log::notice << "Test some stuff out";
-	log::notice << "prout"<< std::endl;
+	log::notice << "prout";
 	log::notice << "mdr" << log::endl;
     while (window.isOpen())
     {
