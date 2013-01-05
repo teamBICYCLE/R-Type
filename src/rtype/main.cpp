@@ -2,10 +2,15 @@
 #include <string>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+#ifdef _WIN32
 #include <system/threads/WinMutex.hh>
+#elif defined __gnu_linux__
+#include <system/threads/UnixMutex.hh>
+#endif
 #include <system/log/Log.hh>
 #include "RTypeConfig.h"
 using namespace std;
+using namespace TBSystem;
 
 #ifdef _WIN32
 #include <windows.h>
@@ -19,7 +24,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
                    HINSTANCE hPrevInstance,
                    LPSTR lpCmdLine,
                    int nCmdShow)
-#elif defined UNIX
+#elif defined __gnu_linux__
 int main(int argc, char* argv[]) 
 #endif
 {
@@ -28,9 +33,15 @@ int main(int argc, char* argv[])
 	sf::SoundBuffer buffer;
     sf::CircleShape shape(100.f);
     shape.setFillColor(sf::Color::Green);
+#ifdef _WIN32
 	WinMutex mut;
+#elif defined __gnu_linux__
+	UnixMutex mut;
+#endif
 
-	TBSystem::log::notice << "Test some stuff out" << TBSystem::log::endl;
+	log::notice << "Test some stuff out";
+	log::notice << "prout"<< std::endl;
+	log::notice << "mdr" << log::endl;
     while (window.isOpen())
     {
         sf::Event event;
