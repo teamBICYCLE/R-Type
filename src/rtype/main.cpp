@@ -7,6 +7,7 @@
 #elif defined __gnu_linux__
 #include <system/threads/UnixMutex.hh>
 #endif
+#include <system/network/Tcp.hh>
 #include <system/log/Log.hh>
 #include "RTypeConfig.h"
 using namespace std;
@@ -37,6 +38,7 @@ int main(int argc, char* argv[])
 	WinMutex mut;
 #elif defined __gnu_linux__
 	UnixMutex mut;
+    network::sockets::Tcp tcp;
 #endif
 
 	log::notice << "Test some stuff out";

@@ -12,11 +12,31 @@ list(APPEND ${PROJECT_NAME}_HEADERS
     ${CMAKE_CURRENT_LIST_DIR}/ITcpSocket.hh  
     ${CMAKE_CURRENT_LIST_DIR}/IUdpSocket.hh  
     ${CMAKE_CURRENT_LIST_DIR}/Tcp.hh  
-    ${CMAKE_CURRENT_LIST_DIR}/Udp.hh
+    ${CMAKE_CURRENT_LIST_DIR}/Udp.hh  
 )
+if(${UNIX})
+list(APPEND ${PROJECT_NAME}_HEADERS
+    ${CMAKE_CURRENT_LIST_DIR}/UnixTcp.hh  
+   #${CMAKE_CURRENT_LIST_DIR}/UnixUdp.hh
+)
+elseif(${WIN32})
+list(APPEND ${PROJECT_NAME}_HEADERS
+    ${CMAKE_CURRENT_LIST_DIR}/WinTcp.hh
+    ${CMAKE_CURRENT_LIST_DIR}/WinUdp.hh      
+)
+endif()
 
 list(APPEND ${PROJECT_NAME}_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/Addr.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/Tcp.cpp
-    #${CMAKE_CURRENT_LIST_DIR}/Udp.cpp      
 )
+if(${UNIX})
+list(APPEND ${PROJECT_NAME}_SOURCES
+    ${CMAKE_CURRENT_LIST_DIR}/UnixTcp.cpp
+    #${CMAKE_CURRENT_LIST_DIR}/UnixUdp.cpp      
+)
+elseif(${WIN32})
+list(APPEND ${PROJECT_NAME}_SOURCES
+    ${CMAKE_CURRENT_LIST_DIR}/WinTcp.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/WinUdp.cpp      
+)
+endif()

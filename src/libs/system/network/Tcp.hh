@@ -6,44 +6,33 @@
  * this stuff is worth it, you can buy me a beer in return Thomas Duplomb
  * -----------------------------------------------------------------------------
  */
-
 #ifndef _TCP_H__
 #define _TCP_H__
 
-#include "ITcpSocket.hh"
-#include "IAddr.hh"
 #ifdef __gnu_linux__
-# include <sys/socket.h>
+# include "UnixTcp.hh"
+# define Parent UnixTcp
+#elif defined _WIN32
+# include "WinTcp.hh"
+# define Parent WinTcp
 #endif
 
 namespace TBSystem {
-namespace network {
-    namespace sockets {
-        class Tcp : public ITcpSocket {
-            public:
-                Tcp();
+    namespace network {
+        namespace sockets {
+            class Tcp : public UnixTcp {
+                public:
+                    Tcp() : Parent() {}
 
-                explicit Tcp(int socketDescriptor);
+                    explicit Tcp(int socketDescriptor)
+                    : Parent(socketDescriptor)
+                    {}
 
-                virtual ~Tcp();
+                    virtual ~Tcp() {}
+            };
 
-                virtual void listen(int queueLenght);
-
-                virtual void bind(const IAddr & addr);
-
-                virtual std::shared_ptr<ITcpSocket> accept(IAddr & pair);
-
-                virtual void connect(const IAddr & pair);
-
-                virtual int recv(char * packet, int maxPacketSize);
-
-                virtual int send(const char * packet, int packetSize);
-
-            private:
-                int _socket;
-        };
+        }
     }
-}
 }
 
 #endif /* !_TCP_H__ */
