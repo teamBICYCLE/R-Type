@@ -18,8 +18,7 @@ namespace log {
 Logger::Logger(int level)
 : _level(level)
 , _newline(true)
-{
-}
+{}
 
 Logger::~Logger() {}
 
@@ -41,6 +40,12 @@ Logger & Logger::operator<<(const log::modifier & s) {
 	}
     return *this;
 }
+
+Logger& Logger::operator<<(std::ostream& (*endline)(std::ostream&))
+    {
+    	_line << endline;
+        return *this;
+    }
 
 std::ostream & Logger::_outstream() const {
    if (_level <= NOTICE) {

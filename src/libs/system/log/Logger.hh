@@ -7,11 +7,12 @@
  * -----------------------------------------------------------------------------
  */
 
-#ifndef     _LOGGER_HH_
-#define		_LOGGER_HH_
+#ifndef  _LOGGER_HH_
+#define	 _LOGGER_HH_
 #include <string>
 #include <sstream>
 #include <ostream>
+#include <ctime>
 
 namespace TBSystem {
 namespace log {
@@ -38,7 +39,12 @@ public:
     template <typename T>
     Logger &   operator<<(const T & s) {
         if (_newline) {
-            _line << std::string("BONJOUR ! Ceci est un message de log: ");
+            char buff[80];
+            std::time_t result = std::time(nullptr);
+            strftime(buff, sizeof(buff), "%Y-%m-%d.%X", std::localtime(&result));
+            _line << std::string("[Log message] [");
+            _line << std::string(buff);
+            _line << std::string("] :");
             _newline = false;
         }
         _line << s;
@@ -46,12 +52,7 @@ public:
     }
 
     Logger &   operator<<(const log::modifier & s);
-
-    template <class charT, class traits>
-    Logger &   operator<<(std::basic_ostream<charT,traits>& endl)
-    {
-        (void)endl;
-    }
+    Logger &   operator<<(std::ostream& (*endline)(std::ostream&));
 
 private:
     std::ostream &		_outstream() const;
