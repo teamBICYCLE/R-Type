@@ -12,7 +12,6 @@
 
 #include "IAddr.hh"
 
-namespace TBSystem {
 namespace network {
     namespace sockets {
         class IUdpSocket {
@@ -28,7 +27,6 @@ namespace network {
                                  IAddr & pair) = 0;
         };
     }
-}
 }
 
 #endif /* !_IUDPSOCKET_H__ */

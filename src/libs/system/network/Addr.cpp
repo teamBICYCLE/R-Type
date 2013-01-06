@@ -20,7 +20,6 @@
 
 #endif
 
-namespace TBSystem {
 namespace network {
     /*
      * AddrInfo implementation
@@ -140,5 +139,4 @@ namespace network {
         }
         return ret;
     }
-}
 }
