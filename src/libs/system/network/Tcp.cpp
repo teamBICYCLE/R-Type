@@ -28,6 +28,7 @@
 
 #endif
 
+namespace TBSystem {
 namespace network {
     namespace sockets {
         Tcp::Tcp()
@@ -119,4 +120,5 @@ namespace network {
             return ret;
         }
     }
+}
 }

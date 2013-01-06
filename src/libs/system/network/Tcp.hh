@@ -16,6 +16,7 @@
 # include <sys/socket.h>
 #endif
 
+namespace TBSystem {
 namespace network {
     namespace sockets {
         class Tcp : public ITcpSocket {
@@ -42,6 +43,7 @@ namespace network {
                 int _socket;
         };
     }
+}
 }
 
 #endif /* !_TCP_H__ */

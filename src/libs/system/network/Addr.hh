@@ -9,7 +9,6 @@
 
 #ifndef _ADDR_H__
 #define _ADDR_H__
-
 #include "IAddr.hh"
 #include <string>
 #include "crossplateform_utils.h"
@@ -17,6 +16,7 @@
 # include <netdb.h>
 #endif
 
+namespace TBSystem {
 namespace network {
 using ::addrinfo;
 class AddrInfo : public IAddrInfo {
@@ -60,6 +60,7 @@ private:
     std::string _proto;
     mutable addrinfo *_infosRes;
 };
+}
 }
 
 #endif /* !_ADDR_H__ */

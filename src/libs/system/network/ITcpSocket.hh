@@ -13,6 +13,7 @@
 #include <memory>
 #include "IAddr.hh"
 
+namespace TBSystem {
 namespace network {
     namespace sockets {
         class ITcpSocket {
@@ -32,6 +33,7 @@ namespace network {
                 virtual int send(const char * packet, int packetSize) = 0;
         };
     }
+}
 }
 
 #endif /* !_ITCPSOCKET_H__ */

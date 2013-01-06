@@ -15,6 +15,7 @@
 #include <vector>
 #include <memory>
 
+namespace TBSystem {
 namespace network {
 enum SpecialIp {
       ADDR_ANY = 0
@@ -44,6 +45,7 @@ public:
 
     virtual std::vector<std::auto_ptr<IAddrInfo>> infos() const = 0;
 };
+}
 }
 
 #endif /* !_IADDR_H__ */
