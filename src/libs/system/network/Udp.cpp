@@ -9,6 +9,7 @@
 
 #include "Udp.hh"
 
+namespace TBSystem {
 namespace network {
     namespace sockets {
         Udp::Udp()
@@ -45,4 +46,5 @@ namespace network {
             return ret;
         }
     }
+}
 }

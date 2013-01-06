@@ -13,6 +13,7 @@
 #include "IUdpSocket.hh"
 #include "IAddr.hh"
 
+namespace TBSystem {
 namespace network {
     namespace sockets {
         class Udp : IUdpSocket {
@@ -30,4 +31,6 @@ namespace network {
         };
     }
 }
+}
+
 #endif /* !_UDP_H__ */
