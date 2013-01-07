@@ -15,6 +15,7 @@ include_directories(${SFML_INCLUDE_DIR})
 # Build configuration
 ################################################################################
 
+set(CMAKE_BUILD_TYPE Debug)
 include_directories(
     ${CMAKE_SOURCE_DIR}/src
     ${CMAKE_SOURCE_DIR}/src/libs
@@ -22,12 +23,13 @@ include_directories(
 
 set(EXECUTABLE_OUTPUT_PATH "${CMAKE_SOURCE_DIR}/bin/")
 set(LIBRARY_OUTPUT_PATH "${CMAKE_SOURCE_DIR}/bin/libs/")
-if(UNIX)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+if(${UNIX})
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -O3")
+    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -std=c++0x -ggdb")
 endif()
-IF(WIN32)
-SET(GUI_TYPE WIN32)
-ENDIF(WIN32)
+if(${WIN32})
+    set(GUI_TYPE WIN32)
+endif()
 
 ################################################################################
 # Build project
