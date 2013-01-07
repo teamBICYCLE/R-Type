@@ -19,6 +19,7 @@ namespace network {
         class UnixUdp : IUdpSocket {
             public:
                 UnixUdp();
+
                 virtual ~UnixUdp();
 
                 virtual void bind(const IAddr & pair);
@@ -28,6 +29,8 @@ namespace network {
 
                 virtual int recv(char * packet, int maxPacketSize,
                                  IAddr & pair);
+            private:
+                int _socket;
         };
     }
 }

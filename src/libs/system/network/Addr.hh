@@ -30,7 +30,7 @@ public:
     virtual int size() const;
 
 private:
-    CROSSPLATEFORM(addrinfo, win) *_raw;
+    addrinfo *  _raw;
 };
 
 class Addr : public IAddr {
@@ -51,14 +51,25 @@ public:
 
     virtual std::tuple<std::string, std::string, std::string> get() const;
 
-    virtual std::vector<std::auto_ptr<IAddrInfo>> infos() const;
+    virtual std::vector<std::shared_ptr<IAddrInfo>> infos() const;
+
+    virtual bool    hasValidAddr() const;
+
+    virtual void    setValid(const void * addr) const;
+
+    virtual int     validSize() const;
+
+    virtual const void*   getValid() const;
 
 private:
     SpecialIp   _special;
     std::string _ip;
     std::string _port;
     std::string _proto;
-    mutable addrinfo *_infosRes;
+
+    mutable struct addrinfo*     _infosRes;
+    mutable bool        _isValid;
+    mutable sockaddr_in _valid;
 };
 }
 }

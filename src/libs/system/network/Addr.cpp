@@ -27,7 +27,7 @@ namespace network {
      */
 
     AddrInfo::AddrInfo(void * addrinfo)
-    : _raw(static_cast<CROSSPLATEFORM(struct addrinfo*,)>(addrinfo))
+    : _raw(static_cast< struct addrinfo * >(addrinfo))
     {
     }
 
@@ -50,6 +50,7 @@ namespace network {
     Addr::Addr()
     : _special(static_cast<SpecialIp>(-1))
     , _infosRes(nullptr)
+    , _isValid(false)
     {
     }
 
@@ -61,6 +62,7 @@ namespace network {
                const std::string & proto)
     : _special(static_cast<SpecialIp>(-1))
     , _infosRes(nullptr)
+    , _isValid(false)
     {
         set(ip, port, proto);
     }
@@ -69,6 +71,7 @@ namespace network {
                const std::string & proto)
     : _special(static_cast<SpecialIp>(-1))
     , _infosRes(nullptr)
+    , _isValid(false)
     {
         set(ip, port, proto);
     }
@@ -80,6 +83,7 @@ namespace network {
         _special = ip;
         _port = port;
         _proto = proto;
+        _isValid = false;
     }
 
     void Addr::set(const std::string & ip, const std::string & port,
@@ -89,6 +93,7 @@ namespace network {
         _ip = ip;
         _port = port;
         _proto = proto;
+        _isValid = false;
     }
 
     std::tuple<std::string, std::string, std::string> Addr::get() const
@@ -106,7 +111,7 @@ namespace network {
         }
     }
 
-    std::vector<std::auto_ptr<IAddrInfo>> Addr::infos() const
+    std::vector<std::shared_ptr<IAddrInfo>> Addr::infos() const
     {
         // Free _infosRes from previous call
         if (_infosRes) freeaddrinfo(_infosRes); _infosRes = nullptr;
@@ -129,16 +134,34 @@ namespace network {
         hint.ai_family = AF_UNSPEC;
 
         // Request addrinfo and prepare return vector
-        std::vector<std::auto_ptr<IAddrInfo>> ret;
+        std::vector<std::shared_ptr<IAddrInfo>> ret;
         int err;
 
         if ((err = getaddrinfo(node, _port.c_str(), &hint, &_infosRes))) {
             throw std::runtime_error(gai_strerror(err));
         }
         for (addrinfo *res = _infosRes; res != nullptr; res = res->ai_next) {
-            ret.push_back(std::auto_ptr<IAddrInfo>(new AddrInfo(res)));
+            ret.push_back(std::shared_ptr<IAddrInfo>(new AddrInfo(res)));
         }
+        if (ret.size() < 1) throw std::runtime_error("Could not resolve Addr");
         return ret;
+    }
+
+    bool    Addr::hasValidAddr() const {
+        return _isValid;
+    }
+
+    void    Addr::setValid(const void * addr) const {
+        memcpy(static_cast<void*>(&_valid), addr, sizeof(_valid));
+    }
+
+    int     Addr::validSize() const {
+        return sizeof(sockaddr_in);
+    }
+
+    const void *  Addr::getValid() const {
+        _isValid = true;
+        return &_valid;
     }
 }
 }

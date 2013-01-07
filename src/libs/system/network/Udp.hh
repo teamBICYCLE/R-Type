@@ -9,7 +9,6 @@
 
 #ifndef _UDP_H__
 #define _UDP_H__
-
 #ifdef __gnu_linux__
 # include "UnixUdp.hh"
 # define Parent UnixUdp
@@ -18,14 +17,16 @@
 # define Parent WinUdp
 #endif
 
-
-class Udp : public Parent {
-public:
-    Udp() : Parent() {}
-    virtual ~Udp() {}
-
-private:
-
-};
+namespace TBSystem {
+    namespace network {
+        namespace sockets {
+            class Udp : public UnixUdp {
+                public:
+                    Udp() : Parent() {}
+                    virtual ~Udp() {}
+            };
+        }
+    }
+}
 
 #endif /* !_UDP_H__ */

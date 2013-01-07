@@ -20,7 +20,7 @@
 namespace TBSystem {
     namespace network {
         namespace sockets {
-            class Tcp : public UnixTcp {
+            class Tcp : public Parent {
                 public:
                     Tcp() : Parent() {}
 
