@@ -25,9 +25,10 @@ set(LIBRARY_OUTPUT_PATH "${CMAKE_SOURCE_DIR}/bin/libs/")
 if(UNIX)
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
 endif()
-IF(WIN32)
-SET(GUI_TYPE WIN32)
-ENDIF(WIN32)
+if(WIN32)
+    add_definitions(/D _CRT_SECURE_NO_WARNINGS)
+    set(GUI_TYPE WIN32)
+endif(WIN32)
 
 ################################################################################
 # Build project
