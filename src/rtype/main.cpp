@@ -39,9 +39,11 @@ int main(int argc, char* argv[])
 	UnixMutex mut;
 #endif
 
+
+    log::notice.configure("output.log");
 	log::notice << "Test some stuff out";
 	log::notice << "other stuff" << std::endl;
-	log::notice << "endtest" << log::endl;
+	log::notice << "end test" << log::endl;
     while (window.isOpen())
     {
         sf::Event event;
