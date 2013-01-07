@@ -42,8 +42,8 @@ int main(int argc, char* argv[])
 #endif
 
 	log::notice << "Test some stuff out";
-	log::notice << "prout";
-	log::notice << "mdr" << log::endl;
+	log::notice << "other stuff" << std::endl;
+	log::notice << "endtest" << log::endl;
     while (window.isOpen())
     {
         sf::Event event;
