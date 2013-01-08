@@ -5,6 +5,9 @@
 # this stuff is worth it, you can buy me a beer in return Thomas Duplomb
 ################################################################################
 
-add_subdirectory(libs)
-add_subdirectory(rtype)
-add_subdirectory(tests)
+## example
+
+add_executable(test-lol udp.cpp)
+target_link_libraries(test-lol system ${SFML_LIBRARIES})
+
+## your tests
