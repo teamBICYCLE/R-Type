@@ -1,27 +1,15 @@
-#include <iostream>
-#include <string>
-#include <thread>
-#include <SFML/Graphics.hpp>
-#include <SFML/Audio.hpp>
-
-#include <system/archiver/ResourcesArchiver.hh>
-
-#ifdef _WIN32
-#include <system/threads/WinMutex.hh>
-#elif defined __gnu_linux__
-#include <system/threads/UnixMutex.hh>
-#endif
-#include <system/log/Log.hh>
-#include <system/network/Udp.hh>
-#include <system/network/Addr.hh>
-#include "RTypeConfig.h"
 #ifdef _WIN32
 #include <windows.h>
 #include <stdlib.h>
 #include <string.h>
 #include <tchar.h>
 #endif
-#include <string.h>
+#include <thread>
+#include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
+
+#include <system/log/Log.hh>
+#include "RTypeConfig.h"
 
 using namespace std;
 using namespace TBSystem;
@@ -35,24 +23,10 @@ int WINAPI WinMain(HINSTANCE hInstance,
 int main(int argc, char* argv[])
 #endif
 {
-    //network::Addr pair(network::ADDR_ANY, "4242", "UDP");
-    //network::sockets::Udp udp;
-    //char buf[1024];
-
-    //udp.bind(pair);
-    //while (1) {
-        //memset(buf, 0, sizeof(buf));
-        //if (udp.recv(buf, sizeof(buf), pair) > 0) {
-            //log::debug << buf << log::endl;
-            //return 0;
-        //}
-        //std::chrono::milliseconds duration( 100 );
-        //std::this_thread::sleep_for(duration);
-    //}
-    //return 0;
     sf::RenderWindow window(sf::VideoMode(800, 600), "RType v"
         + std::to_string(RTYPE_VERSION_MAJOR)
         + "." + std::to_string(RTYPE_VERSION_MINOR));
+
     while (window.isOpen())
     {
         sf::Event event;

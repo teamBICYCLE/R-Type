@@ -9,7 +9,7 @@ project(system)
 
 include(dll/CMakeLists.txt)
 include(threads/CMakeLists.txt)
-#include(network/CMakeLists.txt)
+include(network/CMakeLists.txt)
 include(log/CMakeLists.txt)
 include(archiver/CMakeLists.txt)
 

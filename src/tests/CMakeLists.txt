@@ -7,7 +7,7 @@
 
 ## example
 
-add_executable(test-lol udp.cpp)
+add_executable(test-lol EXCLUDE_FROM_ALL udp.cpp)
 target_link_libraries(test-lol system ${SFML_LIBRARIES})
 
 ## your tests
