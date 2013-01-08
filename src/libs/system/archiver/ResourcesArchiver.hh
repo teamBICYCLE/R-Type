@@ -45,7 +45,7 @@ namespace TBSystem {
             * @param Destination path
             */
             static bool unpack(const char *, const std::string &);
-            static bool unpack(const std::string &, const std::string &, int a);
+            static bool unpack(const std::string &, const std::string &);
 
         private:
             const std::string readFile(const std::string &path) const;

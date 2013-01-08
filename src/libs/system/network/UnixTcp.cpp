@@ -7,48 +7,39 @@
  * -----------------------------------------------------------------------------
  */
 
-#include "Tcp.hh"
+#include "UnixTcp.hh"
 #include <stdexcept>
 #include "system/log/Log.hh"
-#ifdef __gnu_linux__
 #include <errno.h>
 #include <unistd.h>
 #include <string.h>
 #include <sys/socket.h>
 #include <netinet/ip.h>
-
-
-// Test purpuse
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
-
-#elif _WIN32
-
-#endif
-
 namespace TBSystem {
 namespace network {
     namespace sockets {
-        Tcp::Tcp()
+        UnixTcp::UnixTcp()
         {
             errno = 0;
             _socket = socket(AF_INET, SOCK_STREAM, 0);
             if (_socket == -1) throw std::runtime_error(strerror(errno));
         }
 
-        Tcp::Tcp(int socketDescriptor)
+        UnixTcp::UnixTcp(int socketDescriptor)
         : _socket(socketDescriptor)
         {
         }
 
-        Tcp::~Tcp()
+        UnixTcp::~UnixTcp()
         {
             close(_socket);
         }
 
-        void Tcp::listen(int queueLenght)
+        void UnixTcp::listen(int queueLenght)
         {
             errno = 0;
             if (::listen(_socket, queueLenght) != 0) {
@@ -56,7 +47,7 @@ namespace network {
             }
         }
 
-        void Tcp::bind(const IAddr & addr)
+        void UnixTcp::bind(const IAddr & addr)
         {
             for (auto hint : addr.infos()) {
                if (::bind(_socket, static_cast<const sockaddr *>(hint->get()), hint->size())
@@ -66,17 +57,17 @@ namespace network {
             throw std::runtime_error("No valid host for " + std::get<0>(addr.get()) + ":" + std::get<1>(addr.get()));
         }
 
-        std::shared_ptr<ITcpSocket> Tcp::accept(IAddr & pair)
+        std::shared_ptr<ITcpSocket> UnixTcp::accept(IAddr & pair)
         {
             int fd;
 
             errno = 0;
             fd = ::accept(_socket, nullptr, nullptr);
             if (fd == -1) throw std::runtime_error(strerror(errno));
-            return std::shared_ptr<ITcpSocket>(new Tcp(fd));
+            return std::shared_ptr<ITcpSocket>(new UnixTcp(fd));
         }
 
-        void Tcp::connect(const IAddr & pair)
+        void UnixTcp::connect(const IAddr & pair)
         {
             for (auto hint : pair.infos()) {
                 sockaddr_in * _hint = static_cast<sockaddr_in*>(hint->get());
@@ -101,7 +92,7 @@ namespace network {
                                      + ":" + std::get<1>(pair.get()));
        }
 
-        int Tcp::recv(char * packet, int maxPacketSize)
+        int UnixTcp::recv(char * packet, int maxPacketSize)
         {
             int ret;
 
@@ -111,7 +102,7 @@ namespace network {
             return ret;
         }
 
-        int Tcp::send(const char * packet, int packetSize)
+        int UnixTcp::send(const char * packet, int packetSize)
         {
             int ret;
 

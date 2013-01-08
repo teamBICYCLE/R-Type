@@ -9,28 +9,24 @@
 
 #ifndef _UDP_H__
 #define _UDP_H__
-
-#include "IUdpSocket.hh"
-#include "IAddr.hh"
+#ifdef __gnu_linux__
+# include "UnixUdp.hh"
+# define Parent UnixUdp
+#elif defined _WIN32
+# include "WinUdp.hh"
+# define Parent WinUdp
+#endif
 
 namespace TBSystem {
-namespace network {
-    namespace sockets {
-        class Udp : IUdpSocket {
-            public:
-                Udp();
-                virtual ~Udp();
-
-                virtual void bind(const IAddr & pair);
-
-                virtual int send(const char * packet, int packetSize,
-                                 const IAddr & pair);
-
-                virtual int recv(char * packet, int maxPacketSize,
-                                 IAddr & pair);
-        };
+    namespace network {
+        namespace sockets {
+#ifdef __gnu_linux__
+            typedef UnixUdp Udp;
+#elif defined _WIN32
+            typedef WinUdp  Udp;
+#endif
+       }
     }
-}
 }
 
 #endif /* !_UDP_H__ */
