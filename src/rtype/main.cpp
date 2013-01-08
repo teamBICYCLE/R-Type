@@ -3,6 +3,14 @@
 #include <thread>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+
+#include <system/archiver/ResourcesArchiver.hh>
+
+#ifdef _WIN32
+#include <system/threads/WinMutex.hh>
+#elif defined __gnu_linux__
+#include <system/threads/UnixMutex.hh>
+#endif
 #include <system/log/Log.hh>
 #include <system/network/Udp.hh>
 #include <system/network/Addr.hh>
