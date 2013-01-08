@@ -7,4 +7,4 @@
 
 add_subdirectory(libs)
 add_subdirectory(rtype)
-add_subdirectory(tests)
+add_subdirectory(tests EXCLUDE_FROM_ALL)
