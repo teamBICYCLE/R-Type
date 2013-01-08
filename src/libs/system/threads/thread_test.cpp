@@ -6,20 +6,23 @@
 #include <string>
 #include <queue>
 #include <stdexcept>
-#ifdef  __gnu_linux__
-# include "UnixMutex.hh"
-# include "UnixThread.hh"
-#elif   _WIN32
-# include "WinMutex.hh"
-# include "WinThread.hh"
-#endif
+//#ifdef  __gnu_linux__
+//# include "UnixMutex.hh"
+//# include "UnixThread.hh"
+//#elif   _WIN32
+//# include "WinMutex.hh"
+//# include "WinThread.hh"
+//#endif
+#include "Mutex.hh"
+#include "Thread.hh"
 
 std::queue<std::string>	g_work_queue;
-#ifdef  __gnu_linux__
-IMutex				*g_work_queue_crit_section = new UnixMutex();
-#elif   _WIN32
-IMutex				*g_work_queue_crit_section = new WinMutex();
-#endif
+//#ifdef  __gnu_linux__
+//IMutex				*g_work_queue_crit_section = new UnixMutex();
+//#elif   _WIN32
+//IMutex				*g_work_queue_crit_section = new WinMutex();
+//#endif
+IMutex				*g_work_queue_crit_section = new Mutex();
 
 void	fill_work_queue(void)
 {
@@ -125,8 +128,45 @@ void	*trylock_test_routine(void *arg)
 	return new int(0);
 }
 
-#ifdef _WIN32
-void	run_routine(std::function<void*(void*)> routine, WinThread *threads, int nb_threads)
+//#ifdef _WIN32
+//void	run_routine(std::function<void*(void*)> routine, WinThread *threads, int nb_threads)
+//{
+//	for (int i = 0; i < nb_threads; i++)
+//	{
+//		int *id = new int(i + 1);
+//		threads[i].start(routine, id);
+//		waitABit();
+//	}
+//	for (int i = 0; i < nb_threads; i++)
+//	{
+//		int	*ret = nullptr;
+//		threads[i].wait((void**)&ret);
+//		std::cout << "Thread " << i + 1 << " returned with " << *ret << std::endl;
+//        delete ret;
+//	}
+//	std::cout << "----------------------------------------------" << std::endl;
+//}
+//#elif __gnu_linux__
+//void	run_routine(std::function<void*(void*)> routine, UnixThread *threads, int nb_threads)
+//{
+//	for (int i = 0; i < nb_threads; i++)
+//	{
+//		int *id = new int(i + 1);
+//		threads[i].start(routine, id);
+//		waitABit();
+//	}
+//	for (int i = 0; i < nb_threads; i++)
+//	{
+//		int	*ret = nullptr;
+//		threads[i].wait((void**)&ret);
+//		std::cout << "Thread " << i + 1 << " returned with " << *ret << std::endl;
+//        delete ret;
+//	}
+//	std::cout << "----------------------------------------------" << std::endl;
+//}
+//#endif
+
+void	run_routine(std::function<void*(void*)> routine, Thread *threads, int nb_threads)
 {
 	for (int i = 0; i < nb_threads; i++)
 	{
@@ -143,34 +183,16 @@ void	run_routine(std::function<void*(void*)> routine, WinThread *threads, int nb
 	}
 	std::cout << "----------------------------------------------" << std::endl;
 }
-#elif __gnu_linux__
-void	run_routine(std::function<void*(void*)> routine, UnixThread *threads, int nb_threads)
-{
-	for (int i = 0; i < nb_threads; i++)
-	{
-		int *id = new int(i + 1);
-		threads[i].start(routine, id);
-		waitABit();
-	}
-	for (int i = 0; i < nb_threads; i++)
-	{
-		int	*ret = nullptr;
-		threads[i].wait((void**)&ret);
-		std::cout << "Thread " << i + 1 << " returned with " << *ret << std::endl;
-        delete ret;
-	}
-	std::cout << "----------------------------------------------" << std::endl;
-}
-#endif
 
 int	main(int argc, char *argv[])
 {
 	int		nb_threads = 2;
-#ifdef _WIN32
-	WinThread	*threads = nullptr;
-#elif __gnu_linux__
-	UnixThread	*threads = nullptr;
-#endif
+//#ifdef _WIN32
+//	WinThread	*threads = nullptr;
+//#elif __gnu_linux__
+//	UnixThread	*threads = nullptr;
+//#endif
+	Thread	*threads = nullptr;
 
 	srand(time(nullptr));
 	try {
@@ -181,11 +203,12 @@ int	main(int argc, char *argv[])
 		std::cout << "Nb threads: " << nb_threads << std::endl;
 		fill_work_queue();
 		std::cout << "Creating threads..." << std::endl;
-#if _WIN32
-		threads = new WinThread[nb_threads];
-#elif __gnu_linux__
-		threads = new UnixThread[nb_threads];
-#endif
+//#if _WIN32
+//		threads = new WinThread[nb_threads];
+//#elif __gnu_linux__
+//		threads = new UnixThread[nb_threads];
+//#endif
+		threads = new Thread[nb_threads];
 		run_routine(&thread_routine, threads, nb_threads);
 		run_routine(&trylock_test_routine, threads, nb_threads);
 		run_routine(&lock_test_routine, threads, nb_threads);
