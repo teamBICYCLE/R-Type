@@ -11,3 +11,6 @@ add_executable(test-lol udp.cpp)
 target_link_libraries(test-lol system ${SFML_LIBRARIES})
 
 ## your tests
+
+add_executable(thread_test thread_test.cpp)
+target_link_libraries(thread_test system)
