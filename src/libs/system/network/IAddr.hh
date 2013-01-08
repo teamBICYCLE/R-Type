@@ -43,7 +43,16 @@ public:
 
     virtual std::tuple<std::string, std::string, std::string> get() const = 0;
 
-    virtual std::vector<std::auto_ptr<IAddrInfo>> infos() const = 0;
+    virtual std::vector<std::shared_ptr<IAddrInfo>> infos() const = 0;
+
+    virtual bool    hasValidAddr() const = 0;
+
+    virtual void    setValid(const void * addr) const = 0;
+
+    virtual int    validSize() const = 0;
+
+    virtual const void*   getValid() const = 0;
+
 };
 }
 }

@@ -35,9 +35,8 @@ Logger & Logger::operator<<(const log::modifier & s) {
             #elif defined _WIN32
         		OutputDebugString(_line.str().c_str());
             #endif
+            _line.str(""); _line.clear();
         }
-		_newline = true;
-		break;
 	default:
 		break;
 	}
