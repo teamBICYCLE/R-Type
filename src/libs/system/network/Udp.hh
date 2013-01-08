@@ -20,12 +20,12 @@
 namespace TBSystem {
     namespace network {
         namespace sockets {
-            class Udp : public UnixUdp {
-                public:
-                    Udp() : Parent() {}
-                    virtual ~Udp() {}
-            };
-        }
+#ifdef __gnu_linux__
+            typedef UnixUdp Udp;
+#elif defined _WIN32
+            typedef WinUdp  Udp;
+#endif
+       }
     }
 }
 

@@ -11,26 +11,18 @@
 
 #ifdef __gnu_linux__
 # include "UnixTcp.hh"
-# define Parent UnixTcp
 #elif defined _WIN32
 # include "WinTcp.hh"
-# define Parent WinTcp
 #endif
 
 namespace TBSystem {
     namespace network {
         namespace sockets {
-            class Tcp : public Parent {
-                public:
-                    Tcp() : Parent() {}
-
-                    explicit Tcp(int socketDescriptor)
-                    : Parent(socketDescriptor)
-                    {}
-
-                    virtual ~Tcp() {}
-            };
-
+#ifdef __gnu_linux__
+            typedef UnixTcp Tcp;
+#elif defined _WIN32
+            typedef WinTcp  Tcp;
+#endif
         }
     }
 }
