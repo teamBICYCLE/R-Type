@@ -25,10 +25,11 @@ const std::string ResourcesArchiver::readFile(const std::string &path) const
     return content;
 }
 
+// bool
 void ResourcesArchiver::add(const std::string &file)
 {
-    if (file.length() > 100)
-		log::warn << "Filename is too large for this archive" << log::endl;
+    if (file.length() > FILE_NAME_LENGTH)
+	log::warn << "Filename is too large for this archive" << log::endl;
     else
         _files.push_back(file);
 }
@@ -43,9 +44,10 @@ void ResourcesArchiver::pack(void) const
     char name[FILE_NAME_LENGTH];
     std::stringstream size;
 
+    //TODO: for (auto it : _files)
     for (auto it = _files.begin(); it != _files.end(); ++it)
     {
-        std::memset(name, 0, FILE_NAME_LENGTH);
+    	std::memset(name, 0, FILE_NAME_LENGTH);
         std::strncpy(name, it->c_str(), FILE_NAME_LENGTH);
 
         data = ResourcesArchiver::readFile(*it);
@@ -86,7 +88,7 @@ bool ResourcesArchiver::unpack(const char *data, const std::string &dir)
     {
         if (!std::strlen(data))
         {
-			log::critic << "Corrupted data. Archive can't be unpack" << log::endl;
+	    log::critic << "Corrupted data. Archive can't be unpack" << log::endl;
             return false;
         }
 
@@ -105,13 +107,13 @@ bool ResourcesArchiver::unpack(const char *data, const std::string &dir)
 
         // Write data in the resource file
         f.open(dir + "/" + name, std::fstream::out | std::fstream::binary);
-        f.write(data, atoi(size));
+        f.write(data, std::stoi(size));
         if (f.bad())
         {
             log::critic << "Corrupted data. Archive can't be unpack" << log::endl;
             return false;
         }
-        data += atoi(size);
+        data += std::stoi(size);
         f.close();
     }
     return true;
