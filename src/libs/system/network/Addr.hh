@@ -11,9 +11,11 @@
 #define _ADDR_H__
 #include "IAddr.hh"
 #include <string>
-#include "crossplateform_utils.h"
 #ifdef __gnu_linux__
 # include <netdb.h>
+#elif defined _WIN32
+# include <WinSock2.h>
+# include <ws2tcpip.h>
 #endif
 
 namespace TBSystem {

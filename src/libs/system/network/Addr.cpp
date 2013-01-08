@@ -99,10 +99,10 @@ namespace network {
     std::tuple<std::string, std::string, std::string> Addr::get() const
     {
         switch (_special) {
-            case ADDR_ANY:
+            case SI_ADDR_ANY:
                 return std::make_tuple("ADDR_ANY", _port, _proto);
                 break;
-            case ADDR_BROADCAST:
+            case SI_ADDR_BROADCAST:
                 return std::make_tuple("ADDR_BROADCAST", _port, _proto);
                 break;
             default:
@@ -121,7 +121,7 @@ namespace network {
         const char * node = _ip.c_str();
 
         memset(&hint, 0, sizeof(hint));
-        if (_special == ADDR_ANY) {
+        if (_special == SI_ADDR_ANY) {
             hint.ai_flags = AI_PASSIVE;
             node = nullptr;
         }
@@ -153,6 +153,7 @@ namespace network {
 
     void    Addr::setValid(const void * addr) const {
         memcpy(static_cast<void*>(&_valid), addr, sizeof(_valid));
+        _isValid = true;
     }
 
     int     Addr::validSize() const {
@@ -160,7 +161,6 @@ namespace network {
     }
 
     const void *  Addr::getValid() const {
-        _isValid = true;
         return &_valid;
     }
 }

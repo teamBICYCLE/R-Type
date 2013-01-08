@@ -18,8 +18,8 @@
 namespace TBSystem {
 namespace network {
 enum SpecialIp {
-      ADDR_ANY = 0
-    , ADDR_BROADCAST
+      SI_ADDR_ANY = 0
+    , SI_ADDR_BROADCAST
 };
 
 class IAddrInfo {
