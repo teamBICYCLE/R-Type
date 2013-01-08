@@ -1,5 +1,7 @@
 #include <iostream>
 #include <fstream>
+#include <cstring>
+#include <sstream>
 #include "system/log/Log.hh"
 #include "ResourcesArchiver.hh"
 
@@ -39,7 +41,7 @@ void ResourcesArchiver::pack(void) const
     std::ofstream f(_name + "." + _extension, std::ofstream::binary);
     std::string data;
     char name[FILE_NAME_LENGTH];
-    char size[SIZE_FILE_LENGTH];
+    std::stringstream size;
 
     for (auto it = _files.begin(); it != _files.end(); ++it)
     {
@@ -49,14 +51,15 @@ void ResourcesArchiver::pack(void) const
 
         // Write file name
         f.write(name, FILE_NAME_LENGTH);
-
         data = ResourcesArchiver::readFile(*it);
-        std::memset(size, 0, SIZE_FILE_LENGTH);
+        
         // Get file size
-        _itoa(data.length(), size, 10);
+        size.str("");
+        size.clear();
+        size << data.length();
 
         // Write size + data
-        f.write(size, SIZE_FILE_LENGTH);
+        f.write(size.str().c_str(), SIZE_FILE_LENGTH);
         f.write(data.c_str(), data.length());
     }
     f.write(END_OF_ARCHIVE, strlen(END_OF_ARCHIVE));

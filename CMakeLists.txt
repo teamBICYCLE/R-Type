@@ -27,9 +27,10 @@ if(${UNIX})
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -O3")
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -std=c++0x -ggdb")
 endif()
-if(${WIN32})
+if(WIN32)
+    add_definitions(/D _CRT_SECURE_NO_WARNINGS)
     set(GUI_TYPE WIN32)
-endif()
+endif(WIN32)
 
 ################################################################################
 # Build project
