@@ -3,6 +3,14 @@
 #include <thread>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+
+#include <system/archiver/ResourcesArchiver.hh>
+
+#ifdef _WIN32
+#include <system/threads/WinMutex.hh>
+#elif defined __gnu_linux__
+#include <system/threads/UnixMutex.hh>
+#endif
 #include <system/log/Log.hh>
 #include <system/network/Udp.hh>
 #include <system/network/Addr.hh>
@@ -31,10 +39,6 @@ int main(int argc, char* argv[])
     //network::sockets::Udp udp;
     //char buf[1024];
 
-    log::notice.configure("output.log");
-	log::notice << "Test some stuff out";
-	log::notice << "other stuff" << std::endl;
-	log::notice << "end test" << log::endl;
     //udp.bind(pair);
     //while (1) {
         //memset(buf, 0, sizeof(buf));

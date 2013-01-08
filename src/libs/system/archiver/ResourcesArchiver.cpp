@@ -58,8 +58,10 @@ void ResourcesArchiver::pack(void) const
         size.clear();
         size << data.length();
 
+
         // Write size + data
-        f.write(size.str().c_str(), SIZE_FILE_LENGTH);
+        std::cout << "write size : " << size.str() << std::endl;
+        f.write(&size.str()[0], SIZE_FILE_LENGTH);
         f.write(data.c_str(), data.length());
     }
     f.write(END_OF_ARCHIVE, strlen(END_OF_ARCHIVE));
@@ -67,7 +69,7 @@ void ResourcesArchiver::pack(void) const
 }
 
 // TMP
-bool ResourcesArchiver::unpack(const std::string &file, const std::string &dir, int a)
+bool ResourcesArchiver::unpack(const std::string &file, const std::string &dir)
 {
     std::ifstream ifs(file, std::ios::binary);;
     std::string content((std::istreambuf_iterator<char>(ifs)),(std::istreambuf_iterator<char>()));
@@ -99,9 +101,10 @@ bool ResourcesArchiver::unpack(const char *data, const std::string &dir)
         std::strncpy(size, data, SIZE_FILE_LENGTH);
         data += SIZE_FILE_LENGTH;
 
-        std::cout << "Unpack file : " << name << " (" << size << ")" << std::endl;
+        log::info << "Unpack file : " << name << " (" << size << ")" << log::endl;
 
         // Write data in the resource file
+        std::cout << "Unpack file : " << name << " (" << size << ")" << std::endl;
         f.open(dir + "/" + name, std::fstream::out | std::fstream::binary);
         f.write(data, atoi(size));
         if (f.bad())
