@@ -7,28 +7,42 @@
  * -----------------------------------------------------------------------------
  */
 
-#include "UnixUdp.hh"
-#include <sys/socket.h>
+#include "Udp.hh"
 #include <string.h>
+#include <stdexcept>
+#include <system/log/Log.hh>
+#ifdef __gnu_linux__
 #include <unistd.h>
 #include <netinet/ip.h>
-#include <stdexcept>
+#include <sys/socket.h>
+#define recvfrom_size_param unsigned int
+#elif defined _WIN32
+#include <winsock2.h>
+#include <windows.h>
+#define recvfrom_size_param int
+#pragma comment( lib, "wsock32.lib" )
+#pragma comment (lib, "Ws2_32.lib")
+#endif
 
 namespace TBSystem {
 namespace network {
     namespace sockets {
-        UnixUdp::UnixUdp()
+        Udp::Udp()
         {
             errno = 0;
             _socket = socket(AF_INET, SOCK_DGRAM, 0);
             if (_socket == -1) throw std::runtime_error(strerror(errno));
         }
 
-        UnixUdp::~UnixUdp() {
+        Udp::~Udp() {
+#ifdef __gnu_linux__
             close(_socket);
+#elif defined _WIN32
+			closesocket(_socket);
+#endif
         }
 
-        void UnixUdp::bind(const IAddr & pair)
+        void Udp::bind(const IAddr & pair)
         {
             for (auto hint : pair.infos()) {
                if (::bind(_socket, static_cast<const sockaddr *>(hint->get()),
@@ -43,7 +57,7 @@ namespace network {
                                      + std::get<1>(pair.get()));
         }
 
-        int UnixUdp::send(const char * packet, int packetSize, const IAddr & pair)
+        int Udp::send(const char * packet, int packetSize, const IAddr & pair)
         {
             int ret;
 
@@ -67,18 +81,18 @@ namespace network {
             return ret;
         }
 
-        int UnixUdp::recv(char * packet, int maxPacketSize, IAddr & pair)
+        int Udp::recv(char * packet, int maxPacketSize, IAddr & pair)
         {
             int ret;
             sockaddr_in buf;
-            unsigned int len = 0;
+            recvfrom_size_param len = sizeof(buf);
 
             memset(&buf, 0, sizeof(buf));
             errno = 0;
             ret = ::recvfrom(_socket, packet, maxPacketSize, 0,
                              reinterpret_cast<sockaddr*>(&buf), &len);
-            pair.setValid(static_cast<void *>(&buf));
             if (ret == -1) throw std::runtime_error(strerror(errno));
+            pair.setValid(static_cast<void *>(&buf));
             return ret;
         }
     }

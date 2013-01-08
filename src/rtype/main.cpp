@@ -1,27 +1,15 @@
-#include <iostream>
-#include <string>
-#include <thread>
-#include <SFML/Graphics.hpp>
-#include <SFML/Audio.hpp>
-
-#include <system/archiver/ResourcesArchiver.hh>
-
-#ifdef _WIN32
-#include <system/threads/WinMutex.hh>
-#elif defined __gnu_linux__
-#include <system/threads/UnixMutex.hh>
-#endif
-#include <system/log/Log.hh>
-#include <system/network/Udp.hh>
-#include <system/network/Addr.hh>
-#include "RTypeConfig.h"
 #ifdef _WIN32
 #include <windows.h>
 #include <stdlib.h>
 #include <string.h>
 #include <tchar.h>
 #endif
-#include <string.h>
+#include <thread>
+#include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
+
+#include <system/log/Log.hh>
+#include "RTypeConfig.h"
 
 using namespace std;
 using namespace TBSystem;
@@ -53,6 +41,7 @@ int main(int argc, char* argv[])
     sf::RenderWindow window(sf::VideoMode(800, 600), "RType v"
         + std::to_string(RTYPE_VERSION_MAJOR)
         + "." + std::to_string(RTYPE_VERSION_MINOR));
+
     while (window.isOpen())
     {
         sf::Event event;

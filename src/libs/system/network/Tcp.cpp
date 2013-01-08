@@ -7,39 +7,51 @@
  * -----------------------------------------------------------------------------
  */
 
-#include "UnixTcp.hh"
+#include "Tcp.hh"
 #include <stdexcept>
 #include "system/log/Log.hh"
 #include <errno.h>
-#include <unistd.h>
 #include <string.h>
-#include <sys/socket.h>
-#include <netinet/ip.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
+#ifdef __gnu_linux__
+# include <unistd.h>
+# include <sys/socket.h>
+# include <netinet/ip.h>
+# include <sys/socket.h>
+# include <netinet/in.h>
+# include <arpa/inet.h>
+#elif defined _WIN32
+# include <winsock2.h>
+# include <Ws2tcpip.h>
+# include <windows.h>
+# pragma comment( lib, "wsock32.lib" )
+#pragma comment (lib, "Ws2_32.lib")
+#endif
 
 namespace TBSystem {
 namespace network {
     namespace sockets {
-        UnixTcp::UnixTcp()
+        Tcp::Tcp()
         {
             errno = 0;
             _socket = socket(AF_INET, SOCK_STREAM, 0);
             if (_socket == -1) throw std::runtime_error(strerror(errno));
         }
 
-        UnixTcp::UnixTcp(int socketDescriptor)
+        Tcp::Tcp(int socketDescriptor)
         : _socket(socketDescriptor)
         {
         }
 
-        UnixTcp::~UnixTcp()
+        Tcp::~Tcp()
         {
+#ifdef __gnu_linux__
             close(_socket);
-        }
+#elif defined _WIN32
+			closesocket(_socket);
+#endif
+		}
 
-        void UnixTcp::listen(int queueLenght)
+        void Tcp::listen(int queueLenght)
         {
             errno = 0;
             if (::listen(_socket, queueLenght) != 0) {
@@ -47,7 +59,7 @@ namespace network {
             }
         }
 
-        void UnixTcp::bind(const IAddr & addr)
+        void Tcp::bind(const IAddr & addr)
         {
             for (auto hint : addr.infos()) {
                if (::bind(_socket, static_cast<const sockaddr *>(hint->get()), hint->size())
@@ -57,17 +69,17 @@ namespace network {
             throw std::runtime_error("No valid host for " + std::get<0>(addr.get()) + ":" + std::get<1>(addr.get()));
         }
 
-        std::shared_ptr<ITcpSocket> UnixTcp::accept(IAddr & pair)
+        std::shared_ptr<ITcpSocket> Tcp::accept(IAddr & pair)
         {
             int fd;
 
             errno = 0;
             fd = ::accept(_socket, nullptr, nullptr);
             if (fd == -1) throw std::runtime_error(strerror(errno));
-            return std::shared_ptr<ITcpSocket>(new UnixTcp(fd));
+            return std::shared_ptr<ITcpSocket>(new Tcp(fd));
         }
 
-        void UnixTcp::connect(const IAddr & pair)
+        void Tcp::connect(const IAddr & pair)
         {
             for (auto hint : pair.infos()) {
                 sockaddr_in * _hint = static_cast<sockaddr_in*>(hint->get());
@@ -75,7 +87,7 @@ namespace network {
 
                 memset(addrstr, 0, sizeof(addrstr));
                 inet_ntop(_hint->sin_family,
-                          static_cast<const void*>(&_hint->sin_addr),
+                          static_cast<void*>(&_hint->sin_addr),
                           addrstr, sizeof(addrstr));
                 log::info << "Trying to connect to "
                     << addrstr << ":" << ntohs(_hint->sin_port) << "... ";
@@ -92,7 +104,7 @@ namespace network {
                                      + ":" + std::get<1>(pair.get()));
        }
 
-        int UnixTcp::recv(char * packet, int maxPacketSize)
+        int Tcp::recv(char * packet, int maxPacketSize)
         {
             int ret;
 
@@ -102,7 +114,7 @@ namespace network {
             return ret;
         }
 
-        int UnixTcp::send(const char * packet, int packetSize)
+        int Tcp::send(const char * packet, int packetSize)
         {
             int ret;
 
