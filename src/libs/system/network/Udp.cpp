@@ -15,6 +15,7 @@
 #include <unistd.h>
 #include <netinet/ip.h>
 #include <sys/socket.h>
+#include <fcntl.h>
 #define recvfrom_size_param unsigned int
 #elif defined _WIN32
 #include <winsock2.h>
@@ -91,9 +92,30 @@ namespace network {
             errno = 0;
             ret = ::recvfrom(_socket, packet, maxPacketSize, 0,
                              reinterpret_cast<sockaddr*>(&buf), &len);
-            if (ret == -1) throw std::runtime_error(strerror(errno));
+            if (errno != EWOULDBLOCK && ret == -1) throw std::runtime_error(strerror(errno));
             pair.setValid(static_cast<void *>(&buf));
             return ret;
+        }
+
+        void    Udp::setBlocking(bool v)
+        {
+#ifdef __gnu_linux__
+
+            int nonBlocking = v;
+            if ( fcntl( _socket, F_SETFL, O_NONBLOCK, nonBlocking ) == -1 )
+            {
+                log::err << "ERROR: " << strerror(errno) << log::endl;
+            }
+            log::debug << "debug lol" << log::endl;
+
+#elif defined _WIN32
+
+            DWORD nonBlocking = v;
+            if ( ioctlsocket( _socket, FIONBIO, &nonBlocking ) != 0 )
+            {
+            }
+
+#endif
         }
     }
 }

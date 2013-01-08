@@ -29,6 +29,10 @@ namespace network {
 
                 virtual int recv(char * packet, int maxPacketSize,
                                  IAddr & pair);
+
+            public:
+                virtual void setBlocking(bool v);
+
             private:
                 int _socket;
         };

@@ -26,6 +26,8 @@ namespace network {
 
                 virtual int recv(char * packet, int maxPacketSize,
                                  IAddr & pair) = 0;
+
+                virtual void setBlocking(bool v) = 0;
         };
     }
 }
