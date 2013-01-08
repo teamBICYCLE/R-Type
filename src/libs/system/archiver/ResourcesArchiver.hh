@@ -12,7 +12,7 @@ namespace TBSystem {
     class ResourcesArchiver
     {
         public:
-            /*
+            /**
             * ResourcesArchiver Constructor
             *
             * @param Output archive name
@@ -20,32 +20,38 @@ namespace TBSystem {
             */
             ResourcesArchiver(const std::string &, const std::string &e = "ar");
 
-            /*
+            /**
             * ResourcesArchiver Destructor
             */
             ~ResourcesArchiver(void);
 
         public:
-            /*
+            /**
             * Add a file in the archive
             *
             * @param File path
             */
-            void add(const std::string &);
+            bool add(const std::string &);
 
-            /*
+            /**
+            * Add all directory files in the archive
+            *
+            * @param Directory path
+            */
+            bool addDirectory(const std::string &);
+
+            /**
             * Create the archive
             */
             void pack(void) const;
 
-            /*
+            /**
             * Unpack an archive content in a particular path
             *
             * @param Archive content
             * @param Destination path
             */
             static bool unpack(const char *, const std::string &);
-            static bool unpack(const std::string &, const std::string &);
 
         private:
             const std::string readFile(const std::string &path) const;

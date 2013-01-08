@@ -1,7 +1,10 @@
 #include <iostream>
 #include <fstream>
 #include <cstring>
+#include <dirent.h>
 #include <sstream>
+#include <stdexcept>
+#include <functional>
 #include "system/log/Log.hh"
 #include "ResourcesArchiver.hh"
 
@@ -19,19 +22,42 @@ ResourcesArchiver::~ResourcesArchiver(void)
 const std::string ResourcesArchiver::readFile(const std::string &path) const
 {
     std::ifstream ifs(path, std::ios::binary);
+    std::string content;
     if (!ifs.good())
         log::warn << "Undefined reference to file " << path << " (skipped)" << log::endl;
-    std::string content((std::istreambuf_iterator<char>(ifs)),(std::istreambuf_iterator<char>()));
+    else
+        content.assign((std::istreambuf_iterator<char>(ifs)),(std::istreambuf_iterator<char>()));
     return content;
 }
 
-// bool
-void ResourcesArchiver::add(const std::string &file)
+bool ResourcesArchiver::add(const std::string &file)
 {
     if (file.length() > FILE_NAME_LENGTH)
-	log::warn << "Filename is too large for this archive" << log::endl;
-    else
-        _files.push_back(file);
+    {
+	   log::warn << "Filename is too large for this archive" << log::endl;
+       return false;
+    }
+    _files.push_back(file);
+    return true;
+}
+
+bool ResourcesArchiver::addDirectory(const std::string &dir)
+{
+    DIR *dp;
+    struct dirent *entry;
+    unsigned char isFile = 0x8;
+    if (!(dp = opendir(dir.c_str())))
+    {
+        log::warn << "Error(" << errno << ") opening " << dir << log::endl;
+        return false;
+    }
+    
+    while ((entry = readdir(dp)))
+        if (entry->d_type == isFile)
+            _files.push_back(dir + "/" + entry->d_name);
+
+    closedir(dp);
+    return true;
 }
 
 void ResourcesArchiver::pack(void) const
@@ -42,27 +68,29 @@ void ResourcesArchiver::pack(void) const
     std::ofstream f(_name + "." + _extension, std::ofstream::binary);
     std::string data;
     char name[FILE_NAME_LENGTH];
-    std::stringstream size;
+    char size[SIZE_FILE_LENGTH];
+    std::stringstream sizeStream;
 
-    //TODO: for (auto it : _files)
-    for (auto it = _files.begin(); it != _files.end(); ++it)
+    for (auto it : _files)
     {
     	std::memset(name, 0, FILE_NAME_LENGTH);
-        std::strncpy(name, it->c_str(), FILE_NAME_LENGTH);
+        std::strncpy(name, it.c_str(), FILE_NAME_LENGTH);
 
-        data = ResourcesArchiver::readFile(*it);
+        data = ResourcesArchiver::readFile(it);
         if (data.length() > 0)
         { 
             // Write file name
             f.write(name, FILE_NAME_LENGTH);
             
             // Get file size
-            size.str("");
-            size.clear();
-            size << data.length();
+            sizeStream.str("");
+            sizeStream.clear();
+            sizeStream << data.length();
+            std::memset(size, 0, SIZE_FILE_LENGTH);
+            std::strncpy(size, &sizeStream.str()[0], SIZE_FILE_LENGTH);
 
             // Write size + data
-            f.write(&size.str()[0], SIZE_FILE_LENGTH);
+            f.write(size, SIZE_FILE_LENGTH);
             f.write(data.c_str(), data.length());
         }
     }
@@ -70,27 +98,22 @@ void ResourcesArchiver::pack(void) const
     f.close();
 }
 
-// TMP
-bool ResourcesArchiver::unpack(const std::string &file, const std::string &dir)
-{
-    std::ifstream ifs(file, std::ios::binary);;
-    std::string content((std::istreambuf_iterator<char>(ifs)),(std::istreambuf_iterator<char>()));
-    return ResourcesArchiver::unpack(content.c_str(), dir);
-}
-
 bool ResourcesArchiver::unpack(const char *data, const std::string &dir)
 {
     std::string name;
     char size[SIZE_FILE_LENGTH];
+    int isize;
     std::fstream f;
+
+    std::function<double(void)> dataError = [](void) {
+        log::critic << "Corrupted data. Archive can't be unpack" << log::endl;
+        return false;
+    };
 
     while (std::strcmp(data, END_OF_ARCHIVE))
     {
         if (!std::strlen(data))
-        {
-	    log::critic << "Corrupted data. Archive can't be unpack" << log::endl;
-            return false;
-        }
+            return dataError();
 
         // Get File name
         name.resize(std::strlen(data));
@@ -103,17 +126,23 @@ bool ResourcesArchiver::unpack(const char *data, const std::string &dir)
         std::strncpy(size, data, SIZE_FILE_LENGTH);
         data += SIZE_FILE_LENGTH;
 
-        log::info << "Unpack file " << name << " (" << size << ")" << log::endl;
+        try {
+            isize = 0;
+            isize = std::stoi(size);            
+        } catch (std::invalid_argument &e) {
+            return dataError(); 
+        } catch (std::out_of_range &e) {
+            return dataError(); 
+        }
 
         // Write data in the resource file
+        log::info << "Unpack file " << name << " (" << size << ")" << log::endl;
         f.open(dir + "/" + name, std::fstream::out | std::fstream::binary);
-        f.write(data, std::stoi(size));
+        f.write(data, isize);
         if (f.bad())
-        {
-            log::critic << "Corrupted data. Archive can't be unpack" << log::endl;
-            return false;
-        }
-        data += std::stoi(size);
+            return dataError();
+
+        data += isize;
         f.close();
     }
     return true;

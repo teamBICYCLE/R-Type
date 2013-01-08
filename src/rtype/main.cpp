@@ -46,7 +46,7 @@ int main(int argc, char* argv[])
             //log::debug << buf << log::endl;
             //return 0;
         //}
-        //std::chrono::milliseconds duration( 100 );
+        //std::chrono::milliseconds duration(100);
         //std::this_thread::sleep_for(duration);
     //}
     //return 0;
