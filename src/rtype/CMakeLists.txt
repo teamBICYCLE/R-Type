@@ -14,22 +14,31 @@ configure_file (
   "${PROJECT_BINARY_DIR}/RTypeConfig.h"
   )
 
-include_directories("${PROJECT_BINARY_DIR}")
+include_directories(${PROJECT_SOURCE_DIR} ${PROJECT_BINARY_DIR})
 
-list(APPEND ${PROJECT_NAME}_HEADERS
-)
+include("units/CMakeLists.txt")
+include("utilities/CMakeLists.txt")
 
-list(APPEND ${PROJECT_NAME}_SOURCES
+add_executable(client
+	${GUI_TYPE} # Prevent windows from spawning a terminal window
+    ${UTILITIES}
+    ${UNITS}
     main.cpp
 )
 
-add_executable(${PROJECT_NAME} 
-	${GUI_TYPE} # Prevent windows from spawning a terminal window
-    ${${PROJECT_NAME}_HEADERS}
-    ${${PROJECT_NAME}_SOURCES}
+add_executable(server
+    ${UTILITIES}
+    ${UNITS}
+    Input.hh
+    Input.cpp
+    server.cpp
 )
 
-target_link_libraries(${PROJECT_NAME} 
+target_link_libraries(client
     ${SFML_LIBRARIES}
+    system
+)
+
+target_link_libraries(server
     system
 )

@@ -23,7 +23,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 int main(int argc, char* argv[])
 #endif
 {
-    sf::RenderWindow window(sf::VideoMode(800, 600), "RType v"
+    sf::RenderWindow window(sf::VideoMode(800, 600), "RForceType v"
         + std::to_string(RTYPE_VERSION_MAJOR)
         + "." + std::to_string(RTYPE_VERSION_MINOR));
 
@@ -39,7 +39,7 @@ int main(int argc, char* argv[])
         }
         window.clear();
         window.display();
-        std::chrono::milliseconds duration( 100 );
+        std::chrono::milliseconds duration( 1000 );
         std::this_thread::sleep_for(duration);
     }
     return 0;
