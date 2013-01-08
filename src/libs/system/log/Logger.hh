@@ -47,7 +47,7 @@ public:
             strftime(buff, sizeof(buff), "%Y-%m-%d.%X", std::localtime(&result));
             _line << std::string("[Log message] [");
             _line << std::string(buff);
-            _line << std::string("] :");
+            _line << std::string("] : ");
             _newline = false;
         }
         _line << s;

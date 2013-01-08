@@ -26,17 +26,17 @@ Logger & Logger::operator<<(const log::modifier & s) {
 	switch (s) {
 	case log::endl:
 		_line << std::endl;
-        if (_file.good()) {
-            _file << _line.str();
-        } else {
+        // if (_file.good()) {
+        //     _file << _line.str();
+        // } else {
             #ifdef __gnu_linux__
         		_outstream() << _line.str();
         		_outstream().flush();
             #elif defined _WIN32
         		OutputDebugString(_line.str().c_str());
             #endif
-            _line.str(""); _line.clear();
-        }
+        // }
+        _line.str(""); _line.clear();
 	default:
 		break;
 	}
