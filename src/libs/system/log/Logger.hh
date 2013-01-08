@@ -12,6 +12,7 @@
 #include <string>
 #include <sstream>
 #include <ostream>
+#include <fstream>
 #include <ctime>
 
 namespace TBSystem {
@@ -33,8 +34,10 @@ public:
         , DEBUG
     };
 
-    Logger(int level = 6);
+    Logger(int level = INFO);
     ~Logger();
+
+    bool       configure(const std::string &OutpuFile);
 
     template <typename T>
     Logger &   operator<<(const T & s) {
@@ -57,6 +60,7 @@ public:
 private:
     std::ostream &		_outstream() const;
 	std::stringstream	_line;
+    std::ofstream       _file;
 
 private:
     int _level;

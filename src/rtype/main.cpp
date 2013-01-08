@@ -39,13 +39,6 @@ int main(int argc, char* argv[])
     //network::sockets::Udp udp;
     //char buf[1024];
 
-    ResourcesArchiver a("toto");
-    a.add("test/av.jpg");
-    a.add("test/lolo.jpg");
-
-    a.pack();
-    ResourcesArchiver::unpack(std::string("toto.ar"), "res");
-
     //udp.bind(pair);
     //while (1) {
         //memset(buf, 0, sizeof(buf));

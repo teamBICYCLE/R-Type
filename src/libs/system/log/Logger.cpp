@@ -26,16 +26,17 @@ Logger & Logger::operator<<(const log::modifier & s) {
 	switch (s) {
 	case log::endl:
 		_line << std::endl;
-#ifdef __gnu_linux__
-		std::cout << "line = " << _line << std::endl;
-		_outstream() << _line.str();
-		_outstream().flush();
-#elif defined _WIN32
-		OutputDebugString(_line.str().c_str());
-#endif
-        _line.str(""); _line.clear();
-		_newline = true;
-		break;
+        if (_file.good()) {
+            _file << _line.str();
+        } else {
+            #ifdef __gnu_linux__
+        		_outstream() << _line.str();
+        		_outstream().flush();
+            #elif defined _WIN32
+        		OutputDebugString(_line.str().c_str());
+            #endif
+            _line.str(""); _line.clear();
+        }
 	default:
 		break;
 	}
@@ -58,6 +59,15 @@ std::ostream & Logger::_outstream() const {
     else {
         return std::cerr; // TODO: std::cnull
     }
+}
+
+bool    Logger::configure(const std::string &OutputFile) {
+    bool success = false;
+    _file.open(OutputFile);
+    if (_file.good()) {
+        success = true;
+    }
+    return (success);
 }
 }
 }
