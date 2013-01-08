@@ -27,21 +27,21 @@ int WINAPI WinMain(HINSTANCE hInstance,
 int main(int argc, char* argv[])
 #endif
 {
-    network::Addr pair(network::ADDR_ANY, "4242", "UDP");
-    network::sockets::Udp udp;
-    char buf[1024];
+    //network::Addr pair(network::ADDR_ANY, "4242", "UDP");
+    //network::sockets::Udp udp;
+    //char buf[1024];
 
-    udp.bind(pair);
-    while (1) {
-        memset(buf, 0, sizeof(buf));
-        if (udp.recv(buf, sizeof(buf), pair) > 0) {
-            log::debug << buf << log::endl;
-            return 0;
-        }
-        std::chrono::milliseconds duration( 100 );
-        std::this_thread::sleep_for(duration);
-    }
-    return 0;
+    //udp.bind(pair);
+    //while (1) {
+        //memset(buf, 0, sizeof(buf));
+        //if (udp.recv(buf, sizeof(buf), pair) > 0) {
+            //log::debug << buf << log::endl;
+            //return 0;
+        //}
+        //std::chrono::milliseconds duration( 100 );
+        //std::this_thread::sleep_for(duration);
+    //}
+    //return 0;
     sf::RenderWindow window(sf::VideoMode(800, 600), "RType v"
         + std::to_string(RTYPE_VERSION_MAJOR)
         + "." + std::to_string(RTYPE_VERSION_MINOR));
