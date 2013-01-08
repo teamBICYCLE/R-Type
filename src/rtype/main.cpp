@@ -2,6 +2,9 @@
 #include <string>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+
+#include <system/archiver/ResourcesArchiver.hh>
+
 #ifdef _WIN32
 #include <system/threads/WinMutex.hh>
 #elif defined __gnu_linux__
@@ -38,6 +41,14 @@ int main(int argc, char* argv[])
 #elif defined __gnu_linux__
 	UnixMutex mut;
 #endif
+
+    ResourcesArchiver a("toto");
+    a.add("test/av.jpg");
+    a.add("test/lolo.jpg");
+
+    a.pack();
+    std::cout << "Eeeeeeeeee" << std::endl;
+    ResourcesArchiver::unpack(std::string("toto.ar"), "res");
 
 	log::notice << "Test some stuff out";
 	log::notice << "other stuff" << std::endl;
