@@ -68,7 +68,7 @@ std::ostream & Logger::_outstream() const {
 bool    Logger::configure(const std::string &OutputFile) {
     bool success = false;
     _file.open(OutputFile);
-    if (_file.is_open()) {
+    if (_file.is_open() && _file.good()) {
         success = true;
     }
     return (success);
