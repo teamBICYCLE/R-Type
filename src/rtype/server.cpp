@@ -8,13 +8,10 @@
 using namespace TBSystem;
 
 void intTobinary(int num){
-
     if(num>0){
         intTobinary(num/2);
         printf("%d",num%2);
     }
-
-
 }
 
 int     main(int argc, char *argv[])
