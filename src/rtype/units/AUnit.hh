@@ -23,7 +23,7 @@ class   AUnit
     public:
         friend std::ostream&    operator<<(std::ostream& stream, const AUnit& unit);
 
-    private:
+    protected:
         Vector2D		_pos;
         Vector2D		_dir;
         unsigned int	_id;

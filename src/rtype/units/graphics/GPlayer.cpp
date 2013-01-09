@@ -4,8 +4,20 @@
 GPlayer::GPlayer(unsigned int id, const Vector2D& pos, const Vector2D& dir)
 	: GUnit(id, pos, dir), _circle(10.f)
 {
-	_circle.setFillColor(sf::Color::Green);
-	_circle.setPosition(20, 20);
+	switch (_id) {
+		case 1 :
+			_circle.setFillColor(sf::Color::Green);
+			break;
+		case 2 :
+			_circle.setFillColor(sf::Color::Red);
+			break;
+		case 3 :
+			_circle.setFillColor(sf::Color::Blue);
+			break;
+		case 4 :
+			_circle.setFillColor(sf::Color::Yellow);
+			break;
+	}
 }
 
 GPlayer::~GPlayer(void)

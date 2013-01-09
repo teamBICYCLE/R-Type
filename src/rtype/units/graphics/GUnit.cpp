@@ -4,7 +4,6 @@
 GUnit::GUnit(unsigned int id, const Vector2D& pos, const Vector2D& dir)
 	: AUnit(id, pos, dir), sf::Drawable()
 {
-	std::cout << "New GUnit !" << std::endl;
 }
 
 GUnit::~GUnit(void)
@@ -14,6 +13,10 @@ GUnit::~GUnit(void)
 
 void GUnit::draw(sf::RenderTarget &target, sf::RenderStates states) const
 {
-	std::cout << "Draw !" << std::endl;
-	target.draw(*(render()), states);
+	sf::Vector2f pos = static_cast<sf::Vector2f>(_pos);
+
+	//tmp 
+	pos.x *= 800;
+	pos.y *= 800;
+	target.draw(*(render()), sf::Transform().translate(pos));
 }
