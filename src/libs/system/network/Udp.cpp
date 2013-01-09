@@ -92,7 +92,7 @@ namespace network {
             errno = 0;
             ret = ::recvfrom(_socket, packet, maxPacketSize, 0,
                              reinterpret_cast<sockaddr*>(&buf), &len);
-            if (errno != EWOULDBLOCK && ret == -1) throw std::runtime_error(strerror(errno));
+            //if (errno != EWOULDBLOCK && ret == -1) throw std::runtime_error(strerror(errno));
             pair.setValid(static_cast<void *>(&buf));
             return ret;
         }
@@ -110,9 +110,10 @@ namespace network {
 
 #elif defined _WIN32
 
-            DWORD nonBlocking = v;
+            DWORD nonBlocking = !v;
             if ( ioctlsocket( _socket, FIONBIO, &nonBlocking ) != 0 )
             {
+				log::err << "ERROR: " << WSAGetLastError() << log::endl;
             }
 
 #endif

@@ -2,6 +2,7 @@
 # define	__VECTOR2D_HPP__
 
 # include	<iostream>
+# include <SFML/System/Vector2.hpp>
 
 class Vector2D
 {
@@ -27,6 +28,10 @@ class Vector2D
         bool	    operator==(const Vector2D& v) const;
         bool	    operator!=(const Vector2D& v) const;
 
+    public:
+        operator sf::Vector2f() const;
+
+    public:
         float	length() const;
         float	lengthSquared() const;
         void    normalize();

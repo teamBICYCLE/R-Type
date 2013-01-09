@@ -16,5 +16,4 @@ void GUnit::draw(sf::RenderTarget &target, sf::RenderStates states) const
 {
 	std::cout << "Draw !" << std::endl;
 	target.draw(*(render()), states);
-		
 }
