@@ -63,15 +63,18 @@ void    AUnit::setDirection(const Vector2D& dir)
     _dir = dir;
 }
 
+#define TO_SHORT(x) (x * ((uint16_t)-1))
+#define FROM_SHORT(x) (x / (float)((uint16_t)-1))
+
 size_t  AUnit::pack(uint8_t *out, size_t outSize) const
 {
     UnitPacket_u            packetContent;
 
     packetContent.id = _id;
-    packetContent.x = _pos.x;
-    packetContent.y = _pos.y;
-    packetContent.dx = _dir.x;
-    packetContent.dy = _dir.y;
+    packetContent.x = TO_SHORT(_pos.x);
+    packetContent.y = TO_SHORT(_pos.y);
+    packetContent.dx = TO_SHORT(_dir.x);
+    packetContent.dy = TO_SHORT(_dir.y);
 
     network_packet::Packet packet(network_packet::Type::POSITION, packetContent.whole, sizeof(packetContent.whole));
 
@@ -86,10 +89,10 @@ void    AUnit::update(network_packet::Packet packet)
     const UnitPacket_u *content = reinterpret_cast<const UnitPacket_u*>(packet.getContent());
 
     _id = content->id;
-    _pos.x = content->x;
-    _pos.y = content->y;
-    _dir.x = content->dx;
-    _dir.y = content->dy;
+    _pos.x = FROM_SHORT(content->x);
+    _pos.y = FROM_SHORT(content->y);
+    _dir.x = FROM_SHORT(content->dx);
+    _dir.y = FROM_SHORT(content->dy);
 }
 
 std::ostream&   operator<<(std::ostream& stream, const AUnit& unit)

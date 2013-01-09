@@ -21,6 +21,7 @@ int     main(int argc, char *argv[])
 	WSAStartup( MAKEWORD(2,2), &WsaData );
 #endif
     AUnit   player1(1, Vector2D(0.1f, 0.1f), Vector2D(0.f, 0.f));
+    network::Addr p1_s("127.0.0.1", "4244", "UDP");
     AUnit   player2(2, Vector2D(0.1f, 0.2f), Vector2D(0.f, 0.f));
     AUnit   player3(3, Vector2D(0.1f, 0.3f), Vector2D(0.f, 0.f));
     AUnit   player4(4, Vector2D(0.1f, 0.4f), Vector2D(0.f, 0.f));
@@ -49,22 +50,26 @@ int     main(int argc, char *argv[])
 
             switch (input.getId()) {
                 case 1:
-                    player1.setDirection(input.getVector() / 10);
+                    player1.setDirection(input.getVector() / 100);
                     break;
                 case 2:
-                    player2.setDirection(input.getVector() / 10);
+                    player2.setDirection(input.getVector() / 100);
                     break;
                 case 3:
-                    player3.setDirection(input.getVector() / 10);
+                    player3.setDirection(input.getVector() / 100);
                     break;
                 case 4:
-                    player4.setDirection(input.getVector() / 10);
+                    player4.setDirection(input.getVector() / 100);
                     break;
                 default:
                     break;
             }
         }
         player1.move();
+        char buf[256];
+        int ret = player1.pack(reinterpret_cast<uint8_t*>(buf), sizeof(buf));
+        log::debug << "ret = " << ret << log::endl;
+        s.send(buf, ret, p1_s);
 		player1.setDirection(Vector2D());
         player2.move();
 		player2.setDirection(Vector2D());
@@ -73,7 +78,7 @@ int     main(int argc, char *argv[])
         player4.move();
 		player4.setDirection(Vector2D());
 
-        std::chrono::seconds    duration(1);
+        std::chrono::milliseconds    duration(10);
         std::this_thread::sleep_for(duration);
     }
 #ifdef _WIN32

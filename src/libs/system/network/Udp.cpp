@@ -62,7 +62,7 @@ namespace network {
         {
             int ret;
 
-            if (pair.hasValidAddr()) {
+            if (pair.hasValidAddr() && 0) {
                 ret = ::sendto(_socket, packet, packetSize, 0,
                                static_cast<const sockaddr *>(pair.getValid()),
                                pair.validSize());
@@ -101,7 +101,7 @@ namespace network {
         {
 #ifdef __gnu_linux__
 
-            int nonBlocking = v;
+            int nonBlocking = !v;
             if ( fcntl( _socket, F_SETFL, O_NONBLOCK, nonBlocking ) == -1 )
             {
                 log::err << "ERROR: " << strerror(errno) << log::endl;

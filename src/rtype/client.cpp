@@ -7,9 +7,14 @@
 #include <thread>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+#include <SFML/Window/Keyboard.hpp>
 #include "units/graphics/GPlayer.hh"
+#include "units/AUnit.hh"
+#include "input/Data.hh"
+#include "input/Config.hh"
 #include <system/log/Log.hh>
 #include <system/network/Udp.hh>
+#include <system/network/Addr.hh>
 #include "RTypeConfig.h"
 
 using namespace std;
@@ -28,11 +33,11 @@ int main(int argc, char* argv[])
     network::sockets::Udp s;
     network::Addr server(argv[1], argv[2], "UDP");
     Input::Config cfg;
-    cfg._top = sf::Keyboard::UP;
-    cfg._bot = sf::Keyboard::DOWN;
-    cfg._left = sf::Keyboard::LEFT;
-    cfg._right = sf::Keyboard::RIGHT;
-    cfg._fire = sf::Keyboard::SPACE;
+    cfg._top = sf::Keyboard::Up;
+    cfg._bot = sf::Keyboard::Down;
+    cfg._left = sf::Keyboard::Left;
+    cfg._right = sf::Keyboard::Right;
+    cfg._fire = sf::Keyboard::Space;
     GPlayer   player1(1, Vector2D(0.1f, 0.1f), Vector2D(0.01f, 0.f));
     GPlayer   player2(2, Vector2D(0.1f, 0.2f), Vector2D(0.01f, 0.f));
     GPlayer   player3(3, Vector2D(0.1f, 0.3f), Vector2D(0.01f, 0.f));
@@ -42,30 +47,35 @@ int main(int argc, char* argv[])
         + std::to_string(RTYPE_VERSION_MAJOR)
         + "." + std::to_string(RTYPE_VERSION_MINOR));
 
+    s.setBlocking(false);
+    s.bind(network::Addr(network::SI_ADDR_ANY, "4244", "UDP"));
     while (window.isOpen())
     {
         Input::Data i = cfg.getInput();
-
         i.setId(std::stoi(argv[3]));
-        s.send(&i.getPacket(), sizeof(&i.getPacket()), server);
+        uint32_t data = i.getPacket();
+
+        log::debug << "data value: " << data << log::endl;
+        s.send(reinterpret_cast<const char*>(&data), sizeof(data), server);
 
         char buf[256];
-        while (s.recv()) {
-            network_packet::Packet p(buf, sizeof(buf));
+        while (s.recv(buf, sizeof(buf), server) != -1) {
+            network_packet::Packet p((uint8_t*)buf, sizeof(buf));
+            const UnitPacket_u * content = reinterpret_cast<const UnitPacket_u*>(p.getContent());
 
-            UnitPacket_u u(p.getContent());
-            switch (u.getId()) {
+            log::debug << "Player #" << content->id << "pos: " << content->x << ":" << content->y << log::endl;
+            switch (content->id) {
                 case 1:
-                    player1.update(u);
+                    player1.update(p);
                     break;
                 case 2:
-                    player2.udpate(u);
+                    player2.update(p);
                     break;
                 case 3:
-                    player3.update(u);
+                    player3.update(p);
                     break;
                 case 4:
-                    player4.update(u);
+                    player4.update(p);
                     break;
                 default:
                     break;
@@ -83,7 +93,7 @@ int main(int argc, char* argv[])
         window.draw(player3);
         window.draw(player4);
         window.display();
-        std::chrono::milliseconds duration(1000);
+        std::chrono::milliseconds duration(10);
         std::this_thread::sleep_for(duration);
     }
     return 0;
