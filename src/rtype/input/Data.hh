@@ -1,21 +1,22 @@
-#ifndef     __INPUT_HH__
-# define    __INPUT_HH__
+#ifndef     __INPUTDATA_HH__
+# define    __INPUTDATA_HH__
 
 #include <stdint.h>
 #include "utilities/Vector2D.hh"
 
-struct   Input
+namespace Input {
+struct   Data
 {
     public:
-        Input();
-        explicit Input(int packet);
-        ~Input();
+        Data();
+        explicit Data(int packet);
+        ~Data();
 
     public:
-        Input(const Input& other);
-        Input(Input && other);
-        Input&  operator=(Input other);
-        friend void swap(Input& lhs, Input& rhs);
+        Data(const Data& other);
+        Data(Data && other);
+        Data&  operator=(Data other);
+        friend void swap(Data& lhs, Data& rhs);
 
     public:
         int         getId() const;
@@ -46,5 +47,6 @@ struct   Input
 			};
         };
 };
+}
 
-#endif /* !__INPUT_HH__ */
+#endif /* !__INPUTDATA_HH__ */
