@@ -1,6 +1,7 @@
 #ifndef     __INPUT_HH__
 # define    __INPUT_HH__
 
+#include <stdint.h>
 #include "utilities/Vector2D.hh"
 
 struct   Input
@@ -34,13 +35,15 @@ struct   Input
 
     private:
         union {
-            unsigned int _packet;
-            int _top    :1;
-            int _bot    :1;
-            int _left   :1;
-            int _right  :1;
-            int _fire   :1;
-            int _id     :24;
+            uint32_t _packet;
+			struct {
+				unsigned _top    :1;
+				unsigned _bot    :1;
+				unsigned _left   :1;
+				unsigned _right  :1;
+				unsigned _fire   :1;
+				unsigned _id     :24;
+			};
         };
 };
 

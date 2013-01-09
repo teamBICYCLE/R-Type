@@ -19,10 +19,12 @@ void intTobinary(int num){
 
 int     main(int argc, char *argv[])
 {
-    AUnit   player1(1, Vector2D(0.1f, 0.1f), Vector2D(0.01f, 0.f));
-    AUnit   player2(2, Vector2D(0.1f, 0.2f), Vector2D(0.01f, 0.f));
-    AUnit   player3(3, Vector2D(0.1f, 0.3f), Vector2D(0.01f, 0.f));
-    AUnit   player4(4, Vector2D(0.1f, 0.4f), Vector2D(0.01f, 0.f));
+	WSADATA WsaData;
+	WSAStartup( MAKEWORD(2,2), &WsaData );
+    AUnit   player1(1, Vector2D(0.1f, 0.1f), Vector2D(0.f, 0.f));
+    AUnit   player2(2, Vector2D(0.1f, 0.2f), Vector2D(0.f, 0.f));
+    AUnit   player3(3, Vector2D(0.1f, 0.3f), Vector2D(0.f, 0.f));
+    AUnit   player4(4, Vector2D(0.1f, 0.4f), Vector2D(0.f, 0.f));
     network::sockets::Udp s;
     network::Addr pair(network::SI_ADDR_ANY, "4242", "UDP");
 
@@ -30,12 +32,12 @@ int     main(int argc, char *argv[])
     s.bind(pair);
     Input tmp;
 
-    tmp.setId(2); tmp.setBot(true);
+	tmp.setId(2); tmp.setBot(true);
     log::notice << "id mal code " << sizeof(tmp) << log::endl;
-    log::notice << tmp.getId() << log::endl;
+    log::notice << tmp.getPacket() << log::endl;
     while (1)
     {
-        log::notice << player1 << std::endl;
+        log::notice << std::endl << player1 << std::endl;
         log::notice << player2 << std::endl;
         log::notice << player3 << std::endl;
         log::notice << player4 << log::endl;
@@ -64,11 +66,16 @@ int     main(int argc, char *argv[])
             }
         }
         player1.move();
+		player1.setDirection(Vector2D());
         player2.move();
+		player2.setDirection(Vector2D());
         player3.move();
+		player3.setDirection(Vector2D());
         player4.move();
+		player4.setDirection(Vector2D());
 
         std::chrono::seconds    duration(1);
         std::this_thread::sleep_for(duration);
     }
+	WSACleanup();
 }
