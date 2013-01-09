@@ -20,10 +20,10 @@ include("units/CMakeLists.txt")
 include("utilities/CMakeLists.txt")
 
 add_executable(client
-	${GUI_TYPE} # Prevent windows from spawning a terminal window
+    ${GUI_TYPE} # Prevent windows from spawning a terminal window
     ${UTILITIES}
-    ${UNITS}
-    main.cpp
+    ${GUNITS}
+    client.cpp
 )
 
 add_executable(server
