@@ -45,4 +45,5 @@ void    AUnit::setDirection(const Vector2D& dir)
 std::ostream&   operator<<(std::ostream& stream, const AUnit& unit)
 {
     stream << "Unit #" << unit._id << " position: " << unit._pos.x << "-" << unit._pos.y;
+	return stream;
 }

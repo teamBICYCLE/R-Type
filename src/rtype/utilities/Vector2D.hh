@@ -33,7 +33,6 @@ class Vector2D
         float	dot(const Vector2D& v) const;
         float	distance(const Vector2D& v) const;
         float	distanceSquared(const Vector2D& v) const;
-        void    round(void);
 
         float	x;
         float	y;
