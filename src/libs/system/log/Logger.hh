@@ -39,17 +39,11 @@ public:
 
     bool       configure(const std::string &OutpuFile);
 
+	void		outputHeader();
+
     template <typename T>
     Logger &   operator<<(const T & s) {
-        if (_newline) {
-            char buff[80];
-            std::time_t result = std::time(nullptr);
-            strftime(buff, sizeof(buff), "%Y-%m-%d.%X", std::localtime(&result));
-            _line << std::string("[Log message] [");
-            _line << std::string(buff);
-            _line << std::string("] : ");
-            _newline = false;
-        }
+		outputHeader();
         _line << s;
         return *this;
     }

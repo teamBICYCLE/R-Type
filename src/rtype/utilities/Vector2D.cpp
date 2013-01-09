@@ -1,4 +1,4 @@
-#include <cmath>
+#include <math.h>
 #include "Vector2D.hh"
 
 Vector2D::Vector2D(float x, float y)
@@ -149,12 +149,6 @@ float		 Vector2D::distanceSquared(const Vector2D& v) const
   dx = x - v.x;
   dy = y - v.y;
   return dx * dx + dy * dy;
-}
-
-void		Vector2D::round(void)
-{
-  x = ::round(x);
-  y = ::round(y);
 }
 
 Vector2D	operator*(float s, const Vector2D& v)

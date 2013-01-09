@@ -22,6 +22,18 @@ Logger::Logger(int level)
 
 Logger::~Logger() {}
 
+void	 Logger::outputHeader() {
+	    if (_newline) {
+            char buff[80];
+            std::time_t result = std::time(nullptr);
+            strftime(buff, sizeof(buff), "%Y-%m-%d.%X", std::localtime(&result));
+            _line << std::string("[Log message] [");
+            _line << std::string(buff);
+            _line << std::string("] : ");
+            _newline = false;
+        }
+}
+
 Logger & Logger::operator<<(const log::modifier & s) {
 	switch (s) {
 	case log::endl:
@@ -47,6 +59,7 @@ Logger & Logger::operator<<(const log::modifier & s) {
 
 Logger& Logger::operator<<(std::ostream& (*endline)(std::ostream&))
     {
+		outputHeader();
     	_line << endline;
         return *this;
     }

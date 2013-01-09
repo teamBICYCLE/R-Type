@@ -54,7 +54,7 @@ Vector2D    Input::getVector() const
 
 bool        Input::isFiring() const
 {
-    return _fire;
+    return _fire == 1;
 }
 
 unsigned int     Input::getPacket(void) const
