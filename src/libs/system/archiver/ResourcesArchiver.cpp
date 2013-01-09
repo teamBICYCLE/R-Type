@@ -1,7 +1,15 @@
 #include <iostream>
 #include <fstream>
 #include <cstring>
-#include <dirent.h>
+
+#ifdef  __gnu_linux__
+# include <dirent.h>
+#elif      _WIN32
+# include "dirent.h"
+#else
+# error "Unsupported architecture."
+#endif
+
 #include <sstream>
 #include <stdexcept>
 #include <functional>
