@@ -113,6 +113,11 @@ bool		Vector2D::operator!=(const Vector2D& v) const
 	  (y != v.y));
 }
 
+Vector2D::operator sf::Vector2f() const
+{
+    return sf::Vector2f(x, y);
+}
+
 float		Vector2D::length() const
 {
   return sqrt(lengthSquared());
