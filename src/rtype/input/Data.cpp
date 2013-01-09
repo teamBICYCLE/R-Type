@@ -1,46 +1,47 @@
-#include "Input.hh"
+#include "Data.hh"
 
-Input::Input()
+namespace Input {
+Data::Data()
     : _packet(0)
 {
 }
 
-Input::Input(int packet)
+Data::Data(int packet)
     : _packet(packet)
 {
 }
 
-Input::~Input()
+Data::~Data()
 {
 }
 
-Input::Input(const Input& other)
+Data::Data(const Data& other)
     : _packet(other._packet)
 {
 }
 
-Input::Input(Input&& other)
+Data::Data(Data&& other)
 {
     swap(*this, other);
 }
 
-Input&  Input::operator=(Input other)
+Data&  Data::operator=(Data other)
 {
     swap(*this, other);
     return *this;
 }
 
-void    swap(Input& lhs, Input& rhs)
+void    swap(Data& lhs, Data& rhs)
 {
     std::swap(lhs._packet, rhs._packet);
 }
 
-int         Input::getId() const
+int         Data::getId() const
 {
     return _id;
 }
 
-Vector2D    Input::getVector() const
+Vector2D    Data::getVector() const
 {
     Vector2D v;
 
@@ -52,42 +53,43 @@ Vector2D    Input::getVector() const
     return v;
 }
 
-bool        Input::isFiring() const
+bool        Data::isFiring() const
 {
     return _fire == 1;
 }
 
-unsigned int     Input::getPacket(void) const
+unsigned int     Data::getPacket(void) const
 {
     return _packet;
 }
 
-void    Input::setId(int v)
+void    Data::setId(int v)
 {
     _id = v;
 }
 
-void    Input::setTop(bool v)
+void    Data::setTop(bool v)
 {
     _top = v;
 }
 
-void    Input::setBot(bool v)
+void    Data::setBot(bool v)
 {
     _bot = v;
 }
 
-void    Input::setLeft(bool v)
+void    Data::setLeft(bool v)
 {
     _left = v;
 }
 
-void    Input::setRight(bool v)
+void    Data::setRight(bool v)
 {
     _right = v;
 }
 
-void    Input::setFire(bool v)
+void    Data::setFire(bool v)
 {
     _fire = v;
+}
 }

@@ -5,17 +5,18 @@
 # this stuff is worth it, you can buy me a beer in return Thomas Duplomb
 ################################################################################
 
-list(APPEND UNITS_HEADERS
-    ${CMAKE_CURRENT_LIST_DIR}/AUnit.hh
-    ${CMAKE_CURRENT_LIST_DIR}/IPackable.hh
-    ${CMAKE_CURRENT_LIST_DIR}/Packet.hh
+set(NAMESPACE INPUT)
+
+list(APPEND ${NAMESPACE}_HEADERS
+    ${CMAKE_CURRENT_LIST_DIR}/Data.hh
+    ${CMAKE_CURRENT_LIST_DIR}/Config.hh
+    ${CMAKE_CURRENT_LIST_DIR}/Manager.hh
 )
 
-list(APPEND UNITS_SOURCES
-    ${CMAKE_CURRENT_LIST_DIR}/AUnit.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/Packet.cpp
+list(APPEND ${NAMESPACE}_SOURCES
+    ${CMAKE_CURRENT_LIST_DIR}/Data.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/Config.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/Manager.cpp
 )
 
-set(UNITS ${UNITS_HEADERS} ${UNITS_SOURCES})
-
-include("units/graphics/CMakeLists.txt")
+set(${NAMESPACE} ${${NAMESPACE}_HEADERS} ${${NAMESPACE}_SOURCES})

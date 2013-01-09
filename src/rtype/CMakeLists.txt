@@ -18,19 +18,21 @@ include_directories(${PROJECT_SOURCE_DIR} ${PROJECT_BINARY_DIR})
 
 include("units/CMakeLists.txt")
 include("utilities/CMakeLists.txt")
+include("input/CMakeLists.txt")
 
 add_executable(client
-	${GUI_TYPE} # Prevent windows from spawning a terminal window
+    ${GUI_TYPE} # Prevent windows from spawning a terminal window
+    ${INPUT}
     ${UTILITIES}
-    ${UNITS}
-    main.cpp
+    ${GUNITS}
+    client.cpp
 )
 
 add_executable(server
     ${UTILITIES}
     ${UNITS}
-    Input.hh
-    Input.cpp
+    input/Data.hh
+    input/Data.cpp
     server.cpp
 )
 

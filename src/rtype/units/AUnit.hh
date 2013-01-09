@@ -47,11 +47,10 @@ class   AUnit : public IPackable
     public:
         friend std::ostream&    operator<<(std::ostream& stream, const AUnit& unit);
 
-    private:
-        Vector2D    _pos;
-        Vector2D    _dir;
-        int         _id;
-
+    protected:
+        Vector2D		_pos;
+        Vector2D		_dir;
+        unsigned int	_id;
 };
 
 #endif /* !__AUNIT_HH__ */
