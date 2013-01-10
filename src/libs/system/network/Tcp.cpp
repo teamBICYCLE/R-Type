@@ -12,6 +12,7 @@
 #include "system/log/Log.hh"
 #include <errno.h>
 #include <string.h>
+#include "socketInit.hh"
 #ifdef __gnu_linux__
 # include <unistd.h>
 # include <sys/socket.h>
@@ -32,6 +33,7 @@ namespace network {
     namespace sockets {
         Tcp::Tcp()
         {
+            socketInit();
             errno = 0;
             _socket = socket(AF_INET, SOCK_STREAM, 0);
             if (_socket == -1) throw std::runtime_error(strerror(errno));
@@ -40,6 +42,7 @@ namespace network {
         Tcp::Tcp(int socketDescriptor)
         : _socket(socketDescriptor)
         {
+            socketInit();
         }
 
         Tcp::~Tcp()

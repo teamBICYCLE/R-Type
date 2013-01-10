@@ -16,10 +16,6 @@ void intTobinary(int num){
 
 int     main(int argc, char *argv[])
 {
-#ifdef _WIN32
-	WSADATA WsaData;
-	WSAStartup( MAKEWORD(2,2), &WsaData );
-#endif
     AUnit   player1(1, Vector2D(0.1f, 0.1f), Vector2D(0.f, 0.f));
     network::Addr p1_s("127.0.0.1", "4244", "UDP");
     AUnit   player2(2, Vector2D(0.1f, 0.2f), Vector2D(0.f, 0.f));

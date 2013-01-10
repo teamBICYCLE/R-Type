@@ -11,6 +11,7 @@
 #include <string.h>
 #include <stdexcept>
 #include <system/log/Log.hh>
+#include "socketInit.hh"
 #ifdef __gnu_linux__
 #include <unistd.h>
 #include <netinet/ip.h>
@@ -30,6 +31,7 @@ namespace network {
     namespace sockets {
         Udp::Udp()
         {
+            socketInit();
             errno = 0;
             _socket = socket(AF_INET, SOCK_DGRAM, 0);
             if (_socket == -1) throw std::runtime_error(strerror(errno));
