@@ -5,9 +5,8 @@
 # include <string>
 # include <functional>
 # include <dlfcn.h>
-// # include "IDLoader.hh"
 
-class UnixDLoader // : public IDLoader
+class UnixDLoader
 {
 
 public:
