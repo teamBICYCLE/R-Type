@@ -38,6 +38,7 @@ int main(int argc, char* argv[])
     cfg._left = sf::Keyboard::Left;
     cfg._right = sf::Keyboard::Right;
     cfg._fire = sf::Keyboard::Space;
+
     GPlayer   player1(1, Vector2D(0.1f, 0.1f), Vector2D(0.01f, 0.f));
     GPlayer   player2(2, Vector2D(0.1f, 0.2f), Vector2D(0.01f, 0.f));
     GPlayer   player3(3, Vector2D(0.1f, 0.3f), Vector2D(0.01f, 0.f));
@@ -53,6 +54,7 @@ int main(int argc, char* argv[])
     {
         Input::Data i = cfg.getInput();
         i.setId(std::stoi(argv[3]));
+
         uint32_t data = i.getPacket();
 
         log::debug << "data value: " << data << log::endl;

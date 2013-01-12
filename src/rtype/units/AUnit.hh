@@ -4,7 +4,7 @@
 # include   <ostream>
 # include   "IPackable.hh"
 # include   "Packet.hh"
-# include   "utilities/Vector2D.hh"
+# include   "../utilities/Vector2D.hh"
 
 typedef union {
     struct {
