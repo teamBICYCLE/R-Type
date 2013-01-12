@@ -11,6 +11,7 @@
 #include <stdexcept>
 #include <iostream>
 #include <string.h>
+#include "socketInit.hh"
 #ifdef __gnu_linux__
 # include <sys/types.h>
 # include <sys/socket.h>
@@ -52,6 +53,7 @@ namespace network {
     , _infosRes(nullptr)
     , _isValid(false)
     {
+        socketInit();
     }
 
     Addr::~Addr() {

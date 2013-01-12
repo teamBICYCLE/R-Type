@@ -13,14 +13,14 @@ list(APPEND ${PROJECT_NAME}_HEADERS
     ${CMAKE_CURRENT_LIST_DIR}/IUdpSocket.hh  
     ${CMAKE_CURRENT_LIST_DIR}/Tcp.hh  
     ${CMAKE_CURRENT_LIST_DIR}/Udp.hh  
-)
-list(APPEND ${PROJECT_NAME}_HEADERS
     ${CMAKE_CURRENT_LIST_DIR}/Tcp.hh
     ${CMAKE_CURRENT_LIST_DIR}/Udp.hh      
+    ${CMAKE_CURRENT_LIST_DIR}/socketInit.hh      
 )
 
 list(APPEND ${PROJECT_NAME}_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/Addr.cpp
     ${CMAKE_CURRENT_LIST_DIR}/Tcp.cpp
     ${CMAKE_CURRENT_LIST_DIR}/Udp.cpp      
+    ${CMAKE_CURRENT_LIST_DIR}/socketInit.cpp      
 )
