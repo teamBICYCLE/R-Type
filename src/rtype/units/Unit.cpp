@@ -75,10 +75,10 @@ size_t  Unit::pack(uint8_t *out, size_t outSize) const
 {
     UnitPacket_u            packetContent;
 
-    packetContent.x = TO_SHORT(_pos.x);
-    packetContent.y = TO_SHORT(_pos.y);
-    packetContent.dx = TO_SHORT(_dir.x);
-    packetContent.dy = TO_SHORT(_dir.y);
+    packetContent.info.x = TO_SHORT(_pos.x);
+    packetContent.info.y = TO_SHORT(_pos.y);
+    packetContent.info.dx = TO_SHORT(_dir.x);
+    packetContent.info.dy = TO_SHORT(_dir.y);
 
     network_packet::Packet packet(network_packet::Packet::Type::POSITION, _id,
                                   packetContent.whole, sizeof(packetContent.whole));
@@ -93,10 +93,10 @@ void    Unit::unpack(const uint8_t* content)
 {
     const UnitPacket_u *info = reinterpret_cast<const UnitPacket_u*>(content);
 
-    _pos.x = FROM_SHORT(info->x);
-    _pos.y = FROM_SHORT(info->y);
-    _dir.x = FROM_SHORT(info->dx);
-    _dir.y = FROM_SHORT(info->dy);
+    _pos.x = FROM_SHORT(info->info.x);
+    _pos.y = FROM_SHORT(info->info.y);
+    _dir.x = FROM_SHORT(info->info.dx);
+    _dir.y = FROM_SHORT(info->info.dy);
 }
 
 std::ostream&   operator<<(std::ostream& stream, const Unit& unit)

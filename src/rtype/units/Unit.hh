@@ -7,14 +7,13 @@
 # include   "utilities/Vector2D.hh"
 
 typedef union {
-    struct {
+    struct _content {
         uint16_t    x;
         uint16_t    y;
         uint16_t    dx;
         uint16_t    dy;
-    };
-    uint8_t         whole[sizeof(x) + sizeof(y) +
-                          sizeof(dx) + sizeof(dy)];
+    } info;
+    uint8_t         whole[sizeof(_content)];
 } UnitPacket_u;
 
 class   Unit : public IPackable
