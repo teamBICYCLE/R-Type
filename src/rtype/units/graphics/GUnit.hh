@@ -2,9 +2,9 @@
 # define	_G_UNIT_HH_
 
 #include <SFML/Graphics.hpp>
-#include "../AUnit.hh"
+#include "units/Unit.hh"
 
-class GUnit : public AUnit, public sf::Drawable
+class GUnit : public Unit, public sf::Drawable
 {
 
 public:
@@ -12,7 +12,7 @@ public:
 	~GUnit(void);
 
 public:
-	void draw(sf::RenderTarget &target, sf::RenderStates states) const; 
+	void draw(sf::RenderTarget &target, sf::RenderStates states) const;
 	virtual const sf::Drawable *render(void) const = 0;
 };
 
