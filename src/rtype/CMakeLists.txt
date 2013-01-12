@@ -25,6 +25,10 @@ add_executable(client
     ${INPUT}
     ${UTILITIES}
     ${GUNITS}
+    GameState.hh
+    GameState.cpp
+    GraphicGameState.cpp
+    GraphicGameState.hh
     client.cpp
 )
 
@@ -34,6 +38,10 @@ add_executable(server
     input/Data.hh
     input/Data.cpp
     server.cpp
+    NetworkHandler.hh
+    NetworkHandler.cpp
+    GameState.hh
+    GameState.cpp
 )
 
 target_link_libraries(client

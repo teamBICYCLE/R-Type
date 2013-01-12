@@ -9,13 +9,13 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Window/Keyboard.hpp>
 #include "units/graphics/GPlayer.hh"
-#include "units/AUnit.hh"
 #include "input/Data.hh"
 #include "input/Config.hh"
 #include <libs/system/log/Log.hh>
 #include <system/network/Udp.hh>
 #include <system/network/Addr.hh>
 #include "RTypeConfig.h"
+#include "GraphicGameState.hh"
 
 using namespace std;
 using namespace TBSystem;
@@ -38,11 +38,13 @@ int main(int argc, char* argv[])
     cfg._left = sf::Keyboard::Left;
     cfg._right = sf::Keyboard::Right;
     cfg._fire = sf::Keyboard::Space;
-
-    GPlayer   player1(1, Vector2D(0.1f, 0.1f), Vector2D(0.01f, 0.f));
-    GPlayer   player2(2, Vector2D(0.1f, 0.2f), Vector2D(0.01f, 0.f));
-    GPlayer   player3(3, Vector2D(0.1f, 0.3f), Vector2D(0.01f, 0.f));
-    GPlayer   player4(4, Vector2D(0.1f, 0.4f), Vector2D(0.01f, 0.f));
+    std::vector<std::shared_ptr<Unit>> players = {
+      std::shared_ptr<Unit>(new GPlayer(0, Vector2D(0.1f, 0.1f), Vector2D(0.f, 0.f))),
+      std::shared_ptr<Unit>(new GPlayer(1, Vector2D(0.1f, 0.2f), Vector2D(0.f, 0.f))),
+      std::shared_ptr<Unit>(new GPlayer(2, Vector2D(0.1f, 0.3f), Vector2D(0.f, 0.f))),
+      std::shared_ptr<Unit>(new GPlayer(3, Vector2D(0.1f, 0.4f), Vector2D(0.f, 0.f)))
+    };
+    GraphicGameState  g(players);
 
     sf::RenderWindow window(sf::VideoMode(800, 800), "RForceType v"
         + std::to_string(RTYPE_VERSION_MAJOR)
@@ -52,37 +54,21 @@ int main(int argc, char* argv[])
     s.bind(network::Addr(network::SI_ADDR_ANY, "4244", "UDP"));
     while (window.isOpen())
     {
+        uint8_t buf[256];
+
         Input::Data i = cfg.getInput();
         i.setId(std::stoi(argv[3]));
+        int ret = i.pack(buf, sizeof(buf));
 
-        uint32_t data = i.getPacket();
+        s.send(buf, ret, server);
+        std::vector<network_packet::Packet> packets;
 
-        log::debug << "data value: " << data << log::endl;
-        s.send(reinterpret_cast<const char*>(&data), sizeof(data), server);
-
-        char buf[256];
         while (s.recv(buf, sizeof(buf), server) != -1) {
             network_packet::Packet p((uint8_t*)buf, sizeof(buf));
-            const UnitPacket_u * content = reinterpret_cast<const UnitPacket_u*>(p.getContent());
 
-            log::debug << "Player #" << content->id << "pos: " << content->x << ":" << content->y << log::endl;
-            switch (content->id) {
-                case 1:
-                    player1.update(p);
-                    break;
-                case 2:
-                    player2.update(p);
-                    break;
-                case 3:
-                    player3.update(p);
-                    break;
-                case 4:
-                    player4.update(p);
-                    break;
-                default:
-                    break;
-            }
+            packets.push_back(p);
         }
+        g.update(packets);
         sf::Event event;
         while (window.pollEvent(event))
         {
@@ -90,10 +76,7 @@ int main(int argc, char* argv[])
                 window.close();
         }
         window.clear();
-        window.draw(player1);
-        window.draw(player2);
-        window.draw(player3);
-        window.draw(player4);
+        window.draw(g);
         window.display();
         std::chrono::milliseconds duration(10);
         std::this_thread::sleep_for(duration);

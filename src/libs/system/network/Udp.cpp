@@ -60,7 +60,7 @@ namespace network {
                                      + std::get<1>(pair.get()));
         }
 
-        int Udp::send(const char * packet, int packetSize, const IAddr & pair)
+        int Udp::send(const uint8_t * packet, int packetSize, const IAddr & pair)
         {
             int ret;
 
@@ -84,7 +84,7 @@ namespace network {
             return ret;
         }
 
-        int Udp::recv(char * packet, int maxPacketSize, IAddr & pair)
+        int Udp::recv(uint8_t * packet, int maxPacketSize, IAddr & pair)
         {
             int ret;
             sockaddr_in buf;
@@ -108,7 +108,6 @@ namespace network {
             {
                 log::err << "ERROR: " << strerror(errno) << log::endl;
             }
-            log::debug << "debug lol" << log::endl;
 
 #elif defined _WIN32
 

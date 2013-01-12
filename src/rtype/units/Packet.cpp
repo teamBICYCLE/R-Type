@@ -1,26 +1,28 @@
 #include <cstring>
 #include <utility>
 #include "Packet.hh"
+#include <system/log/Log.hh>
+
+using namespace TBSystem;
 
 namespace network_packet {
 
-Packet::Packet(Type type, uint8_t *content, size_t contentSize)
-    : _type(type)
-    , _dataSize(sizeof(_type) + contentSize)
+Packet::Packet(Type type, uint32_t id,
+               const uint8_t *content, size_t contentSize)
+    : _dataSize(sizeof(_header) + contentSize)
 {
-    std::memcpy(_data, &type, sizeof(_type));
-    std::memcpy(_data + sizeof(_type), content, contentSize);
+   _header.type = type;
+   _header.id = id;
+   std::memcpy(_data, &_header, sizeof(_header));
+   std::memcpy(_data + sizeof(_header), content, contentSize);
 }
 
 //dataFromNetwork represents a network packet, with the type first and then the data
-Packet::Packet(uint8_t *dataFromNetwork, size_t size)
+Packet::Packet(const uint8_t *dataFromNetwork, size_t size)
 {
-    _dataSize = size;
-    std::memcpy(&_type, dataFromNetwork, sizeof(_type));
-    dataFromNetwork += sizeof(_type);
-    size -= sizeof(_type);
-    std::memcpy(_data, &_type, sizeof(_type));
-    std::memcpy(_data + sizeof(_type), dataFromNetwork, size);
+   _dataSize = size;
+   std::memcpy(&_header, dataFromNetwork, sizeof(_header));
+   std::memcpy(_data, dataFromNetwork, size);
 }
 
 Packet::~Packet()
@@ -28,7 +30,7 @@ Packet::~Packet()
 }
 
 Packet::Packet(const Packet& other)
-    : _type(other._type)
+    : _header(other._header)
     , _dataSize(other._dataSize)
 {
     std::memcpy(_data, other._data, other._dataSize);
@@ -47,24 +49,29 @@ Packet&     Packet::operator=(Packet other)
 
 void    swap(Packet& lhs, Packet& rhs)
 {
-    std::swap(lhs._type, rhs._type);
+    std::swap(lhs._header, rhs._header);
     std::swap(lhs._data, rhs._data);
     std::swap(lhs._dataSize, rhs._dataSize);
 }
 
-Type    Packet::getType(void) const
+Packet::Type    Packet::getType(void) const
 {
-    return _type;
+    return _header.type;
+}
+
+uint32_t    Packet::getId(void) const
+{
+    return _header.id;
 }
 
 const uint8_t *Packet::getContent(void) const
 {
-    return _data + sizeof(_type);
+    return _data + sizeof(_header);
 }
 
 size_t  Packet::getContentSize(void) const
 {
-    return _dataSize - sizeof(_type);
+    return _dataSize - sizeof(_header);
 }
 
 const uint8_t *Packet::getData(void) const

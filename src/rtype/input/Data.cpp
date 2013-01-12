@@ -1,4 +1,9 @@
 #include "Data.hh"
+#include <stdexcept>
+#include <cstring>
+#include <system/log/Log.hh>
+
+using namespace TBSystem;
 
 namespace Input {
 Data::Data()
@@ -91,5 +96,24 @@ void    Data::setRight(bool v)
 void    Data::setFire(bool v)
 {
     _fire = v;
+}
+
+size_t Data::pack(uint8_t *out, size_t outSize) const
+{
+   network_packet::Packet packet(network_packet::Packet::Type::INPUT, _id,
+                                 reinterpret_cast<const uint8_t*>(&_packet),
+                                 sizeof(_packet));
+
+   if (outSize < packet.getDataSize()) {
+      throw std::overflow_error("Output is too small for the packet to fit");
+   }
+   std::memcpy(out, packet.getData(), packet.getDataSize());
+   return packet.getDataSize();
+}
+
+void   Data::unpack(const uint8_t* content)
+{
+   _packet = *reinterpret_cast<const uint32_t*>(content);
+   log::debug << "unpack id: " << _id << " left: " << _left << " right " << _right << log::endl;
 }
 }

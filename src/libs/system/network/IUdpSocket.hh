@@ -21,10 +21,10 @@ namespace network {
 
                 virtual void bind(const IAddr & pair) = 0;
 
-                virtual int send(const char * packet, int packetSize,
+                virtual int send(const uint8_t * packet, int packetSize,
                                  const IAddr & pair) = 0;
 
-                virtual int recv(char * packet, int maxPacketSize,
+                virtual int recv(uint8_t * packet, int maxPacketSize,
                                  IAddr & pair) = 0;
 
                 virtual void setBlocking(bool v) = 0;
