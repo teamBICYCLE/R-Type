@@ -30,6 +30,8 @@ add_executable(client
     ${CLIENT_NETWORK}
     ${CLIENT_GAMESTATE}
     client.cpp
+    UnitFactory.hh
+    UnitFactory.cpp
 )
 
 add_executable(server

@@ -13,6 +13,13 @@ Unit::Unit(int id, const Vector2D& pos, const Vector2D& dir)
 {
 }
 
+Unit::Unit(void)
+    : _id()
+    , _pos()
+    , _dir()
+{
+}
+
 Unit::Unit(const Unit& other)
     : _lastPacketSequence(other._lastPacketSequence)
     , _id(other._id)
@@ -32,11 +39,11 @@ Unit::Unit(Unit&& other)
     swap(*this, other);
 }
 
-Unit&  Unit::operator=(Unit other)
-{
-    swap(*this, other);
-    return *this;
-}
+// Unit&  Unit::operator=(Unit other)
+// {
+//     swap(*this, other);
+//     return *this;
+// }
 
 void    swap(Unit& lhs, Unit& rhs)
 {
@@ -121,3 +128,8 @@ std::ostream&   operator<<(std::ostream& stream, const Unit& unit)
     stream << "Unit #" << unit._id << " position: " << unit._pos.x << "-" << unit._pos.y;
 	return stream;
 }
+
+// Unit *  Unit::clone(void)
+// {
+//     return (new (*this));
+// }

@@ -11,11 +11,16 @@
 #include "units/graphics/GPlayer.hh"
 #include "input/Data.hh"
 #include "input/Config.hh"
-#include <system/log/Log.hh>
+#include <libs/system/log/Log.hh>
 #include <system/network/Udp.hh>
 #include <system/network/Addr.hh>
 #include "RTypeConfig.h"
 #include "gamestate/GraphicGameState.hh"
+
+#include "UnitFactory.hh"
+#include "units/Player.hh"
+
+#include <memory>
 
 using namespace std;
 using namespace TBSystem;
@@ -30,6 +35,7 @@ int main(int argc, char* argv[])
 #endif
 {
     // tmp
+
     network::sockets::Udp s;
     network::Addr server(argv[1], argv[2], "UDP");
     Input::Config cfg;
@@ -58,11 +64,10 @@ int main(int argc, char* argv[])
 
         Input::Data i = cfg.getInput();
         i.setId(std::stoi(argv[3]));
-        g.simulate(i);
+         g.simulate(i);
         int ret = i.pack(buf, sizeof(buf));
 
         s.send(buf, ret, server);
-
         std::vector<communication::Packet> packets;
 
         while (s.recv(buf, sizeof(buf), server) != -1) {
