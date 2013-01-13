@@ -47,5 +47,14 @@ void  GraphicGameState::updateWithDeath(uint32_t id, const uint8_t* content)
 {
    //assert(false);
 }
+#include <iostream>
+void  GraphicGameState::simulate(const Input::Data& input)
+{
+  const int playerId = input.getId();
 
-
+  if (playerId >= 0 && playerId < _players.size()) {
+    //std::cout << "Simulating player #" << input.getplayerId() << " with input like: " << input.getVector() << std::endl;
+    _players[playerId]->setDirection(input.getVector() / 100);
+    _players[playerId]->move();
+  }
+}

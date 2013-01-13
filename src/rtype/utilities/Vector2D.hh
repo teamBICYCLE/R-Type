@@ -27,6 +27,7 @@ class Vector2D
         Vector2D	operator-() const;
         bool	    operator==(const Vector2D& v) const;
         bool	    operator!=(const Vector2D& v) const;
+        friend std::ostream&  operator<<(std::ostream& stream, const Vector2D& vector);
 
     public:
         operator sf::Vector2f() const;

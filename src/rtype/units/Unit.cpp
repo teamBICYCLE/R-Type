@@ -98,12 +98,12 @@ size_t  Unit::pack(uint8_t *out, size_t outSize) const
 
 void    Unit::unpack(const uint8_t* content)
 {
-    const UnitPacket_u *info = reinterpret_cast<const UnitPacket_u*>(content);
+  const UnitPacket_u *info = reinterpret_cast<const UnitPacket_u*>(content);
 
-    _pos.x = FROM_SHORT(info->info.x);
-    _pos.y = FROM_SHORT(info->info.y);
-    _dir.x = FROM_SHORT(info->info.dx);
-    _dir.y = FROM_SHORT(info->info.dy);
+  _pos.x = FROM_SHORT(info->info.x);
+  _pos.y = FROM_SHORT(info->info.y);
+  _dir.x = FROM_SHORT(info->info.dx);
+  _dir.y = FROM_SHORT(info->info.dy);
 }
 
 std::ostream&   operator<<(std::ostream& stream, const Unit& unit)

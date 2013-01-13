@@ -11,6 +11,7 @@
 #define _GRAPHICGAMESTATE_H__
 
 #include <SFML/Graphics.hpp>
+#include "input/Data.hh"
 #include "GameState.hh"
 
 class GraphicGameState : public GameState, public sf::Drawable {
@@ -22,8 +23,9 @@ public:
   void draw(sf::RenderTarget &target, sf::RenderStates states) const;
 
 public:
-  void  updateWithPosition (uint32_t id, const uint8_t* content);
-  void  updateWithDeath    (uint32_t id, const uint8_t* content);
+  void  updateWithPosition  (uint32_t id, const uint8_t* content);
+  void  updateWithDeath     (uint32_t id, const uint8_t* content);
+  void  simulate            (const Input::Data& input);
 };
 
 #endif /* !_GRAPHICGAMESTATE_H__ */

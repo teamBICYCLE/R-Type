@@ -161,3 +161,8 @@ Vector2D	operator*(float s, const Vector2D& v)
   return v * s;
 }
 
+std::ostream&  operator<<(std::ostream& stream, const Vector2D& vector)
+{
+  stream << "x=" << vector.x << "-y=" << vector.y;
+  return stream;
+}

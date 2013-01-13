@@ -6,3 +6,4 @@ install_manifest.txt
 build/*
 bin/*
 *.out
+*.swp

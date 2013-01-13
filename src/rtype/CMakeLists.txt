@@ -27,7 +27,7 @@ add_executable(client
     ${INPUT}
     ${UTILITIES}
     ${GUNITS}
-    ${NETWORK}
+    ${CLIENT_NETWORK}
     ${CLIENT_GAMESTATE}
     client.cpp
     UnitFactory.hh
@@ -37,7 +37,7 @@ add_executable(client
 add_executable(server
     ${UTILITIES}
     ${UNITS}
-    ${NETWORK}
+    ${SERVER_NETWORK}
     ${SERVER_GAMESTATE}
     input/Data.hh
     input/Data.cpp

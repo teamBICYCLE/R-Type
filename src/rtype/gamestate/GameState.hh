@@ -33,6 +33,7 @@ public:
 
 protected:
   typedef std::function<void (uint32_t, const uint8_t *)> UpdateFunction;
+  uint32_t  _lastPacketSequence;
   std::vector<std::shared_ptr<Unit>>  _players;
   std::map<communication::Packet::Type, UpdateFunction> _updateMap;
 };

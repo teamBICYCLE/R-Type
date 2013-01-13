@@ -29,6 +29,7 @@ public:
   friend void swap(Packet& lhs, Packet& rhs);
 
 public:
+  uint32_t        getSequence(void) const;
   Type            getType(void) const;
   uint32_t        getId(void) const;
   const uint8_t   *getContent(void) const;
@@ -38,6 +39,7 @@ public:
 
 private:
   struct {
+    uint32_t  sequence;
     Type      type;
     uint32_t  id;
   } _header;

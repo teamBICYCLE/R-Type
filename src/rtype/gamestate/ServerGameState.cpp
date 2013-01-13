@@ -29,6 +29,6 @@ void  ServerGameState::updateWithInput(uint32_t id, const uint8_t* content)
       Input::Data d;
 
       d.unpack(content);
-      _players[id]->setDirection(d.getVector() / 100);
+      _players[id]->setDirection(d.getVector() / 500);
    }
 }
