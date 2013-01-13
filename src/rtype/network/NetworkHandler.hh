@@ -15,6 +15,8 @@
 #include <system/network/Addr.hh>
 #include "gamestate/GameState.hh"
 
+namespace communication {
+
 class NetworkHandler {
 public:
    NetworkHandler();
@@ -22,7 +24,7 @@ public:
 
 public:
    void  broadcast(const GameState& g);
-   std::vector<network_packet::Packet> getIncomingPackets();
+   std::vector<communication::Packet> getIncomingPackets();
 
 public:
    void setClients(const std::vector<TBSystem::network::Addr>& c);
@@ -31,5 +33,7 @@ private:
    TBSystem::network::sockets::Udp      _socket;
    std::vector<TBSystem::network::Addr> _outAddr;
 };
+
+}
 
 #endif /* !_NETWORKHANDLER_H__ */

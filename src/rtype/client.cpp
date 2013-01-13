@@ -62,10 +62,10 @@ int main(int argc, char* argv[])
 
         s.send(buf, ret, server);
 
-        std::vector<network_packet::Packet> packets;
+        std::vector<communication::Packet> packets;
 
         while (s.recv(buf, sizeof(buf), server) != -1) {
-            network_packet::Packet p((uint8_t*)buf, sizeof(buf));
+            communication::Packet p((uint8_t*)buf, sizeof(buf));
 
             packets.push_back(p);
         }

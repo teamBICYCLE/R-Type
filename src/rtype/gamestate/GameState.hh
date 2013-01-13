@@ -22,8 +22,8 @@ public:
   GameState(const std::vector<std::shared_ptr<Unit>>& v);
   virtual ~GameState();
 
-  void  update(const network_packet::Packet & packet);
-  void  update(const std::vector<network_packet::Packet>& v);
+  void  update(const communication::Packet & packet);
+  void  update(const std::vector<communication::Packet>& v);
 
 public:
   void  move();
@@ -34,7 +34,7 @@ public:
 protected:
   typedef std::function<void (uint32_t, const uint8_t *)> UpdateFunction;
   std::vector<std::shared_ptr<Unit>>  _players;
-  std::map<network_packet::Packet::Type, UpdateFunction> _updateMap;
+  std::map<communication::Packet::Type, UpdateFunction> _updateMap;
 };
 
 #endif /* !_GAMESTATE_H__ */

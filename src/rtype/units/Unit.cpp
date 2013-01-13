@@ -80,7 +80,7 @@ size_t  Unit::pack(uint8_t *out, size_t outSize) const
     packetContent.info.dx = TO_SHORT(_dir.x);
     packetContent.info.dy = TO_SHORT(_dir.y);
 
-    network_packet::Packet packet(network_packet::Packet::Type::POSITION, _id,
+    communication::Packet packet(communication::Packet::Type::POSITION, _id,
                                   packetContent.whole, sizeof(packetContent.whole));
 
     if (outSize < packet.getDataSize())

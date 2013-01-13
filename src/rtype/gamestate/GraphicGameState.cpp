@@ -18,9 +18,9 @@ GraphicGameState::GraphicGameState(const std::vector<std::shared_ptr<Unit>>& v)
 {
   using namespace std::placeholders;
 
-   _updateMap[network_packet::Packet::Type::POSITION] =
+   _updateMap[communication::Packet::Type::POSITION] =
       std::bind(&GraphicGameState::updateWithPosition, this, _1, _2);
-   _updateMap[network_packet::Packet::Type::DEATH] =
+   _updateMap[communication::Packet::Type::DEATH] =
       std::bind(&GraphicGameState::updateWithDeath, this, _1, _2);
 }
 
