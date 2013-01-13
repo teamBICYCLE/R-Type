@@ -58,6 +58,7 @@ int main(int argc, char* argv[])
 
         Input::Data i = cfg.getInput();
         i.setId(std::stoi(argv[3]));
+        g.simulate(i);
         int ret = i.pack(buf, sizeof(buf));
 
         s.send(buf, ret, server);
@@ -76,6 +77,7 @@ int main(int argc, char* argv[])
             if (event.type == sf::Event::Closed)
                 window.close();
         }
+
         window.clear();
         window.draw(g);
         window.display();

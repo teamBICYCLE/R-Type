@@ -21,7 +21,7 @@ int     main(int argc, char *argv[])
   // all those informations will be coming from game init
   std::vector<network::Addr> clients;
   clients.push_back(network::Addr("10.23.99.201", "4244", "UDP"));
-  clients.push_back(network::Addr("10.23.99.200", "4244", "UDP"));
+  clients.push_back(network::Addr("10.23.98.230", "4244", "UDP"));
 
   std::vector<std::shared_ptr<Unit>> players;
 
