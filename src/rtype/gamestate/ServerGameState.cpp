@@ -15,7 +15,7 @@ ServerGameState::ServerGameState(const std::vector<std::shared_ptr<Unit>>& v)
 {
    using namespace std::placeholders;
 
-   _updateMap[network_packet::Packet::Type::INPUT] =
+   _updateMap[communication::Packet::Type::INPUT] =
       std::bind(&ServerGameState::updateWithInput, this, _1, _2);
 }
 

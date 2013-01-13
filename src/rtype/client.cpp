@@ -15,7 +15,7 @@
 #include <system/network/Udp.hh>
 #include <system/network/Addr.hh>
 #include "RTypeConfig.h"
-#include "GraphicGameState.hh"
+#include "gamestate/GraphicGameState.hh"
 
 using namespace std;
 using namespace TBSystem;
@@ -61,10 +61,11 @@ int main(int argc, char* argv[])
         int ret = i.pack(buf, sizeof(buf));
 
         s.send(buf, ret, server);
-        std::vector<network_packet::Packet> packets;
+        std::vector<communication::Packet> packets;
 
         while (s.recv(buf, sizeof(buf), server) != -1) {
-            network_packet::Packet p((uint8_t*)buf, sizeof(buf));
+            communication::Packet p((uint8_t*)buf, sizeof(buf));
+
             packets.push_back(p);
         }
         

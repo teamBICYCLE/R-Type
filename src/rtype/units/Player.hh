@@ -13,10 +13,14 @@
 # include "Unit.hh"
 
 class Player : public Unit {
-using namespace TBSystem;
+
 public:
     Player(int id, const Vector2D& pos, const Vector2D& dir);
+    Player(void);
     virtual ~Player();
+
+public:
+	Player *clone(void);
 };
 
 #endif /* !_PLAYER_H__ */

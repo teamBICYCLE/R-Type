@@ -7,13 +7,21 @@
 
 list(APPEND UNITS_HEADERS
     ${CMAKE_CURRENT_LIST_DIR}/Unit.hh
+<<<<<<< Updated upstream
+=======
+    ${CMAKE_CURRENT_LIST_DIR}/Player.hh
     ${CMAKE_CURRENT_LIST_DIR}/IPackable.hh
     ${CMAKE_CURRENT_LIST_DIR}/Packet.hh
+>>>>>>> Stashed changes
 )
 
 list(APPEND UNITS_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/Unit.cpp
+<<<<<<< Updated upstream
+=======
+    ${CMAKE_CURRENT_LIST_DIR}/Player.cpp
     ${CMAKE_CURRENT_LIST_DIR}/Packet.cpp
+>>>>>>> Stashed changes
 )
 
 set(UNITS ${UNITS_HEADERS} ${UNITS_SOURCES})

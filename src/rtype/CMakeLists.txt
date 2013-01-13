@@ -19,31 +19,29 @@ include_directories(${PROJECT_SOURCE_DIR} ${PROJECT_BINARY_DIR})
 include("units/CMakeLists.txt")
 include("utilities/CMakeLists.txt")
 include("input/CMakeLists.txt")
+include("gamestate/CMakeLists.txt")
+include("network/CMakeLists.txt")
 
 add_executable(client
     ${GUI_TYPE} # Prevent windows from spawning a terminal window
     ${INPUT}
     ${UTILITIES}
     ${GUNITS}
-    GameState.hh
-    GameState.cpp
-    GraphicGameState.cpp
-    GraphicGameState.hh
+    ${NETWORK}
+    ${CLIENT_GAMESTATE}
     client.cpp
+    UnitFactory.hh
+    UnitFactory.cpp
 )
 
 add_executable(server
     ${UTILITIES}
     ${UNITS}
+    ${NETWORK}
+    ${SERVER_GAMESTATE}
     input/Data.hh
     input/Data.cpp
     server.cpp
-    NetworkHandler.hh
-    NetworkHandler.cpp
-    GameState.hh
-    GameState.cpp
-    ServerGameState.hh
-    ServerGameState.cpp
 )
 
 target_link_libraries(client

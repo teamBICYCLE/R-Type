@@ -12,6 +12,13 @@ Unit::Unit(int id, const Vector2D& pos, const Vector2D& dir)
 {
 }
 
+Unit::Unit(void)
+    : _id()
+    , _pos()
+    , _dir()
+{
+}
+
 Unit::Unit(const Unit& other)
     : _id(other._id)
     , _pos(other._pos)
@@ -80,7 +87,7 @@ size_t  Unit::pack(uint8_t *out, size_t outSize) const
     packetContent.info.dx = TO_SHORT(_dir.x);
     packetContent.info.dy = TO_SHORT(_dir.y);
 
-    network_packet::Packet packet(network_packet::Packet::Type::POSITION, _id,
+    communication::Packet packet(communication::Packet::Type::POSITION, _id,
                                   packetContent.whole, sizeof(packetContent.whole));
 
     if (outSize < packet.getDataSize())
@@ -104,3 +111,8 @@ std::ostream&   operator<<(std::ostream& stream, const Unit& unit)
     stream << "Unit #" << unit._id << " position: " << unit._pos.x << "-" << unit._pos.y;
 	return stream;
 }
+
+// Unit *  Unit::clone(void)
+// {
+//     return (new (*this));
+// }

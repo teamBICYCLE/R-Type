@@ -2,9 +2,15 @@
 # define    __UNIT_HH__
 
 # include   <ostream>
+<<<<<<< Updated upstream
+# include   "utilities/Vector2D.hh"
+# include   "network/IPackable.hh"
+# include   "network/Packet.hh"
+=======
 # include   "IPackable.hh"
 # include   "Packet.hh"
-# include   "../utilities/Vector2D.hh"
+>>>>>>> Stashed changes
+# include   "utilities/Vector2D.hh"
 
 typedef union {
     struct _content {
@@ -20,6 +26,7 @@ class   Unit : public IPackable
 {
     public:
         Unit(int id, const Vector2D& pos, const Vector2D& dir);
+        Unit(void);
         virtual ~Unit();
 
     public:
@@ -40,6 +47,7 @@ class   Unit : public IPackable
     public:
         virtual size_t  pack(uint8_t *out, size_t outSize) const;
         virtual void    unpack(const uint8_t* content);
+        //Unit            *clone(void) = 0;
 
     public:
         friend std::ostream&    operator<<(std::ostream& stream, const Unit& unit);
@@ -47,7 +55,7 @@ class   Unit : public IPackable
     protected:
         Vector2D		_pos;
         Vector2D		_dir;
-        uint32_t  	_id;
+        uint32_t  	    _id;
 };
 
 #endif /* !__UNIT_HH__ */

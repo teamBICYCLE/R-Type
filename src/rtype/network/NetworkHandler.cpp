@@ -7,10 +7,12 @@
  * -----------------------------------------------------------------------------
  */
 
-#include "NetworkHandler.hh"
 #include <system/log/Log.hh>
+#include "NetworkHandler.hh"
 
 using namespace TBSystem;
+
+namespace communication {
 
 NetworkHandler::NetworkHandler()
 {
@@ -25,16 +27,16 @@ NetworkHandler::~NetworkHandler()
 {
 }
 
-std::vector<network_packet::Packet> NetworkHandler::getIncomingPackets()
+std::vector<communication::Packet> NetworkHandler::getIncomingPackets()
 {
   network::Addr clt;
-  std::vector<network_packet::Packet> inputs;
+  std::vector<communication::Packet> inputs;
   uint8_t buf[256];
   int ret;
 
   while ((ret = _socket.recv(buf, sizeof(buf), clt))
          != -1) {
-    network_packet::Packet p(buf, ret);
+    communication::Packet p(buf, ret);
 
     // TODO: verifier que clt est dans la liste des clients
     inputs.push_back(p);
@@ -45,7 +47,7 @@ std::vector<network_packet::Packet> NetworkHandler::getIncomingPackets()
 void  NetworkHandler::broadcast(const GameState& g)
 {
       for (auto& p : g.getPlayers()) {
-         uint8_t  buf[network_packet::Packet::MAX_PACKET_SIZE];
+         uint8_t  buf[communication::Packet::MAX_PACKET_SIZE];
          int      packetSize;
 
          packetSize = p->pack(buf, sizeof(buf));
@@ -58,4 +60,6 @@ void  NetworkHandler::broadcast(const GameState& g)
 void NetworkHandler::setClients(const std::vector<network::Addr>& c)
 {
   _outAddr = c;
+}
+
 }

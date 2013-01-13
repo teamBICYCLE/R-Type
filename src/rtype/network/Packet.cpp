@@ -5,7 +5,7 @@
 
 using namespace TBSystem;
 
-namespace network_packet {
+namespace communication {
 
 Packet::Packet(Type type, uint32_t id,
                const uint8_t *content, size_t contentSize)

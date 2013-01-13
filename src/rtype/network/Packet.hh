@@ -3,7 +3,7 @@
 
 # include   "IPackable.hh"
 
-namespace   network_packet {
+namespace   communication {
 
 class   Packet
 {

@@ -100,9 +100,9 @@ void    Data::setFire(bool v)
 
 size_t Data::pack(uint8_t *out, size_t outSize) const
 {
-   network_packet::Packet packet(network_packet::Packet::Type::INPUT, _id,
-                                 reinterpret_cast<const uint8_t*>(&_packet),
-                                 sizeof(_packet));
+  communication::Packet packet(communication::Packet::Type::INPUT, _id,
+                               reinterpret_cast<const uint8_t*>(&_packet),
+                               sizeof(_packet));
 
    if (outSize < packet.getDataSize()) {
       throw std::overflow_error("Output is too small for the packet to fit");

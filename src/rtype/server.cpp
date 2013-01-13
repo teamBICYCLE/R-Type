@@ -4,8 +4,8 @@
 #include <system/network/Addr.hh>
 #include "units/Unit.hh"
 #include "input/Data.hh"
-#include "ServerGameState.hh"
-#include "NetworkHandler.hh"
+#include "gamestate/ServerGameState.hh"
+#include "network/NetworkHandler.hh"
 
 using namespace TBSystem;
 
@@ -31,7 +31,7 @@ int     main(int argc, char *argv[])
   players.push_back(std::shared_ptr<Unit>(new Unit(3, Vector2D(0.1f, 0.4f), Vector2D(0.f, 0.f))));
 
   // START OF THE REAL LOOP
-  NetworkHandler   nh;
+  communication::NetworkHandler   nh;
 
   nh.setClients(clients);
   network::sockets::Udp s;

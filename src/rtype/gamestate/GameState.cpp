@@ -19,14 +19,14 @@ GameState::~GameState()
 {
 }
 
-void  GameState::update(const network_packet::Packet& packet)
+void  GameState::update(const communication::Packet& packet)
 {
    auto it = _updateMap.find(packet.getType());
 
    if (it != _updateMap.end()) it->second(packet.getId(), packet.getContent());
 }
 
-void  GameState::update(const std::vector<network_packet::Packet>& v)
+void  GameState::update(const std::vector<communication::Packet>& v)
 {
    for (auto& p : v)
    {

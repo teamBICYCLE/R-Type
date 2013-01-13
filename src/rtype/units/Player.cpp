@@ -14,6 +14,15 @@ Player::Player(int id, const Vector2D& pos, const Vector2D& dir)
 {
 }
 
+Player::Player(void)
+	: Unit()
+{	
+}
+
 Player::~Player()
 {
+}
+
+Player *Player::clone(void){
+	return (new Player(*this));
 }
