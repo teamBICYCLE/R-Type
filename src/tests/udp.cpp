@@ -14,7 +14,7 @@ int main(int argc, const char *argv[])
 	//try {
     network::Addr pair(network::SI_ADDR_ANY, "4242", "UDP");
     network::sockets::Udp udp;
-    char buf[1024];
+    uint8_t buf[1024];
 
     udp.bind(pair);
     while (1) {

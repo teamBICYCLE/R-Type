@@ -8,7 +8,10 @@
  */
 
 #include "socketInit.hh"
-#include <stdlib.h>
+#include <cstdlib>
+#ifdef _WIN32
+# include <windows.h>
+#endif
 
 static void    shutdownSocket(void) {
 #ifdef _WIN32
