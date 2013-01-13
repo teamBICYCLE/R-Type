@@ -17,6 +17,11 @@
 #include "RTypeConfig.h"
 #include "gamestate/GraphicGameState.hh"
 
+#include "UnitFactory.hh"
+#include "units/Player.hh"
+
+#include <memory>
+
 using namespace std;
 using namespace TBSystem;
 
@@ -30,57 +35,63 @@ int main(int argc, char* argv[])
 #endif
 {
     // tmp
-    network::sockets::Udp s;
-    network::Addr server(argv[1], argv[2], "UDP");
-    Input::Config cfg;
-    cfg._top = sf::Keyboard::Up;
-    cfg._bot = sf::Keyboard::Down;
-    cfg._left = sf::Keyboard::Left;
-    cfg._right = sf::Keyboard::Right;
-    cfg._fire = sf::Keyboard::Space;
-    std::vector<std::shared_ptr<Unit>> players = {
-      std::shared_ptr<Unit>(new GPlayer(0, Vector2D(0.1f, 0.1f), Vector2D(0.f, 0.f))),
-      std::shared_ptr<Unit>(new GPlayer(1, Vector2D(0.1f, 0.2f), Vector2D(0.f, 0.f))),
-      std::shared_ptr<Unit>(new GPlayer(2, Vector2D(0.1f, 0.3f), Vector2D(0.f, 0.f))),
-      std::shared_ptr<Unit>(new GPlayer(3, Vector2D(0.1f, 0.4f), Vector2D(0.f, 0.f)))
-    };
-    GraphicGameState  g(players);
 
-    sf::RenderWindow window(sf::VideoMode(800, 800), "RForceType v"
-        + std::to_string(RTYPE_VERSION_MAJOR)
-        + "." + std::to_string(RTYPE_VERSION_MINOR));
+    UnitFactory f;
 
-    s.setBlocking(false);
-    s.bind(network::Addr(network::SI_ADDR_ANY, "4244", "UDP"));
-    while (window.isOpen())
-    {
-        uint8_t buf[256];
+    std::unique_ptr<Player> p = f.create<Player>();
+    p->test();
 
-        Input::Data i = cfg.getInput();
-        i.setId(std::stoi(argv[3]));
-        int ret = i.pack(buf, sizeof(buf));
+    // network::sockets::Udp s;
+    // network::Addr server(argv[1], argv[2], "UDP");
+    // Input::Config cfg;
+    // cfg._top = sf::Keyboard::Up;
+    // cfg._bot = sf::Keyboard::Down;
+    // cfg._left = sf::Keyboard::Left;
+    // cfg._right = sf::Keyboard::Right;
+    // cfg._fire = sf::Keyboard::Space;
+    // std::vector<std::shared_ptr<Unit>> players = {
+    //   std::shared_ptr<Unit>(new GPlayer(0, Vector2D(0.1f, 0.1f), Vector2D(0.f, 0.f))),
+    //   std::shared_ptr<Unit>(new GPlayer(1, Vector2D(0.1f, 0.2f), Vector2D(0.f, 0.f))),
+    //   std::shared_ptr<Unit>(new GPlayer(2, Vector2D(0.1f, 0.3f), Vector2D(0.f, 0.f))),
+    //   std::shared_ptr<Unit>(new GPlayer(3, Vector2D(0.1f, 0.4f), Vector2D(0.f, 0.f)))
+    // };
+    // GraphicGameState  g(players);
 
-        s.send(buf, ret, server);
-        std::vector<communication::Packet> packets;
+    // sf::RenderWindow window(sf::VideoMode(800, 800), "RForceType v"
+    //     + std::to_string(RTYPE_VERSION_MAJOR)
+    //     + "." + std::to_string(RTYPE_VERSION_MINOR));
 
-        while (s.recv(buf, sizeof(buf), server) != -1) {
-            communication::Packet p((uint8_t*)buf, sizeof(buf));
+    // s.setBlocking(false);
+    // s.bind(network::Addr(network::SI_ADDR_ANY, "4244", "UDP"));
+    // while (window.isOpen())
+    // {
+    //     uint8_t buf[256];
 
-            packets.push_back(p);
-        }
+    //     Input::Data i = cfg.getInput();
+    //     i.setId(std::stoi(argv[3]));
+    //     int ret = i.pack(buf, sizeof(buf));
+
+    //     s.send(buf, ret, server);
+    //     std::vector<communication::Packet> packets;
+
+    //     while (s.recv(buf, sizeof(buf), server) != -1) {
+    //         communication::Packet p((uint8_t*)buf, sizeof(buf));
+
+    //         packets.push_back(p);
+    //     }
         
-        g.update(packets);
-        sf::Event event;
-        while (window.pollEvent(event))
-        {
-            if (event.type == sf::Event::Closed)
-                window.close();
-        }
-        window.clear();
-        window.draw(g);
-        window.display();
-        std::chrono::milliseconds duration(10);
-        std::this_thread::sleep_for(duration);
-    }
-    return 0;
+    //     g.update(packets);
+    //     sf::Event event;
+    //     while (window.pollEvent(event))
+    //     {
+    //         if (event.type == sf::Event::Closed)
+    //             window.close();
+    //     }
+    //     window.clear();
+    //     window.draw(g);
+    //     window.display();
+    //     std::chrono::milliseconds duration(10);
+    //     std::this_thread::sleep_for(duration);
+    // }
+    // return 0;
 }
