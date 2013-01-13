@@ -4,7 +4,7 @@
 #include <system/network/Addr.hh>
 #include "units/Unit.hh"
 #include "input/Data.hh"
-#include "GameState.hh"
+#include "ServerGameState.hh"
 #include "NetworkHandler.hh"
 
 using namespace TBSystem;
@@ -35,7 +35,7 @@ int     main(int argc, char *argv[])
 
   nh.setClients(clients);
   network::sockets::Udp s;
-  GameState g(players);
+  ServerGameState g(players);
   while (1)
   {
     // updates the player vectors from inputs

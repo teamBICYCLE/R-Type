@@ -42,6 +42,8 @@ add_executable(server
     NetworkHandler.cpp
     GameState.hh
     GameState.cpp
+    ServerGameState.hh
+    ServerGameState.cpp
 )
 
 target_link_libraries(client

@@ -26,10 +26,6 @@ public:
   void  update(const std::vector<network_packet::Packet>& v);
 
 public:
-  // server
-  void  updateWithInput    (uint32_t id, const uint8_t* content);
-
-public:
   void  move();
 
 public:

@@ -13,10 +13,6 @@
 GameState::GameState(const std::vector<std::shared_ptr<Unit>>& v)
    : _players(v)
 {
-   using namespace std::placeholders;
-
-   _updateMap[network_packet::Packet::Type::INPUT] =
-      std::bind(&GameState::updateWithInput, this, _1, _2);
 }
 
 GameState::~GameState()
@@ -35,17 +31,6 @@ void  GameState::update(const std::vector<network_packet::Packet>& v)
    for (auto& p : v)
    {
       this->update(p);
-   }
-}
-
-// server
-void  GameState::updateWithInput(uint32_t id, const uint8_t* content)
-{
-   if (id >= 0 && id <= _players.size()) {
-      Input::Data d;
-
-      d.unpack(content);
-      _players[id]->setDirection(d.getVector() / 100);
    }
 }
 
