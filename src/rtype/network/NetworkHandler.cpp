@@ -7,8 +7,8 @@
  * -----------------------------------------------------------------------------
  */
 
-#include "NetworkHandler.hh"
 #include <system/log/Log.hh>
+#include "NetworkHandler.hh"
 
 using namespace TBSystem;
 

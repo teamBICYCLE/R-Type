@@ -19,6 +19,7 @@ include_directories(${PROJECT_SOURCE_DIR} ${PROJECT_BINARY_DIR})
 include("units/CMakeLists.txt")
 include("utilities/CMakeLists.txt")
 include("input/CMakeLists.txt")
+include("gamestate/CMakeLists.txt")
 include("network/CMakeLists.txt")
 
 add_executable(client
@@ -27,10 +28,7 @@ add_executable(client
     ${UTILITIES}
     ${GUNITS}
     ${NETWORK}
-    GameState.hh
-    GameState.cpp
-    GraphicGameState.cpp
-    GraphicGameState.hh
+    ${CLIENT_GAMESTATE}
     client.cpp
 )
 
@@ -38,13 +36,10 @@ add_executable(server
     ${UTILITIES}
     ${UNITS}
     ${NETWORK}
+    ${SERVER_GAMESTATE}
     input/Data.hh
     input/Data.cpp
     server.cpp
-    GameState.hh
-    GameState.cpp
-    ServerGameState.hh
-    ServerGameState.cpp
 )
 
 target_link_libraries(client

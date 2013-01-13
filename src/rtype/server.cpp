@@ -4,7 +4,7 @@
 #include <system/network/Addr.hh>
 #include "units/Unit.hh"
 #include "input/Data.hh"
-#include "ServerGameState.hh"
+#include "gamestate/ServerGameState.hh"
 #include "network/NetworkHandler.hh"
 
 using namespace TBSystem;

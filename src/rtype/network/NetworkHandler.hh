@@ -13,7 +13,7 @@
 #include <vector>
 #include <system/network/Udp.hh>
 #include <system/network/Addr.hh>
-#include "GameState.hh"
+#include "gamestate/GameState.hh"
 
 class NetworkHandler {
 public:

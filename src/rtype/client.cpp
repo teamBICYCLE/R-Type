@@ -15,7 +15,7 @@
 #include <system/network/Udp.hh>
 #include <system/network/Addr.hh>
 #include "RTypeConfig.h"
-#include "GraphicGameState.hh"
+#include "gamestate/GraphicGameState.hh"
 
 using namespace std;
 using namespace TBSystem;
