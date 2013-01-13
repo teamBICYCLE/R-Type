@@ -36,11 +36,6 @@ int main(int argc, char* argv[])
 {
     // tmp
 
-    UnitFactory f;
-
-    std::unique_ptr<Player> p = f.create<Player>();
-    p->test();
-
     network::sockets::Udp s;
     network::Addr server(argv[1], argv[2], "UDP");
     Input::Config cfg;
