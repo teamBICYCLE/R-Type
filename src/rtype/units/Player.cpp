@@ -7,6 +7,7 @@
  * -----------------------------------------------------------------------------
  */
 
+#include <iostream>
 #include "Player.hh"
 
 Player::Player(int id, const Vector2D& pos, const Vector2D& dir)
@@ -23,6 +24,8 @@ Player::~Player()
 {
 }
 
-Player *Player::clone(void){
+Player *Player::clone(void)
+{
+	std::cout << "Player clone" << std::endl;
 	return (new Player(*this));
 }

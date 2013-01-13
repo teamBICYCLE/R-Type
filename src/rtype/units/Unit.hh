@@ -2,14 +2,9 @@
 # define    __UNIT_HH__
 
 # include   <ostream>
-<<<<<<< Updated upstream
 # include   "utilities/Vector2D.hh"
 # include   "network/IPackable.hh"
 # include   "network/Packet.hh"
-=======
-# include   "IPackable.hh"
-# include   "Packet.hh"
->>>>>>> Stashed changes
 # include   "utilities/Vector2D.hh"
 
 typedef union {
@@ -32,7 +27,7 @@ class   Unit : public IPackable
     public:
         Unit(const Unit& other);
         Unit(Unit&& other);
-        Unit&  operator=(Unit other);
+        // Unit&  operator=(Unit other);
         friend void    swap(Unit& lhs, Unit& rhs);
 
     public:
@@ -47,7 +42,7 @@ class   Unit : public IPackable
     public:
         virtual size_t  pack(uint8_t *out, size_t outSize) const;
         virtual void    unpack(const uint8_t* content);
-        //Unit            *clone(void) = 0;
+        Unit    *clone(void){};
 
     public:
         friend std::ostream&    operator<<(std::ostream& stream, const Unit& unit);
