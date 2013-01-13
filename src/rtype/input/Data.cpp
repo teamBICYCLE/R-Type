@@ -6,13 +6,16 @@
 using namespace TBSystem;
 
 namespace Input {
+
 Data::Data()
     : _packet(0)
+    , _id(0)
 {
 }
 
 Data::Data(int packet)
     : _packet(packet)
+    , _id(0)
 {
 }
 
@@ -22,6 +25,7 @@ Data::~Data()
 
 Data::Data(const Data& other)
     : _packet(other._packet)
+    , _id(other._id)
 {
 }
 
@@ -39,6 +43,7 @@ Data&  Data::operator=(Data other)
 void    swap(Data& lhs, Data& rhs)
 {
     std::swap(lhs._packet, rhs._packet);
+    std::swap(lhs._id, rhs._id);
 }
 
 int         Data::getId() const
@@ -113,7 +118,8 @@ size_t Data::pack(uint8_t *out, size_t outSize) const
 
 void   Data::unpack(const uint8_t* content)
 {
-   _packet = *reinterpret_cast<const uint32_t*>(content);
-   log::debug << "left: " << _left << " right " << _right << log::endl;
+  _packet = *reinterpret_cast<const uint32_t*>(content);
+  log::debug << "left: " << _left << " right " << _right << log::endl;
 }
+
 }

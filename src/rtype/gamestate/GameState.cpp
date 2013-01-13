@@ -11,7 +11,8 @@
 #include "input/Data.hh"
 
 GameState::GameState(const std::vector<std::shared_ptr<Unit>>& v)
-   : _players(v)
+  : _lastPacketSequence(0) 
+  , _players(v)
 {
 }
 
@@ -21,9 +22,17 @@ GameState::~GameState()
 
 void  GameState::update(const communication::Packet& packet)
 {
-   auto it = _updateMap.find(packet.getType());
+  const uint32_t  newPacketSequence = packet.getSequence();
 
-   if (it != _updateMap.end()) it->second(packet.getId(), packet.getContent());
+  if (_lastPacketSequence < newPacketSequence)
+  {
+    _lastPacketSequence = newPacketSequence;
+    auto it = _updateMap.find(packet.getType());
+
+    if (it != _updateMap.end()) it->second(packet.getId(), packet.getContent());
+  }
+  else
+    std::cout << "==============================================Dropped !" << std::endl;
 }
 
 void  GameState::update(const std::vector<communication::Packet>& v)
