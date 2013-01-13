@@ -5,7 +5,7 @@
 #include "units/Unit.hh"
 #include "input/Data.hh"
 #include "ServerGameState.hh"
-#include "NetworkHandler.hh"
+#include "network/NetworkHandler.hh"
 
 using namespace TBSystem;
 

@@ -3,8 +3,8 @@
 
 #include <stdint.h>
 #include "utilities/Vector2D.hh"
-#include "units/IPackable.hh"
-#include "units/Packet.hh"
+#include "network/IPackable.hh"
+#include "network/Packet.hh"
 
 namespace Input {
 

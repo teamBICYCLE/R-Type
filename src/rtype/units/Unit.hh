@@ -2,8 +2,8 @@
 # define    __UNIT_HH__
 
 # include   <ostream>
-# include   "IPackable.hh"
-# include   "Packet.hh"
+# include   "network/IPackable.hh"
+# include   "network/Packet.hh"
 # include   "utilities/Vector2D.hh"
 
 typedef union {

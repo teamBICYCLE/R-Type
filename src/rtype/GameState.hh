@@ -15,7 +15,7 @@
 #include <functional>
 #include <memory>
 #include "units/Unit.hh"
-#include "units/Packet.hh"
+#include "network/Packet.hh"
 
 class GameState {
 public:
