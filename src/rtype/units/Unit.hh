@@ -29,6 +29,7 @@ class   Unit : public IPackable
         friend void    swap(Unit& lhs, Unit& rhs);
 
     public:
+        int             getLastPacketSequence(void) const;
         int             getId(void) const;
         const Vector2D& getPos(void) const;
         const Vector2D& getDir(void) const;
@@ -36,15 +37,18 @@ class   Unit : public IPackable
     public:
         void    move(void);
         void    setDirection(const Vector2D& dir);
+        void    setLastPacketSequence(uint32_t newPacketSequence);
 
     public:
         virtual size_t  pack(uint8_t *out, size_t outSize) const;
-        virtual void    unpack(const uint8_t* content);
+        virtual void    unpack(const uint32_t newPacketSequence,
+                               const uint8_t* content);
 
     public:
         friend std::ostream&    operator<<(std::ostream& stream, const Unit& unit);
 
     protected:
+        uint32_t    _lastPacketSequence;
         Vector2D		_pos;
         Vector2D		_dir;
         uint32_t  	_id;

@@ -16,19 +16,26 @@ ServerGameState::ServerGameState(const std::vector<std::shared_ptr<Unit>>& v)
    using namespace std::placeholders;
 
    _updateMap[communication::Packet::Type::INPUT] =
-      std::bind(&ServerGameState::updateWithInput, this, _1, _2);
+      std::bind(&ServerGameState::updateWithInput, this, _1);
 }
 
 ServerGameState::~ServerGameState()
 {
 }
 
-void  ServerGameState::updateWithInput(uint32_t id, const uint8_t* content)
+void  ServerGameState::updateWithInput(const communication::Packet& packet)
 {
-   if (id >= 0 && id <= _players.size()) {
-      Input::Data d;
+  const uint32_t  id = packet.getId();
 
-      d.unpack(content);
-      _players[id]->setDirection(d.getVector() / 500);
-   }
+  if (id >= 0 && id <= _players.size()) {
+    Input::Data d;
+    std::shared_ptr<Unit>& player = _players[id];
+
+    d.unpack(packet.getSequence(), packet.getContent());
+    if (player->getLastPacketSequence() < packet.getSequence())
+    {
+      player->setLastPacketSequence(packet.getSequence());
+      player->setDirection(d.getVector() / 200);
+    }
+  }
 }

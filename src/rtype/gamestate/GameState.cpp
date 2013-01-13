@@ -22,17 +22,9 @@ GameState::~GameState()
 
 void  GameState::update(const communication::Packet& packet)
 {
-  const uint32_t  newPacketSequence = packet.getSequence();
+  auto it = _updateMap.find(packet.getType());
 
-  if (_lastPacketSequence < newPacketSequence)
-  {
-    _lastPacketSequence = newPacketSequence;
-    auto it = _updateMap.find(packet.getType());
-
-    if (it != _updateMap.end()) it->second(packet.getId(), packet.getContent());
-  }
-  else
-    std::cout << "==============================================Dropped !" << std::endl;
+  if (it != _updateMap.end()) it->second(packet);
 }
 
 void  GameState::update(const std::vector<communication::Packet>& v)

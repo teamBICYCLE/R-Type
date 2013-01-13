@@ -32,7 +32,7 @@ public:
   const std::vector<std::shared_ptr<Unit>>& getPlayers() const;
 
 protected:
-  typedef std::function<void (uint32_t, const uint8_t *)> UpdateFunction;
+  typedef std::function<void (const communication::Packet&)> UpdateFunction;
   uint32_t  _lastPacketSequence;
   std::vector<std::shared_ptr<Unit>>  _players;
   std::map<communication::Packet::Type, UpdateFunction> _updateMap;
