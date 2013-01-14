@@ -19,9 +19,9 @@ GraphicGameState::GraphicGameState(const std::vector<std::shared_ptr<Unit>>& v)
   using namespace std::placeholders;
 
    _updateMap[communication::Packet::Type::POSITION] =
-      std::bind(&GraphicGameState::updateWithPosition, this, _1, _2);
+      std::bind(&GraphicGameState::updateWithPosition, this, _1);
    _updateMap[communication::Packet::Type::DEATH] =
-      std::bind(&GraphicGameState::updateWithDeath, this, _1, _2);
+      std::bind(&GraphicGameState::updateWithDeath, this, _1);
 }
 
 GraphicGameState::~GraphicGameState()
@@ -35,26 +35,27 @@ void GraphicGameState::draw(sf::RenderTarget &target, sf::RenderStates states) c
 }
 
 // client
-void  GraphicGameState::updateWithPosition(uint32_t id, const uint8_t* content)
+void  GraphicGameState::updateWithPosition(const communication::Packet& packet)
 {
-   if (id >= 0 && id < _players.size()) {
-      _players[id]->unpack(content);
-   }
+  const uint32_t id = packet.getId();
+
+  if (id >= 0 && id < _players.size()) {
+    _players[id]->unpack(packet.getSequence(), packet.getContent());
+  }
 }
 
 // client
-void  GraphicGameState::updateWithDeath(uint32_t id, const uint8_t* content)
+void  GraphicGameState::updateWithDeath(const communication::Packet& packet)
 {
    //assert(false);
 }
-#include <iostream>
+
 void  GraphicGameState::simulate(const Input::Data& input)
 {
   const int playerId = input.getId();
 
   if (playerId >= 0 && playerId < _players.size()) {
-    //std::cout << "Simulating player #" << input.getplayerId() << " with input like: " << input.getVector() << std::endl;
-    _players[playerId]->setDirection(input.getVector() / 100);
+      GameState::setPlayerDirection(playerId, input.getVector());
     _players[playerId]->move();
   }
 }

@@ -18,7 +18,7 @@ public:
   virtual ~ServerGameState();
 
 public:
-  void  updateWithInput    (uint32_t id, const uint8_t* content);
+  void  updateWithInput    (const communication::Packet& packet);
 };
 
 #endif /* !_SERVERGAMESTATE_H__ */

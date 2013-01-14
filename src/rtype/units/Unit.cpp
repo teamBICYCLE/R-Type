@@ -6,7 +6,8 @@
 using namespace TBSystem;
 
 Unit::Unit(int id, const Vector2D& pos, const Vector2D& dir)
-    : _id(id)
+    : _lastPacketSequence(0)
+    , _id(id)
     , _pos(pos)
     , _dir(dir)
 {
@@ -20,7 +21,8 @@ Unit::Unit(void)
 }
 
 Unit::Unit(const Unit& other)
-    : _id(other._id)
+    : _lastPacketSequence(other._lastPacketSequence)
+    , _id(other._id)
     , _pos(other._pos)
     , _dir(other._dir)
 {
@@ -43,9 +45,15 @@ Unit&  Unit::operator=(Unit other)
 
 void    swap(Unit& lhs, Unit& rhs)
 {
+    std::swap(lhs._lastPacketSequence, rhs._lastPacketSequence);
     std::swap(lhs._id, rhs._id);
     std::swap(lhs._pos, rhs._pos);
     std::swap(lhs._dir, rhs._dir);
+}
+
+int     Unit::getLastPacketSequence(void) const
+{
+  return _lastPacketSequence;
 }
 
 int     Unit::getId(void) const
@@ -73,6 +81,11 @@ void    Unit::setDirection(const Vector2D& dir)
     _dir = dir;
 }
 
+void  Unit::setLastPacketSequence(uint32_t newPacketSequence)
+{
+  _lastPacketSequence = newPacketSequence;
+}
+
 #define TO_SHORT(x) (x * ((uint16_t)-1))
 #define FROM_SHORT(x) (x / (float)((uint16_t)-1))
 
@@ -94,14 +107,20 @@ size_t  Unit::pack(uint8_t *out, size_t outSize) const
     return packet.getDataSize();
 }
 
-void    Unit::unpack(const uint8_t* content)
+void    Unit::unpack(const uint32_t newPacketSequence, const uint8_t* content)
 {
   const UnitPacket_u *info = reinterpret_cast<const UnitPacket_u*>(content);
 
-  _pos.x = FROM_SHORT(info->info.x);
-  _pos.y = FROM_SHORT(info->info.y);
-  _dir.x = FROM_SHORT(info->info.dx);
-  _dir.y = FROM_SHORT(info->info.dy);
+  if (_lastPacketSequence < newPacketSequence)
+  {
+    _lastPacketSequence = newPacketSequence;
+    _pos.x = FROM_SHORT(info->info.x);
+    _pos.y = FROM_SHORT(info->info.y);
+    _dir.x = FROM_SHORT(info->info.dx);
+    _dir.y = FROM_SHORT(info->info.dy);
+  }
+  else
+    std::cout << "==============================================DROPPED" << std::endl;
 }
 
 std::ostream&   operator<<(std::ostream& stream, const Unit& unit)
