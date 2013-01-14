@@ -36,6 +36,11 @@ namespace network {
             socketInit();
             errno = 0;
             _socket = socket(AF_INET, SOCK_STREAM, 0);
+#ifndef NDEBUG
+            int optval = 1;
+            setsockopt(_socket, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof optval);
+            log::debug << "Socket set to reusse addr" << log::endl;
+#endif
             if (_socket == -1) throw std::runtime_error(strerror(errno));
         }
 
