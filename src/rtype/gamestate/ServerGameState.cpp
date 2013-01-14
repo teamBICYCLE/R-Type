@@ -37,5 +37,7 @@ void  ServerGameState::updateWithInput(const communication::Packet& packet)
       player->setLastPacketSequence(packet.getSequence());
       player->setDirection(d.getVector() / 200);
     }
+    else
+      std::cout << "=======================================Dropped" << std::endl;
   }
 }

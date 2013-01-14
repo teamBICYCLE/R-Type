@@ -119,7 +119,7 @@ size_t Data::pack(uint8_t *out, size_t outSize) const
 void   Data::unpack(const uint32_t newPacketSequence, const uint8_t* content)
 {
   _packet = *reinterpret_cast<const uint32_t*>(content);
-  log::debug << "left: " << _left << " right " << _right << log::endl;
+  //log::debug << "left: " << _left << " right " << _right << log::endl;
 }
 
 }

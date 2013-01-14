@@ -121,6 +121,8 @@ void    Unit::unpack(const uint32_t newPacketSequence, const uint8_t* content)
     _dir.x = FROM_SHORT(info->info.dx);
     _dir.y = FROM_SHORT(info->info.dy);
   }
+  else
+    std::cout << "==============================================DROPPED" << std::endl;
 }
 
 std::ostream&   operator<<(std::ostream& stream, const Unit& unit)
