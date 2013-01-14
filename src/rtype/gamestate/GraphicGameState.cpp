@@ -55,7 +55,7 @@ void  GraphicGameState::simulate(const Input::Data& input)
   const int playerId = input.getId();
 
   if (playerId >= 0 && playerId < _players.size()) {
-    _players[playerId]->setDirection(input.getVector() / 200);
+      GameState::setPlayerDirection(playerId, input.getVector());
     _players[playerId]->move();
   }
 }

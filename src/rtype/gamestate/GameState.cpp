@@ -35,6 +35,13 @@ void  GameState::update(const std::vector<communication::Packet>& v)
    }
 }
 
+void  GameState::setPlayerDirection(int id, const Vector2D& dir)
+{
+  if (id >= 0 && id < _players.size()) {
+    _players[id]->setDirection(dir / GameState::PLAYER_SPEED);
+  }
+}
+
 void  GameState::move()
 {
    for (auto& p : _players) {

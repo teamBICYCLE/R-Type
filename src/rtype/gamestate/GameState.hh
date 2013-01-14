@@ -28,10 +28,14 @@ public:
 public:
   void  move();
 
+protected:
+  void  setPlayerDirection(int id, const Vector2D& dir);
+
 public:
   const std::vector<std::shared_ptr<Unit>>& getPlayers() const;
 
 protected:
+  const float PLAYER_SPEED = 200.f;
   typedef std::function<void (const communication::Packet&)> UpdateFunction;
   uint32_t  _lastPacketSequence;
   std::vector<std::shared_ptr<Unit>>  _players;
