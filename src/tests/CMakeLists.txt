@@ -17,3 +17,21 @@ target_link_libraries(thread_test system)
 
 # add_executable(archiver_test archiver_test.cpp)
 # target_link_libraries(archiver_test system)
+
+# add_executable(sprite 
+# sprites/AnimationInfos.cpp
+# sprites/AnimationInfos.hh
+# sprites/test_sprite.cpp
+# sprites/Animation.cpp
+# sprites/Animation.hh
+# sprites/Board.cpp
+# sprites/Board.hh
+# )
+
+# target_link_libraries(sprite system csv-parser ${SFML_LIBRARIES})
+
+#test_sprite.cpp
+#SpriteLoader.cpp
+#SpriteLoader.hh
+#Animation.hh
+#Animation.cpp
