@@ -10,6 +10,7 @@
 #ifndef _PLAYER_H__
 #define _PLAYER_H__
 
+# include <iostream>
 # include "Unit.hh"
 
 class Player : public Unit {
@@ -18,6 +19,11 @@ public:
     Player(int id, const Vector2D& pos, const Vector2D& dir);
     Player(void);
     virtual ~Player();
+
+    void test(void) const
+    {
+    	std::cout << ":)" << std::endl;
+    }
 
 public:
 	Player *clone(void);

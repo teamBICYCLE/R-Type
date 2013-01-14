@@ -24,7 +24,6 @@ Unit::Unit(const Unit& other)
     , _pos(other._pos)
     , _dir(other._dir)
 {
-   log::debug << "copy packet" << log::endl;
 }
 
 Unit::~Unit()
@@ -33,15 +32,14 @@ Unit::~Unit()
 
 Unit::Unit(Unit&& other)
 {
-   log::debug << "move packet" << log::endl;
     swap(*this, other);
 }
 
-// Unit&  Unit::operator=(Unit other)
-// {
-//     swap(*this, other);
-//     return *this;
-// }
+Unit&  Unit::operator=(Unit other)
+{
+    swap(*this, other);
+    return *this;
+}
 
 void    swap(Unit& lhs, Unit& rhs)
 {
@@ -108,11 +106,18 @@ void    Unit::unpack(const uint8_t* content)
 
 std::ostream&   operator<<(std::ostream& stream, const Unit& unit)
 {
-    stream << "Unit #" << unit._id << " position: " << unit._pos.x << "-" << unit._pos.y;
+  stream << "Unit #" << unit._id << " position: " << unit._pos.x << "-" << unit._pos.y;
 	return stream;
 }
 
-// Unit *  Unit::clone(void)
-// {
-//     return (new (*this));
-// }
+Unit *Unit::clone(void)
+{
+  return (new Unit(*this));
+}
+
+void  Unit::reset(void)
+{
+    _pos = Vector2D();
+    _dir = Vector2D();
+    _id = uint32_t();
+}

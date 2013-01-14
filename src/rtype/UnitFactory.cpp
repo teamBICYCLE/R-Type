@@ -8,6 +8,6 @@ UnitFactory::UnitFactory(void)
 
 UnitFactory::~UnitFactory(void)
 {
-	for (auto it : _collection)
-		delete it.second;
+	// for (auto it : _collection)
+	// 	delete it.second;
 }
