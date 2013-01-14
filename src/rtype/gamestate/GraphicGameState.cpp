@@ -9,11 +9,11 @@
 
 #include <system/log/Log.hh>
 #include "GraphicGameState.hh"
-#include "units/graphics/GUnit.hh"
+#include "units/graphics/GPlayer.hh"
 
 using namespace TBSystem;
 
-GraphicGameState::GraphicGameState(const std::vector<std::shared_ptr<Unit>>& v)
+GraphicGameState::GraphicGameState(const std::vector<std::shared_ptr<Player>>& v)
   : GameState(v)
 {
   using namespace std::placeholders;
@@ -30,7 +30,7 @@ GraphicGameState::~GraphicGameState()
 
 void GraphicGameState::draw(sf::RenderTarget &target, sf::RenderStates states) const {
   for (auto& p : _players) {
-    target.draw(static_cast<GUnit&>(*p));
+    target.draw(static_cast<GPlayer&>(*p));
   }
 }
 

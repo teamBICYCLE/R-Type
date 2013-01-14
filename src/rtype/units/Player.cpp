@@ -25,6 +25,14 @@ Player::~Player()
 	std::cout << "Player delete " << this << std::endl;
 }
 
+bool  Player::collideWith(const Player& other) const
+{
+  float dist = _pos.distanceSquared(other.getPos());
+
+  std::cout << "Dist " << dist << std::endl;
+  return dist <= (20.f / 800.f) * (20.f / 800.f);
+}
+
 Player *Player::clone(void)
 {
 	return (new Player(*this));

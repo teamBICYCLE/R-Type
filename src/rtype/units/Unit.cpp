@@ -6,25 +6,25 @@
 using namespace TBSystem;
 
 Unit::Unit(int id, const Vector2D& pos, const Vector2D& dir)
-    : _lastPacketSequence(0)
-    , _id(id)
-    , _pos(pos)
-    , _dir(dir)
+  : _lastPacketSequence(0)
+  , _id(id)
+  , _pos(pos)
+  , _dir(dir)
 {
 }
 
 Unit::Unit(void)
-    : _id()
-    , _pos()
-    , _dir()
+  : _id()
+  , _pos()
+  , _dir()
 {
 }
 
 Unit::Unit(const Unit& other)
-    : _lastPacketSequence(other._lastPacketSequence)
-    , _id(other._id)
-    , _pos(other._pos)
-    , _dir(other._dir)
+  : _lastPacketSequence(other._lastPacketSequence)
+  , _id(other._id)
+  , _pos(other._pos)
+  , _dir(other._dir)
 {
 }
 
@@ -34,13 +34,13 @@ Unit::~Unit()
 
 Unit::Unit(Unit&& other)
 {
-    swap(*this, other);
+  swap(*this, other);
 }
 
 Unit&  Unit::operator=(Unit other)
 {
-    swap(*this, other);
-    return *this;
+  swap(*this, other);
+  return *this;
 }
 
 void    swap(Unit& lhs, Unit& rhs)
@@ -71,12 +71,12 @@ const Vector2D& Unit::getDir(void) const
     return _dir;
 }
 
-void    Unit::move(void)
+void  Unit::move(void)
 {
     _pos += _dir;
 }
 
-void    Unit::setDirection(const Vector2D& dir)
+void  Unit::setDir(const Vector2D& dir)
 {
     _dir = dir;
 }
@@ -84,6 +84,11 @@ void    Unit::setDirection(const Vector2D& dir)
 void  Unit::setLastPacketSequence(uint32_t newPacketSequence)
 {
   _lastPacketSequence = newPacketSequence;
+}
+
+void  Unit::setPos(const Vector2D& pos)
+{
+  _pos = pos;
 }
 
 #define TO_SHORT(x) (x * ((uint16_t)-1))

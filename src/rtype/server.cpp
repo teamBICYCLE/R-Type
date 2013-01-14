@@ -23,12 +23,12 @@ int     main(int argc, char *argv[])
   clients.push_back(network::Addr("10.23.99.201", "4244", "UDP"));
   clients.push_back(network::Addr("10.23.98.230", "4244", "UDP"));
 
-  std::vector<std::shared_ptr<Unit>> players;
+  std::vector<std::shared_ptr<Player>> players;
 
-  players.push_back(std::shared_ptr<Unit>(new Unit(0, Vector2D(0.1f, 0.1f), Vector2D(0.f, 0.f))));
-  players.push_back(std::shared_ptr<Unit>(new Unit(1, Vector2D(0.1f, 0.2f), Vector2D(0.f, 0.f))));
-  players.push_back(std::shared_ptr<Unit>(new Unit(2, Vector2D(0.1f, 0.3f), Vector2D(0.f, 0.f))));
-  players.push_back(std::shared_ptr<Unit>(new Unit(3, Vector2D(0.1f, 0.4f), Vector2D(0.f, 0.f))));
+  players.push_back(std::shared_ptr<Player>(new Player(0, Vector2D(0.1f, 0.1f), Vector2D(0.f, 0.f))));
+  players.push_back(std::shared_ptr<Player>(new Player(1, Vector2D(0.1f, 0.2f), Vector2D(0.f, 0.f))));
+  players.push_back(std::shared_ptr<Player>(new Player(2, Vector2D(0.1f, 0.3f), Vector2D(0.f, 0.f))));
+  players.push_back(std::shared_ptr<Player>(new Player(3, Vector2D(0.1f, 0.4f), Vector2D(0.f, 0.f))));
 
   // START OF THE REAL LOOP
   communication::NetworkHandler   nh;
