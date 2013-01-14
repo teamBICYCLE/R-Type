@@ -21,6 +21,7 @@ include("utilities/CMakeLists.txt")
 include("input/CMakeLists.txt")
 include("gamestate/CMakeLists.txt")
 include("network/CMakeLists.txt")
+include("sprites/CMakeLists.txt")
 
 add_executable(client
     ${GUI_TYPE} # Prevent windows from spawning a terminal window
@@ -29,6 +30,7 @@ add_executable(client
     ${GUNITS}
     ${CLIENT_NETWORK}
     ${CLIENT_GAMESTATE}
+    ${SPRITES}
     client.cpp
     UnitFactory.hh
     UnitFactory.cpp
@@ -46,6 +48,7 @@ add_executable(server
 
 target_link_libraries(client
     ${SFML_LIBRARIES}
+    csv-parser
     system
 )
 
