@@ -27,7 +27,7 @@ class   Unit : public IPackable
     public:
         Unit(const Unit& other);
         Unit(Unit&& other);
-        // Unit&  operator=(Unit other);
+        Unit&  operator=(Unit other);
         friend void    swap(Unit& lhs, Unit& rhs);
 
     public:
@@ -38,8 +38,9 @@ class   Unit : public IPackable
 
     public:
         void    move(void);
-        void    setDirection(const Vector2D& dir);
+        void    setDir(const Vector2D& dir);
         void    setLastPacketSequence(uint32_t newPacketSequence);
+        void    setPos(const Vector2D& pos);
 
     public:
         virtual size_t  pack(uint8_t *out, size_t outSize) const;
@@ -54,7 +55,7 @@ class   Unit : public IPackable
         uint32_t    _lastPacketSequence;
         Vector2D		_pos;
         Vector2D		_dir;
-        uint32_t  	    _id;
+        uint32_t  	_id;
 };
 
 #endif /* !__UNIT_HH__ */

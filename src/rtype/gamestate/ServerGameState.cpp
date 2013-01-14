@@ -10,7 +10,7 @@
 #include "input/Data.hh"
 #include "ServerGameState.hh"
 
-ServerGameState::ServerGameState(const std::vector<std::shared_ptr<Unit>>& v)
+ServerGameState::ServerGameState(const std::vector<std::shared_ptr<Player>>& v)
   : GameState(v)
 {
    using namespace std::placeholders;
@@ -29,7 +29,7 @@ void  ServerGameState::updateWithInput(const communication::Packet& packet)
 
   if (id >= 0 && id <= _players.size()) {
     Input::Data d;
-    std::shared_ptr<Unit>& player = _players[id];
+    std::shared_ptr<Player>& player = _players[id];
 
     d.unpack(packet.getSequence(), packet.getContent());
     if (player->getLastPacketSequence() < packet.getSequence())

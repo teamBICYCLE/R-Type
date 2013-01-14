@@ -12,15 +12,17 @@
 
 # include "Unit.hh"
 
-class Player : public Unit {
+class Player : public virtual Unit {
+public:
+  Player(int id, const Vector2D& pos, const Vector2D& dir);
+  Player(void);
+  virtual ~Player();
 
 public:
-    Player(int id, const Vector2D& pos, const Vector2D& dir);
-    Player(void);
-    virtual ~Player();
+  virtual bool  collideWith(const Player& other) const;
 
 public:
-	Player *clone(void);
+  Player *clone(void);
 };
 
 #endif /* !_PLAYER_H__ */

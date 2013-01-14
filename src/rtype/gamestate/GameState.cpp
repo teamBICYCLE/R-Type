@@ -10,7 +10,7 @@
 #include "GameState.hh"
 #include "input/Data.hh"
 
-GameState::GameState(const std::vector<std::shared_ptr<Unit>>& v)
+GameState::GameState(const std::vector<std::shared_ptr<Player>>& v)
   : _lastPacketSequence(0) 
   , _players(v)
 {
@@ -38,18 +38,30 @@ void  GameState::update(const std::vector<communication::Packet>& v)
 void  GameState::setPlayerDirection(int id, const Vector2D& dir)
 {
   if (id >= 0 && id < _players.size()) {
-    _players[id]->setDirection(dir / GameState::PLAYER_SPEED);
+    _players[id]->setDir(dir / GameState::PLAYER_SPEED);
   }
 }
 
 void  GameState::move()
 {
    for (auto& p : _players) {
-      p->move();
+     Vector2D  savedPos = p->getPos();
+
+     p->move();
+     for (auto& other : _players)
+     {
+       if (other->getId() != p->getId() &&
+           other->collideWith(*p) == true)
+       {
+         p->setPos(savedPos);
+         std::cout << "COLLIDED" << std::endl;
+         break;
+       }
+     }
    }
 }
 
-const std::vector<std::shared_ptr<Unit>>& GameState::getPlayers() const
+const std::vector<std::shared_ptr<Player>>& GameState::getPlayers() const
 {
   return _players;
 }

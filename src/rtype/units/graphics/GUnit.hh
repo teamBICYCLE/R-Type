@@ -4,7 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include "units/Unit.hh"
 
-class GUnit : public Unit, public sf::Drawable
+class GUnit : public virtual Unit, public sf::Drawable
 {
 
 public:

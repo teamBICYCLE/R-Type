@@ -1,8 +1,12 @@
 #include <iostream>
 #include "GPlayer.hh"
 
+#include <iostream>
 GPlayer::GPlayer(unsigned int id, const Vector2D& pos, const Vector2D& dir)
-	: GUnit(id, pos, dir), _circle(10.f)
+    : Unit(id, pos, dir)
+    , GUnit(id, pos, dir)
+    , Player(id, pos, dir)
+    , _circle(10.f)
 {
 	switch (_id) {
 		case 0 :
