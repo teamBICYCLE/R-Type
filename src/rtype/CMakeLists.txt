@@ -34,6 +34,8 @@ add_executable(client
     client.cpp
     UnitFactory.hh
     UnitFactory.cpp
+    UnitPool.hh
+    UnitPool.cpp
 )
 
 add_executable(server

@@ -10,6 +10,7 @@
 #ifndef _PLAYER_H__
 #define _PLAYER_H__
 
+# include <iostream>
 # include "Unit.hh"
 
 class Player : public virtual Unit {
@@ -20,6 +21,11 @@ public:
 
 public:
   virtual bool  collideWith(const Player& other) const;
+
+    void test(void) const
+    {
+    	std::cout << ":)" << std::endl;
+    }
 
 public:
   Player *clone(void);

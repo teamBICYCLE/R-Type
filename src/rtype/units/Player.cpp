@@ -22,6 +22,7 @@ Player::Player(void)
 
 Player::~Player()
 {
+	std::cout << "Player delete " << this << std::endl;
 }
 
 bool  Player::collideWith(const Player& other) const
@@ -34,6 +35,5 @@ bool  Player::collideWith(const Player& other) const
 
 Player *Player::clone(void)
 {
-	std::cout << "Player clone" << std::endl;
 	return (new Player(*this));
 }

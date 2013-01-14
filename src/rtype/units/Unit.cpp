@@ -130,11 +130,18 @@ void    Unit::unpack(const uint32_t newPacketSequence, const uint8_t* content)
 
 std::ostream&   operator<<(std::ostream& stream, const Unit& unit)
 {
-    stream << "Unit #" << unit._id << " position: " << unit._pos.x << "-" << unit._pos.y;
+  stream << "Unit #" << unit._id << " position: " << unit._pos.x << "-" << unit._pos.y;
 	return stream;
 }
 
-// Unit *  Unit::clone(void)
-// {
-//     return (new (*this));
-// }
+Unit *Unit::clone(void)
+{
+  return (new Unit(*this));
+}
+
+void  Unit::reset(void)
+{
+    _pos = Vector2D();
+    _dir = Vector2D();
+    _id = uint32_t();
+}

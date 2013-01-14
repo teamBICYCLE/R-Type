@@ -44,9 +44,11 @@ class   Unit : public IPackable
 
     public:
         virtual size_t  pack(uint8_t *out, size_t outSize) const;
+        virtual void    unpack(const uint8_t* content);
         virtual void    unpack(const uint32_t newPacketSequence,
                                const uint8_t* content);
-        Unit    *clone(void){};
+        virtual Unit    *clone(void);
+        virtual void    reset(void);
 
     public:
         friend std::ostream&    operator<<(std::ostream& stream, const Unit& unit);

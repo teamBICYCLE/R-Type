@@ -17,7 +17,7 @@
 #include "RTypeConfig.h"
 #include "gamestate/GraphicGameState.hh"
 
-#include "UnitFactory.hh"
+#include "UnitPool.hh"
 #include "units/Player.hh"
 
 #include <memory>
@@ -37,8 +37,6 @@ int WINAPI WinMain(HINSTANCE hInstance,
 int main(int argc, char* argv[])
 #endif
 {
-  // tmp
-
   network::sockets::Udp s;
   network::Addr server(argv[1], argv[2], "UDP");
   Input::Config cfg;
