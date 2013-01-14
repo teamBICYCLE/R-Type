@@ -27,7 +27,7 @@ public:
 		for (auto it : _collection)
 		{
 			if (it.first == typeid(T).name())
-				return (static_cast<T*>(it.second->clone()));
+				return (dynamic_cast<T*>(it.second->clone()));
 		}
 		log::warn << "Factory : can't create this object (doesn't exist)" << log::endl;
 		return NULL;
