@@ -27,10 +27,10 @@ Player::~Player()
 
 bool  Player::collideWith(const Player& other) const
 {
-  float dist = _pos.distanceSquared(other.getPos());
+  float dist = _hitboxCenter.distanceSquared(other.getHitboxCenter());
 
-  std::cout << "Dist " << dist << std::endl;
-  return dist <= (20.f / 800.f) * (20.f / 800.f);
+  return dist <= (((_hitboxRadius + other.getHitboxRadius()) / 800.f) *
+                 ((_hitboxRadius + other.getHitboxRadius()) / 800.f));
 }
 
 Player *Player::clone(void)

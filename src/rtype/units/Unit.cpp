@@ -10,6 +10,8 @@ Unit::Unit(int id, const Vector2D& pos, const Vector2D& dir)
   , _id(id)
   , _pos(pos)
   , _dir(dir)
+  , _hitboxCenter(_pos)
+  , _hitboxRadius(10.f)
 {
 }
 
@@ -17,6 +19,8 @@ Unit::Unit(void)
   : _id()
   , _pos()
   , _dir()
+  , _hitboxCenter()
+  , _hitboxRadius()
 {
 }
 
@@ -25,6 +29,8 @@ Unit::Unit(const Unit& other)
   , _id(other._id)
   , _pos(other._pos)
   , _dir(other._dir)
+  , _hitboxCenter(other._hitboxCenter)
+  , _hitboxRadius(other._hitboxRadius)
 {
 }
 
@@ -49,6 +55,8 @@ void    swap(Unit& lhs, Unit& rhs)
     std::swap(lhs._id, rhs._id);
     std::swap(lhs._pos, rhs._pos);
     std::swap(lhs._dir, rhs._dir);
+    std::swap(lhs._hitboxCenter, rhs._hitboxCenter);
+    std::swap(lhs._hitboxRadius, rhs._hitboxRadius);
 }
 
 int     Unit::getLastPacketSequence(void) const
@@ -71,9 +79,20 @@ const Vector2D& Unit::getDir(void) const
     return _dir;
 }
 
+const Vector2D& Unit::getHitboxCenter(void) const
+{
+  return _hitboxCenter;
+}
+
+float           Unit::getHitboxRadius(void) const
+{
+  return _hitboxRadius;
+}
+
 void  Unit::move(void)
 {
     _pos += _dir;
+    _hitboxCenter = _pos;
 }
 
 void  Unit::setDir(const Vector2D& dir)
@@ -91,6 +110,17 @@ void  Unit::setPos(const Vector2D& pos)
   _pos = pos;
 }
 
+void    Unit::setHitboxCenter(const Vector2D& center)
+{
+  _hitboxCenter = center;
+}
+
+void    Unit::setHitboxRadius(const float radius)
+{
+  _hitboxRadius = radius;
+}
+
+  
 #define TO_SHORT(x) (x * ((uint16_t)-1))
 #define FROM_SHORT(x) (x / (float)((uint16_t)-1))
 

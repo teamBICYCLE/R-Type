@@ -35,16 +35,19 @@ class   Unit : public IPackable
         int             getId(void) const;
         const Vector2D& getPos(void) const;
         const Vector2D& getDir(void) const;
+        const Vector2D& getHitboxCenter(void) const;
+        float           getHitboxRadius(void) const;
 
     public:
         void    move(void);
         void    setDir(const Vector2D& dir);
         void    setLastPacketSequence(uint32_t newPacketSequence);
         void    setPos(const Vector2D& pos);
+        void    setHitboxCenter(const Vector2D& center);
+        void    setHitboxRadius(const float radius);
 
     public:
         virtual size_t  pack(uint8_t *out, size_t outSize) const;
-        virtual void    unpack(const uint8_t* content);
         virtual void    unpack(const uint32_t newPacketSequence,
                                const uint8_t* content);
         virtual Unit    *clone(void);
@@ -54,10 +57,15 @@ class   Unit : public IPackable
         friend std::ostream&    operator<<(std::ostream& stream, const Unit& unit);
 
     protected:
-        uint32_t    _lastPacketSequence;
-        Vector2D		_pos;
-        Vector2D		_dir;
-        uint32_t  	_id;
+        uint32_t  _lastPacketSequence;
+        Vector2D	_pos;
+        Vector2D	_dir;
+        uint32_t  _id;
+        //Hitbox center is different from _pos so
+        //that we can set to be the head of the
+        //rocket, for example
+        Vector2D  _hitboxCenter;
+        float     _hitboxRadius;
 };
 
 #endif /* !__UNIT_HH__ */
