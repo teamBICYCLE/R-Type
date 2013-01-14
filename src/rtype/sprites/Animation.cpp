@@ -44,7 +44,7 @@ const std::chrono::milliseconds Animation::getDuration(void) const
 	return _duration;
 }
 
-sf::Rect<int> Animation::operator[](const uint position) const
+sf::Rect<int> Animation::operator[](const unsigned int position) const
 {
 	return _sprite[position];
 }

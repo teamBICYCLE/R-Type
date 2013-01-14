@@ -17,7 +17,7 @@ namespace Sprite
 		virtual ~Animation(void);
 
 
-		sf::Rect<int> operator[](const uint position) const;
+		sf::Rect<int> operator[](const unsigned int position) const;
 		void setRects(const std::vector<sf::Rect<int>> &sprite);
 		void setDuration(const std::chrono::milliseconds duration);
 		std::vector<sf::Rect<int>> getRects(void) const;

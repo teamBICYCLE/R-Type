@@ -48,21 +48,21 @@ void Board::refreshMap(const std::string &boardFile, const std::string &boardCfg
 
 void Board::refreshAnimMap(csv::Parser &csvCfg)
 {
-	for (uint i = 0; i < csvCfg.rowCount(); ++i) {
+	for (unsigned int i = 0; i < csvCfg.rowCount(); ++i) {
 		_animations[csvCfg[i][FileIDX::NAME]] = createSpriteBoard(csvCfg, i);
 	}
 }
 
-Animation Board::createSpriteBoard(csv::Parser &csvCfg, uint i)
+Animation Board::createSpriteBoard(csv::Parser &csvCfg, unsigned int i)
 {
 	std::vector<sf::Rect<int>> tmp;
 	csv::Row row = csvCfg[i];
-	uint spritesNb = row.getValue<uint>(FileIDX::SpriteLoaderNB)
-	, origX = row.getValue<uint>(FileIDX::ORIGX)
-	, origY = row.getValue<uint>(FileIDX::ORIGY)
-	, sizeY = row.getValue<uint>(FileIDX::SIZEY)
-	, sizeX = row.getValue<uint>(FileIDX::SIZEX);
-	uint duration = row.getValue<uint>(FileIDX::DURATION);
+	unsigned int spritesNb = row.getValue<unsigned int>(FileIDX::SpriteLoaderNB)
+	, origX = row.getValue<unsigned int>(FileIDX::ORIGX)
+	, origY = row.getValue<unsigned int>(FileIDX::ORIGY)
+	, sizeY = row.getValue<unsigned int>(FileIDX::SIZEY)
+	, sizeX = row.getValue<unsigned int>(FileIDX::SIZEX);
+	unsigned int duration = row.getValue<unsigned int>(FileIDX::DURATION);
 
 	if (spritesNb == 0) {
 		throw std::invalid_argument("Animation [" + csvCfg[i][FileIDX::NAME] + "] in file "

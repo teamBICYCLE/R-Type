@@ -28,7 +28,7 @@ namespace Sprite
 	private:
 		void refreshMap(const std::string &boardFile, const std::string &boardCfg);
 		void refreshAnimMap(csv::Parser &csvCfg);
-		Animation createSpriteBoard(csv::Parser &csvCfg, uint i);
+		Animation createSpriteBoard(csv::Parser &csvCfg, unsigned int i);
 
 		std::map<std::string, Animation> _animations;
 		sf::Texture _texture;
