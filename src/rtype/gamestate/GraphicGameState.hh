@@ -19,6 +19,10 @@ public:
   GraphicGameState(const std::vector<std::shared_ptr<Player>>& v);
   virtual ~GraphicGameState();
 
+private:
+  GraphicGameState(const GraphicGameState& other);
+  GraphicGameState& operator=(const GraphicGameState& other);
+
 public:
   void draw(sf::RenderTarget &target, sf::RenderStates states) const;
 
@@ -26,6 +30,17 @@ public:
   void  updateWithPosition  (const communication::Packet& packet);
   void  updateWithDeath     (const communication::Packet& packet);
   void  simulate            (const Input::Data& input);
+  void  animationUpdate     (void);
+
+private:
+  const float BACKGROUND_SPEED = 800.f;
+
+private:
+  sf::Texture *_backgroundTexture;
+  sf::Sprite  *_backgroundSprite1;
+  sf::Sprite  *_backgroundSprite2;
+  Vector2D    _backgroundPos;
+  Vector2D    _backgroundDirection;
 };
 
 #endif /* !_GRAPHICGAMESTATE_H__ */

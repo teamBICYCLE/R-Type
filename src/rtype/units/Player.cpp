@@ -37,6 +37,7 @@ bool  Player::collideWith(const Player& other) const
 void  Player::move(void)
 {
   const float scaledHitboxDiameter = (_hitboxRadius / GameState::WINDOW_WIDTH) * 2;
+
   Unit::move();
   if (_pos.x < 0) _pos.x = 0;
   if (_pos.x + scaledHitboxDiameter > 1) _pos.x = 1 - scaledHitboxDiameter;

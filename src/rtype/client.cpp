@@ -53,12 +53,12 @@ int main(int argc, char* argv[])
     std::shared_ptr<Player>(new GPlayer(2, Vector2D(0.1f, 0.3f), Vector2D(0.f, 0.f))),
     std::shared_ptr<Player>(new GPlayer(3, Vector2D(0.1f, 0.4f), Vector2D(0.f, 0.f)))
   };
-  GraphicGameState  g(players);
 
   sf::RenderWindow window(sf::VideoMode(GameState::WINDOW_WIDTH, GameState::WINDOW_HEIGHT),
                           "RForceType v"
                           + std::to_string(RTYPE_VERSION_MAJOR)
                           + "." + std::to_string(RTYPE_VERSION_MINOR));
+  GraphicGameState  g(players);
 
   s.setBlocking(false);
   s.bind(network::Addr(network::SI_ADDR_ANY, "4244", "UDP"));
@@ -117,6 +117,7 @@ int main(int argc, char* argv[])
       g.update(packets);
       accumulator -= g_frameDelta;
     }
+    g.animationUpdate();
 
     sf::Event event;
     while (window.pollEvent(event))
