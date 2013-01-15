@@ -7,6 +7,7 @@
  * -----------------------------------------------------------------------------
  */
 
+#include <list>
 #include "input/Data.hh"
 #include "ServerGameState.hh"
 
@@ -48,4 +49,5 @@ void  ServerGameState::updateWithInput(const communication::Packet& packet)
 void  ServerGameState::requireMonsters(const Vector2D &left, const Vector2D &right)
 {
   std::cout << "requireMonsters" << std::endl;
+  std::list<Unit *> monsters = _pm.get(left, right);
 }
