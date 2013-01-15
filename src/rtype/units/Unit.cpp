@@ -16,7 +16,8 @@ Unit::Unit(int id, const Vector2D& pos, const Vector2D& dir)
 }
 
 Unit::Unit(void)
-  : _id()
+  : _lastPacketSequence(0)
+  , _id()
   , _pos()
   , _dir()
   , _hitboxCenter()
