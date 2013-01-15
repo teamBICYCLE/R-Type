@@ -20,6 +20,7 @@
 # include <sys/socket.h>
 # include <netinet/in.h>
 # include <arpa/inet.h>
+#include <sys/ioctl.h>
 #elif defined _WIN32
 # include <winsock2.h>
 # include <Ws2tcpip.h>
@@ -129,6 +130,24 @@ namespace network {
             ret = ::send(_socket, packet, packetSize, 0);
             if (ret == -1) throw std::runtime_error(strerror(errno));
             return ret;
+        }
+
+        int Tcp::getUnderlyingSocket() const
+        {
+          return _socket;
+        }
+
+        bool Tcp::hasPendingDatagram() const
+        {
+          int tmp;
+#ifdef _WIN32
+#define ioctl ioctlsocket
+#endif
+          tmp = 0;
+          ioctl(_socket, FIONREAD, &tmp);
+          log::debug << "les pointeurs: " << tmp << log::endl;
+          return (tmp > 0);
+#undef ioctl
         }
     }
 }

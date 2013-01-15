@@ -16,6 +16,7 @@ list(APPEND ${PROJECT_NAME}_HEADERS
     ${CMAKE_CURRENT_LIST_DIR}/Tcp.hh
     ${CMAKE_CURRENT_LIST_DIR}/Udp.hh      
     ${CMAKE_CURRENT_LIST_DIR}/socketInit.hh      
+    ${CMAKE_CURRENT_LIST_DIR}/Listener.hh      
 )
 
 list(APPEND ${PROJECT_NAME}_SOURCES
@@ -23,4 +24,5 @@ list(APPEND ${PROJECT_NAME}_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/Tcp.cpp
     ${CMAKE_CURRENT_LIST_DIR}/Udp.cpp      
     ${CMAKE_CURRENT_LIST_DIR}/socketInit.cpp      
+    ${CMAKE_CURRENT_LIST_DIR}/Listener.cpp      
 )
