@@ -5,6 +5,8 @@ using namespace Sprite;
 
 Board::Board(const std::string &boardFile, const std::string &boardCfg)
 {
+	_texture = new sf::Texture;
+	_board = new sf::Sprite;
 	refreshMap(boardFile, boardCfg);
 }
 
@@ -32,10 +34,10 @@ void Board::refreshMap(const std::string &boardFile, const std::string &boardCfg
 {
 	try	{
 		csv::Parser csvCfg = csv::Parser(boardCfg);
-		if (!_texture.loadFromFile(boardFile)) {
+		if (!_texture->loadFromFile(boardFile)) {
 			throw std::invalid_argument("Could not load image from [" + boardFile + "].");
 		} else {
-			_board.setTexture(_texture);
+			_board->setTexture(*_texture);
 		}
 		if (csvCfg.columnCount() != SIZEY + 1) {
 			throw std::invalid_argument("Badly formated config file : [" + boardCfg + "].");
@@ -58,11 +60,11 @@ Animation Board::createSpriteBoard(csv::Parser &csvCfg, unsigned int i)
 	std::vector<sf::Rect<int>> tmp;
 	csv::Row row = csvCfg[i];
 	unsigned int spritesNb = row.getValue<unsigned int>(FileIDX::SpriteLoaderNB)
-	, origX = row.getValue<unsigned int>(FileIDX::ORIGX)
-	, origY = row.getValue<unsigned int>(FileIDX::ORIGY)
-	, sizeY = row.getValue<unsigned int>(FileIDX::SIZEY)
-	, sizeX = row.getValue<unsigned int>(FileIDX::SIZEX);
-	unsigned int duration = row.getValue<unsigned int>(FileIDX::DURATION);
+	, origX                = row.getValue<unsigned int>(FileIDX::ORIGX)
+	, origY                = row.getValue<unsigned int>(FileIDX::ORIGY)
+	, sizeY                = row.getValue<unsigned int>(FileIDX::SIZEY)
+	, sizeX                = row.getValue<unsigned int>(FileIDX::SIZEX);
+	unsigned int duration  = row.getValue<unsigned int>(FileIDX::DURATION);
 
 	if (spritesNb == 0) {
 		throw std::invalid_argument("Animation [" + csvCfg[i][FileIDX::NAME] + "] in file "
@@ -87,9 +89,9 @@ Animation Board::createSpriteBoard(csv::Parser &csvCfg, unsigned int i)
 
 sf::Sprite &Board::getSprite(const std::string &animName, std::chrono::milliseconds time)
 {
-	_board.setTextureRect(_animations[animName][static_cast<int>((time / (_animations[animName].getDuration().count())).count())
+	_board->setTextureRect(_animations[animName][static_cast<int>((time / (_animations[animName].getDuration().count())).count())
 				% (_animations[animName].getRects().size())]);
-	return (_board);
+	return (*_board);
 }
 
 AnimationInfos *Board::generateAnimInfo(void)
