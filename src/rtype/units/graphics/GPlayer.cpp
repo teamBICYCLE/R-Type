@@ -1,7 +1,6 @@
 #include <iostream>
 #include "GPlayer.hh"
 
-#include <iostream>
 GPlayer::GPlayer(unsigned int id, const Vector2D& pos, const Vector2D& dir)
     : Unit(id, pos, dir)
     , GUnit(id, pos, dir)

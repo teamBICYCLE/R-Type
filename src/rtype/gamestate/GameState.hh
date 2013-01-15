@@ -34,6 +34,10 @@ protected:
 public:
   const std::vector<std::shared_ptr<Player>>& getPlayers() const;
 
+public:
+  static const float WINDOW_WIDTH;
+  static const float WINDOW_HEIGHT;
+
 protected:
   const float PLAYER_SPEED = 200.f;
   typedef std::function<void (const communication::Packet&)> UpdateFunction;

@@ -22,10 +22,8 @@ public:
 public:
   virtual bool  collideWith(const Player& other) const;
 
-    void test(void) const
-    {
-    	std::cout << ":)" << std::endl;
-    }
+public:
+  virtual void  move(void);
 
 public:
   Player *clone(void);
