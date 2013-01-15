@@ -4,7 +4,9 @@ using namespace Sprite;
 
 AnimationInfos::AnimationInfos(const Board &spriteBoard)
 : _spriteBoard(spriteBoard)
-{}
+{
+	
+}
 
 AnimationInfos::AnimationInfos(const AnimationInfos &other)
 : _currentAnim(other._currentAnim), _currentSpriteTime(other._currentSpriteTime),
@@ -22,7 +24,8 @@ AnimationInfos &AnimationInfos::operator=(const AnimationInfos &other)
 }
 
 AnimationInfos::~AnimationInfos(void)
-{}
+{
+}
 
 bool AnimationInfos::setAnimationName(const std::string &animName)
 {
