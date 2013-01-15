@@ -11,7 +11,7 @@
 #include "ServerGameState.hh"
 
 ServerGameState::ServerGameState(const std::vector<std::shared_ptr<Player>>& v)
-  : GameState(v), _pm()
+  : GameState(v)//, _pm()
 {
    using namespace std::placeholders;
 

@@ -12,6 +12,7 @@ include(threads/CMakeLists.txt)
 include(network/CMakeLists.txt)
 include(log/CMakeLists.txt)
 include(archiver/CMakeLists.txt)
+include(exploredir/CMakeLists.txt)
 
 add_library(${PROJECT_NAME}
     ${${PROJECT_NAME}_HEADERS}
