@@ -9,6 +9,7 @@
 # include "units/Unit.hh"
 # include "UnitFactory.hh"
 # include "units/Player.hh"
+# include "units/Monster.hh"
 
 # define	PLAYER_NB	4
 # define	MONSTER_NB	50
