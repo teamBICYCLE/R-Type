@@ -71,7 +71,7 @@ int main(int argc, char* argv[])
   int lastFpsPrinted = 0;
   int accumulator = 0;
   int timeDraw = 0;
-  window.setFramerateLimit(0);
+  window.setFramerateLimit(300);
   while (window.isOpen())
   {
     //newTime = std::chrono::system_clock::now();

@@ -11,7 +11,7 @@
 #include "ServerGameState.hh"
 
 ServerGameState::ServerGameState(const std::vector<std::shared_ptr<Player>>& v)
-  : GameState(v)
+  : GameState(v)//, _pm()
 {
    using namespace std::placeholders;
 
@@ -43,4 +43,9 @@ void  ServerGameState::updateWithInput(const communication::Packet& packet)
       player->setLastPacketSequence(0);//So that the client can reconnect and his packets be treated, and not dropped
     }
   }
+}
+
+void  ServerGameState::requireMonsters(const Vector2D &left, const Vector2D &right)
+{
+  std::cout << "requireMonsters" << std::endl;
 }

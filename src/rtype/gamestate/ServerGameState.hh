@@ -19,6 +19,10 @@ public:
 
 public:
   void  updateWithInput    (const communication::Packet& packet);
+  void  requireMonsters(const Vector2D &left, const Vector2D &right);
+
+private:
+	// const PatternManager _pm;
 };
 
 #endif /* !_SERVERGAMESTATE_H__ */

@@ -10,14 +10,25 @@ UnitPool::UnitPool(void)
 	for (int i = 0; i != PLAYER_NB; ++i)
 		_collection[typeid(Player).name()].push_back(f.create<Player>());
 
+	// create Monsters
+	for (int i = 0; i != MONSTER_NB; ++i)
+		_collection[typeid(Monster).name()].push_back(f.create<Monster>());
+
 	using namespace TBSystem;
-	log::info << "Pool Player Size = " << _collection[typeid(Player).name()].size() << log::endl;
+	log::info << "Pool Size = " <<
+		_collection[typeid(Player).name()].size() +
+		_collection[typeid(Monster).name()].size()
+	<< log::endl;
 }
 
 UnitPool::~UnitPool(void)
 {
 	using namespace TBSystem;
-	log::info << "Pool Player Size = " << _collection[typeid(Player).name()].size() << log::endl;
+	log::info << "Pool Size = " <<
+		_collection[typeid(Player).name()].size() +
+		_collection[typeid(Monster).name()].size()
+	<< log::endl;
+	
 	_collection[typeid(Player).name()].clear();
 }
 
