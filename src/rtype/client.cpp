@@ -55,7 +55,8 @@ int main(int argc, char* argv[])
   };
   GraphicGameState  g(players);
 
-  sf::RenderWindow window(sf::VideoMode(800, 800), "RForceType v"
+  sf::RenderWindow window(sf::VideoMode(GameState::WINDOW_WIDTH, GameState::WINDOW_HEIGHT),
+                          "RForceType v"
                           + std::to_string(RTYPE_VERSION_MAJOR)
                           + "." + std::to_string(RTYPE_VERSION_MINOR));
 

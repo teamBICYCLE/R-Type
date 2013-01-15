@@ -10,6 +10,9 @@
 #include "GameState.hh"
 #include "input/Data.hh"
 
+const float GameState::WINDOW_WIDTH = 800.f;
+const float GameState::WINDOW_HEIGHT = 800.f;
+
 GameState::GameState(const std::vector<std::shared_ptr<Player>>& v)
   : _lastPacketSequence(0) 
   , _players(v)

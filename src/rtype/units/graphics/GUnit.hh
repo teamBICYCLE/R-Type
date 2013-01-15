@@ -6,7 +6,6 @@
 
 class GUnit : public virtual Unit, public sf::Drawable
 {
-
 public:
 	GUnit(unsigned int id, const Vector2D& pos, const Vector2D& dir);
 	~GUnit(void);
