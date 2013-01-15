@@ -5,16 +5,16 @@
 # this stuff is worth it, you can buy me a beer in return Thomas Duplomb
 ################################################################################
 
-list(APPEND UNITS_HEADERS
-    ${CMAKE_CURRENT_LIST_DIR}/Unit.hh
-    ${CMAKE_CURRENT_LIST_DIR}/Player.hh
+list(APPEND SPRITES_HEADERS
+  ${CMAKE_CURRENT_LIST_DIR}/Animation.hh
+  ${CMAKE_CURRENT_LIST_DIR}/Board.hh
+  ${CMAKE_CURRENT_LIST_DIR}/AnimationInfos.hh
 )
 
-list(APPEND UNITS_SOURCES
-    ${CMAKE_CURRENT_LIST_DIR}/Unit.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/Player.cpp
+list(APPEND SPRITES_SOURCES
+  ${CMAKE_CURRENT_LIST_DIR}/Animation.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/Board.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/AnimationInfos.cpp
 )
 
-set(UNITS ${UNITS_HEADERS} ${UNITS_SOURCES})
-
-include("units/graphics/CMakeLists.txt")
+set(SPRITES ${SPRITES_HEADERS} ${SPRITES_SOURCES})

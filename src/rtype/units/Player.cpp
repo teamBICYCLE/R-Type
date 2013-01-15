@@ -7,6 +7,7 @@
  * -----------------------------------------------------------------------------
  */
 
+#include <iostream>
 #include "Player.hh"
 
 Player::Player(int id, const Vector2D& pos, const Vector2D& dir)
@@ -14,6 +15,25 @@ Player::Player(int id, const Vector2D& pos, const Vector2D& dir)
 {
 }
 
+Player::Player(void)
+	: Unit()
+{	
+}
+
 Player::~Player()
 {
+	std::cout << "Player delete " << this << std::endl;
+}
+
+bool  Player::collideWith(const Player& other) const
+{
+  float dist = _hitboxCenter.distanceSquared(other.getHitboxCenter());
+
+  return dist <= (((_hitboxRadius + other.getHitboxRadius()) / 800.f) *
+                 ((_hitboxRadius + other.getHitboxRadius()) / 800.f));
+}
+
+Player *Player::clone(void)
+{
+	return (new Player(*this));
 }

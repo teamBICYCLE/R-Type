@@ -14,31 +14,32 @@
 #include <map>
 #include <functional>
 #include <memory>
-#include "units/Unit.hh"
-#include "units/Packet.hh"
+#include "units/Player.hh"
+#include "network/Packet.hh"
 
 class GameState {
 public:
-  GameState(const std::vector<std::shared_ptr<Unit>>& v);
+  GameState(const std::vector<std::shared_ptr<Player>>& v);
   virtual ~GameState();
 
-  void  update(const network_packet::Packet & packet);
-  void  update(const std::vector<network_packet::Packet>& v);
-
-public:
-  // server
-  void  updateWithInput    (uint32_t id, const uint8_t* content);
+  void  update(const communication::Packet& packet);
+  void  update(const std::vector<communication::Packet>& v);
 
 public:
   void  move();
 
+protected:
+  void  setPlayerDirection(int id, const Vector2D& dir);
+
 public:
-  const std::vector<std::shared_ptr<Unit>>& getPlayers() const;
+  const std::vector<std::shared_ptr<Player>>& getPlayers() const;
 
 protected:
-  typedef std::function<void (uint32_t, const uint8_t *)> UpdateFunction;
-  std::vector<std::shared_ptr<Unit>>  _players;
-  std::map<network_packet::Packet::Type, UpdateFunction> _updateMap;
+  const float PLAYER_SPEED = 200.f;
+  typedef std::function<void (const communication::Packet&)> UpdateFunction;
+  uint32_t  _lastPacketSequence;
+  std::vector<std::shared_ptr<Player>>  _players;
+  std::map<communication::Packet::Type, UpdateFunction> _updateMap;
 };
 
 #endif /* !_GAMESTATE_H__ */

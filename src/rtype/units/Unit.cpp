@@ -6,18 +6,32 @@
 using namespace TBSystem;
 
 Unit::Unit(int id, const Vector2D& pos, const Vector2D& dir)
-    : _id(id)
-    , _pos(pos)
-    , _dir(dir)
+  : _lastPacketSequence(0)
+  , _id(id)
+  , _pos(pos)
+  , _dir(dir)
+  , _hitboxCenter(_pos)
+  , _hitboxRadius(10.f)
+{
+}
+
+Unit::Unit(void)
+  : _id()
+  , _pos()
+  , _dir()
+  , _hitboxCenter()
+  , _hitboxRadius()
 {
 }
 
 Unit::Unit(const Unit& other)
-    : _id(other._id)
-    , _pos(other._pos)
-    , _dir(other._dir)
+  : _lastPacketSequence(other._lastPacketSequence)
+  , _id(other._id)
+  , _pos(other._pos)
+  , _dir(other._dir)
+  , _hitboxCenter(other._hitboxCenter)
+  , _hitboxRadius(other._hitboxRadius)
 {
-   log::debug << "copy packet" << log::endl;
 }
 
 Unit::~Unit()
@@ -26,21 +40,28 @@ Unit::~Unit()
 
 Unit::Unit(Unit&& other)
 {
-   log::debug << "move packet" << log::endl;
-    swap(*this, other);
+  swap(*this, other);
 }
 
 Unit&  Unit::operator=(Unit other)
 {
-    swap(*this, other);
-    return *this;
+  swap(*this, other);
+  return *this;
 }
 
 void    swap(Unit& lhs, Unit& rhs)
 {
+    std::swap(lhs._lastPacketSequence, rhs._lastPacketSequence);
     std::swap(lhs._id, rhs._id);
     std::swap(lhs._pos, rhs._pos);
     std::swap(lhs._dir, rhs._dir);
+    std::swap(lhs._hitboxCenter, rhs._hitboxCenter);
+    std::swap(lhs._hitboxRadius, rhs._hitboxRadius);
+}
+
+int     Unit::getLastPacketSequence(void) const
+{
+  return _lastPacketSequence;
 }
 
 int     Unit::getId(void) const
@@ -58,16 +79,48 @@ const Vector2D& Unit::getDir(void) const
     return _dir;
 }
 
-void    Unit::move(void)
+const Vector2D& Unit::getHitboxCenter(void) const
 {
-    _pos += _dir;
+  return _hitboxCenter;
 }
 
-void    Unit::setDirection(const Vector2D& dir)
+float           Unit::getHitboxRadius(void) const
+{
+  return _hitboxRadius;
+}
+
+void  Unit::move(void)
+{
+    _pos += _dir;
+    _hitboxCenter = _pos;
+}
+
+void  Unit::setDir(const Vector2D& dir)
 {
     _dir = dir;
 }
 
+void  Unit::setLastPacketSequence(uint32_t newPacketSequence)
+{
+  _lastPacketSequence = newPacketSequence;
+}
+
+void  Unit::setPos(const Vector2D& pos)
+{
+  _pos = pos;
+}
+
+void    Unit::setHitboxCenter(const Vector2D& center)
+{
+  _hitboxCenter = center;
+}
+
+void    Unit::setHitboxRadius(const float radius)
+{
+  _hitboxRadius = radius;
+}
+
+  
 #define TO_SHORT(x) (x * ((uint16_t)-1))
 #define FROM_SHORT(x) (x / (float)((uint16_t)-1))
 
@@ -75,12 +128,12 @@ size_t  Unit::pack(uint8_t *out, size_t outSize) const
 {
     UnitPacket_u            packetContent;
 
-    packetContent.x = TO_SHORT(_pos.x);
-    packetContent.y = TO_SHORT(_pos.y);
-    packetContent.dx = TO_SHORT(_dir.x);
-    packetContent.dy = TO_SHORT(_dir.y);
+    packetContent.info.x = TO_SHORT(_pos.x);
+    packetContent.info.y = TO_SHORT(_pos.y);
+    packetContent.info.dx = TO_SHORT(_dir.x);
+    packetContent.info.dy = TO_SHORT(_dir.y);
 
-    network_packet::Packet packet(network_packet::Packet::Type::POSITION, _id,
+    communication::Packet packet(communication::Packet::Type::POSITION, _id,
                                   packetContent.whole, sizeof(packetContent.whole));
 
     if (outSize < packet.getDataSize())
@@ -89,18 +142,36 @@ size_t  Unit::pack(uint8_t *out, size_t outSize) const
     return packet.getDataSize();
 }
 
-void    Unit::unpack(const uint8_t* content)
+void    Unit::unpack(const uint32_t newPacketSequence, const uint8_t* content)
 {
-    const UnitPacket_u *info = reinterpret_cast<const UnitPacket_u*>(content);
+  const UnitPacket_u *info = reinterpret_cast<const UnitPacket_u*>(content);
 
-    _pos.x = FROM_SHORT(info->x);
-    _pos.y = FROM_SHORT(info->y);
-    _dir.x = FROM_SHORT(info->dx);
-    _dir.y = FROM_SHORT(info->dy);
+  if (_lastPacketSequence < newPacketSequence)
+  {
+    _lastPacketSequence = newPacketSequence;
+    _pos.x = FROM_SHORT(info->info.x);
+    _pos.y = FROM_SHORT(info->info.y);
+    _dir.x = FROM_SHORT(info->info.dx);
+    _dir.y = FROM_SHORT(info->info.dy);
+  }
+  else
+    std::cout << "==============================================DROPPED" << std::endl;
 }
 
 std::ostream&   operator<<(std::ostream& stream, const Unit& unit)
 {
-    stream << "Unit #" << unit._id << " position: " << unit._pos.x << "-" << unit._pos.y;
+  stream << "Unit #" << unit._id << " position: " << unit._pos.x << "-" << unit._pos.y;
 	return stream;
+}
+
+Unit *Unit::clone(void)
+{
+  return (new Unit(*this));
+}
+
+void  Unit::reset(void)
+{
+    _pos = Vector2D();
+    _dir = Vector2D();
+    _id = uint32_t();
 }

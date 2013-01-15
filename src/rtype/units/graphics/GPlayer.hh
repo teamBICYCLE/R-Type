@@ -2,11 +2,11 @@
 # define	_G_PLAYER_HH_
 
 #include <SFML/Graphics.hpp>
+#include "units/Player.hh"
 #include "GUnit.hh"
 
-class GPlayer : public GUnit
+class GPlayer : public GUnit, public Player
 {
-
 public:
 	GPlayer(unsigned int id, const Vector2D& pos, const Vector2D& dir);
 	~GPlayer(void);
