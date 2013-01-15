@@ -38,6 +38,9 @@ void  ServerGameState::updateWithInput(const communication::Packet& packet)
       GameState::setPlayerDirection(id, d.getVector());
     }
     else
-      std::cout << "=======================================Dropped" << std::endl;
+    {
+      std::cout << "==============================================Dropped. Last: " << player->getLastPacketSequence() << ". New: " << packet.getSequence() << std::endl;
+      player->setLastPacketSequence(0);//So that the client can reconnect and his packets be treated, and not dropped
+    }
   }
 }
