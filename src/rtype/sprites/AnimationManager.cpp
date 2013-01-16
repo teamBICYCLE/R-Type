@@ -29,7 +29,7 @@ bool AnimationManager::addSource(const std::string& spriteFile, const std::strin
 {
 	try {
 		_animations.insert(std::make_pair(spriteFile,
-							SpriteBoard(spriteFile, cfgFile)));
+							new Board(spriteFile, cfgFile)));
 	} catch (std::exception &e) {
 		std::cout << e.what() << std::endl;
 		return (false);
@@ -37,17 +37,7 @@ bool AnimationManager::addSource(const std::string& spriteFile, const std::strin
 	return (true);
 }
 
-bool AnimationManager::setAnimationName(const std::string &animName, const std::string &spriteFile)
-{
-	if (_animations.find(spriteFile) != _animations.end()) {
-		_animations.find(spriteFile)->second.getAnimInfo()->setAnimationName(animName);
-		return (true);
-	} else {
-		return (false);
-	}
-}
-
-SpriteBoard &AnimationManager::operator[](const std::string &spriteFile)
+Board *AnimationManager::operator[](const std::string &spriteFile)
 {
 	if (_animations.find(spriteFile) != _animations.end()) {
 		return (_animations.find(spriteFile)->second);
