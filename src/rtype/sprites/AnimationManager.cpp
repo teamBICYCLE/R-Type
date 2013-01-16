@@ -1,5 +1,7 @@
 #include <iostream>
 #include <exception>
+#include "system/exploredir/ExploreDir.hh"
+#include "system/log/Log.hh"
 #include "AnimationManager.hh"
 
 using namespace Sprite;
@@ -52,4 +54,65 @@ SpriteBoard &AnimationManager::operator[](const std::string &spriteFile)
 	} else {
 		throw std::invalid_argument("Can not find " + spriteFile + ".");
 	}
+}
+
+bool AnimationManager::addSourceFolder(const std::string &path)
+{
+	std::vector<std::string> fileList;
+	
+	fileList = TBSystem::ExploreDir::run(path);
+	std::sort(fileList.begin(), fileList.end());
+	return (findAssociatedFile(fileList));
+}
+
+bool AnimationManager::findAssociatedFile(std::vector<std::string> &files)
+{
+	bool success = true;
+	std::vector<std::string>::iterator cfgFile;
+
+	while ((cfgFile = findCfgFile(files)) != files.end()) {
+		std::vector<std::string>::iterator imgFile = findAssociatedImg(files, *cfgFile);
+	
+		if (imgFile != files.end()) {
+			try {
+				if (!addSource(*imgFile, *cfgFile)) {
+					success = false;
+				}
+			} catch (std::invalid_argument(&e)) {
+				TBSystem::log::warn << e.what() << TBSystem::log::endl;
+				success = false;
+			}
+		}
+		if (imgFile != files.end())
+			files.erase(imgFile);
+		if (cfgFile != files.end())
+			files.erase(cfgFile);
+	}
+	return success;
+}
+
+std::vector<std::string>::iterator AnimationManager::findCfgFile(std::vector<std::string> &files)
+{
+	return (std::find_if(files.begin(), files.end(), [](std::string &file)
+			{
+				if (!file.compare(file.find_last_of('.'), file.length(),
+								std::string(".cfg"))) {
+					return (true);
+				}
+				return (false);
+			}));
+}
+
+std::vector<std::string>::iterator AnimationManager::findAssociatedImg(std::vector<std::string> &files,
+												const std::string &cfgFile)
+{
+	return (std::find_if(files.begin(), files.end(), [cfgFile](std::string &file)
+			{
+				if (file.compare(file.find_last_of('.'), file.length(),
+								std::string(".cfg")) &&
+					!cfgFile.compare(0, cfgFile.find_last_of('.'), file, 0, file.find_last_of('.'))) {
+					return (true);
+				}
+				return (false);
+			}));
 }

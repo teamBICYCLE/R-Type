@@ -34,14 +34,14 @@ namespace Sprite
 		sf::Texture  *_texture;
 		sf::Sprite   *_board;
 
-			enum FileIDX {
-			      NAME           = 0
-				, SpriteLoaderNB = 1
-				, DURATION       = 2
-				, ORIGX          = 3
-				, SIZEX          = 4
-				, ORIGY          = 5
-				, SIZEY          = 6
+		enum FileIDX {
+		      NAME           = 0
+			, SpriteLoaderNB = 1
+			, DURATION       = 2
+			, ORIGX          = 3
+			, SIZEX          = 4
+			, ORIGY          = 5
+			, SIZEY          = 6
 		};
 
 	};
