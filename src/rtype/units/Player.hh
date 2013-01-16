@@ -10,10 +10,10 @@
 #ifndef _PLAYER_H__
 #define _PLAYER_H__
 
-# include <iostream>
 # include "Unit.hh"
 
-class Player : public virtual Unit {
+class Player : public virtual Unit
+{
 public:
   Player(int id, const Vector2D& pos, const Vector2D& dir);
   Player(void);
@@ -21,11 +21,7 @@ public:
 
 public:
   virtual bool  collideWith(const Player& other) const;
-
-    void test(void) const
-    {
-    	std::cout << ":)" << std::endl;
-    }
+  virtual void  move(void);
 
 public:
   Player *clone(void);

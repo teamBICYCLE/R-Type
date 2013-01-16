@@ -4,7 +4,6 @@
 #include <string.h>
 #include <tchar.h>
 #endif
-#include <chrono>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <SFML/Window/Keyboard.hpp>
@@ -25,8 +24,10 @@
 using namespace std;
 using namespace TBSystem;
 
-static const std::chrono::milliseconds g_frameDelta(1000 / 60);
-static const std::chrono::milliseconds g_maxFrameTime(25);
+//static const std::chrono::milliseconds g_frameDelta(1000 / 60);
+//static const std::chrono::milliseconds g_maxFrameTime(25);
+static const int  g_frameDelta(16);
+static const int  g_maxFrameTime(25);
 
 #ifdef _WIN32
 int WINAPI WinMain(HINSTANCE hInstance,
@@ -51,33 +52,43 @@ int main(int argc, char* argv[])
     std::shared_ptr<Player>(new GPlayer(2, Vector2D(0.1f, 0.3f), Vector2D(0.f, 0.f))),
     std::shared_ptr<Player>(new GPlayer(3, Vector2D(0.1f, 0.4f), Vector2D(0.f, 0.f)))
   };
-  GraphicGameState  g(players);
 
-  sf::RenderWindow window(sf::VideoMode(800, 800), "RForceType v"
+  sf::RenderWindow window(sf::VideoMode(GameState::WINDOW_WIDTH, GameState::WINDOW_HEIGHT),
+                          "RForceType v"
                           + std::to_string(RTYPE_VERSION_MAJOR)
                           + "." + std::to_string(RTYPE_VERSION_MINOR));
+  GraphicGameState  g(players);
 
   s.setBlocking(false);
   s.bind(network::Addr(network::SI_ADDR_ANY, "4244", "UDP"));
 
-  std::chrono::time_point<std::chrono::system_clock> currentTime = std::chrono::system_clock::now();
-  std::chrono::time_point<std::chrono::system_clock> newTime;
-  std::chrono::time_point<std::chrono::system_clock> lastDrawTime;
-  std::chrono::milliseconds accumulator;
+  sf::Clock clock;
+  int lastFpsPrinted = 0;
+  int accumulator = 0;
   int timeDraw = 0;
-
+  window.setFramerateLimit(300);
   while (window.isOpen())
   {
-    newTime = std::chrono::system_clock::now();
-    std::chrono::milliseconds frameTime = std::chrono::duration_cast<std::chrono::milliseconds>
-                                          (newTime - currentTime);
+    int frameTime = clock.getElapsedTime().asMilliseconds();
     if (frameTime > g_maxFrameTime)
       frameTime = g_maxFrameTime;
     accumulator += frameTime;
-    currentTime = newTime;
+    lastFpsPrinted += frameTime;
+
+    std::cout << "Frame: " << frameTime << std::endl;
+
+    if (lastFpsPrinted >= 1000)
+    {
+      std::cout << timeDraw << "fps" << std::endl;
+      timeDraw = 0;
+      lastFpsPrinted -= 1000;
+    }
+
+    clock.restart();
 
     while (accumulator >= g_frameDelta)
     {
+      std::cout << "HERE" << std::endl;
       uint8_t buf[256];
 
       Input::Data i = cfg.getInput();
@@ -96,6 +107,7 @@ int main(int argc, char* argv[])
       g.update(packets);
       accumulator -= g_frameDelta;
     }
+    g.animationUpdate();
 
     sf::Event event;
     while (window.pollEvent(event))
@@ -107,13 +119,6 @@ int main(int argc, char* argv[])
     window.draw(g);
     window.display();
     timeDraw++;
-    std::chrono::time_point<std::chrono::system_clock> drawTime = std::chrono::system_clock::now();
-    if (std::chrono::duration_cast<std::chrono::seconds>(drawTime - lastDrawTime) >= std::chrono::seconds(1))
-    {
-      std::cout << timeDraw << "fps" << std::endl;
-      timeDraw = 0;
-      lastDrawTime = drawTime;
-    }
   }
   return EXIT_SUCCESS;
 }

@@ -46,15 +46,15 @@ std::vector<communication::Packet> NetworkHandler::getIncomingPackets()
 
 void  NetworkHandler::broadcast(const GameState& g)
 {
-      for (auto& p : g.getPlayers()) {
-         uint8_t  buf[communication::Packet::MAX_PACKET_SIZE];
-         int      packetSize;
+  for (auto& p : g.getPlayers()) {
+    uint8_t  buf[communication::Packet::MAX_PACKET_SIZE];
+    int      packetSize;
 
-         packetSize = p->pack(buf, sizeof(buf));
-         for (auto& addr : _outAddr) {
-            _socket.send(buf, packetSize, addr);
-         }
-   }
+    packetSize = p->pack(buf, sizeof(buf));
+    for (auto& addr : _outAddr) {
+      _socket.send(buf, packetSize, addr);
+    }
+  }
 }
 
 void NetworkHandler::setClients(const std::vector<network::Addr>& c)

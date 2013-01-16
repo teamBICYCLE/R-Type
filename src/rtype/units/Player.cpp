@@ -8,6 +8,7 @@
  */
 
 #include <iostream>
+#include "gamestate/GameState.hh"
 #include "Player.hh"
 
 Player::Player(int id, const Vector2D& pos, const Vector2D& dir)
@@ -22,15 +23,27 @@ Player::Player(void)
 
 Player::~Player()
 {
-	std::cout << "Player delete " << this << std::endl;
 }
 
 bool  Player::collideWith(const Player& other) const
 {
   float dist = _hitboxCenter.distanceSquared(other.getHitboxCenter());
 
-  return dist <= (((_hitboxRadius + other.getHitboxRadius()) / 800.f) *
-                 ((_hitboxRadius + other.getHitboxRadius()) / 800.f));
+  return dist <= (((_hitboxRadius + other.getHitboxRadius()) / GameState::WINDOW_WIDTH) *
+                 ((_hitboxRadius + other.getHitboxRadius()) / GameState::WINDOW_WIDTH));
+}
+
+void  Player::move(void)
+{
+  const float scaledHitboxDiameter = (_hitboxRadius / GameState::WINDOW_WIDTH) * 2;
+
+  Unit::move();
+  if (_pos.x < 0) _pos.x = 0;
+  if (_pos.x + scaledHitboxDiameter > 1) _pos.x = 1 - scaledHitboxDiameter;
+  if (_pos.y < 0) _pos.y = 0;
+  if (_pos.y + scaledHitboxDiameter > 1) _pos.y = 1 - scaledHitboxDiameter;
+  //std::cout << "Player moved: " << _pos << std::endl;
+  _hitboxCenter = _pos;
 }
 
 Player *Player::clone(void)

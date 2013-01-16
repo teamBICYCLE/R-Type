@@ -16,7 +16,8 @@ Unit::Unit(int id, const Vector2D& pos, const Vector2D& dir)
 }
 
 Unit::Unit(void)
-  : _id()
+  : _lastPacketSequence(0)
+  , _id()
   , _pos()
   , _dir()
   , _hitboxCenter()
@@ -155,7 +156,10 @@ void    Unit::unpack(const uint32_t newPacketSequence, const uint8_t* content)
     _dir.y = FROM_SHORT(info->info.dy);
   }
   else
-    std::cout << "==============================================DROPPED" << std::endl;
+  {
+    std::cout << "==============================================DROPPED. Last: " << _lastPacketSequence << ". New: " << newPacketSequence << std::endl;
+    _lastPacketSequence = 0;
+  }
 }
 
 std::ostream&   operator<<(std::ostream& stream, const Unit& unit)

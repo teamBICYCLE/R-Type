@@ -39,7 +39,7 @@ class   Unit : public IPackable
         float           getHitboxRadius(void) const;
 
     public:
-        void    move(void);
+        virtual void    move(void);
         void    setDir(const Vector2D& dir);
         void    setLastPacketSequence(uint32_t newPacketSequence);
         void    setPos(const Vector2D& pos);
