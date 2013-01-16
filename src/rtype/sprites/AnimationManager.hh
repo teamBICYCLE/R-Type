@@ -4,7 +4,7 @@
 # include <map>
 # include <string>
 # include <vector>
-# include "SpriteBoard.hh"
+# include "Board.hh"
 
 namespace Sprite
 {
@@ -16,10 +16,9 @@ namespace Sprite
 		AnimationManager& operator=(const AnimationManager &other);
 		virtual ~AnimationManager(void);
 
-		SpriteBoard &operator[](const std::string &spriteFile);
+		Board *operator[](const std::string &spriteFile);
 		bool addSourceFolder(const std::string &path);
 		bool addSource(const std::string& spriteFile , const std::string &cfgFile);
-		bool setAnimationName(const std::string &animName, const std::string &spriteFile);
 	private:
 		bool findAssociatedFile(std::vector<std::string> &files);
 		std::vector<std::string>::iterator  findCfgFile(std::vector<std::string> &files);
@@ -27,7 +26,7 @@ namespace Sprite
 												const std::string &cfgFile);
 
 	private:
-		std::map<std::string, SpriteBoard> _animations;
+		std::map<std::string, Board *> _animations;
 	};
 }
 #endif /*!__ANIMATION_MANAGER__ */

@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 2.6)
+set(CMAKE_BUILD_TYPE Debug)
 project (RType)
 
 ################################################################################
@@ -15,17 +16,17 @@ include_directories(${SFML_INCLUDE_DIR})
 # Build configuration
 ################################################################################
 
-set(CMAKE_BUILD_TYPE Debug)
 include_directories(
     ${CMAKE_SOURCE_DIR}/src
     ${CMAKE_SOURCE_DIR}/src/libs
 )
 
-set(EXECUTABLE_OUTPUT_PATH "${CMAKE_SOURCE_DIR}/bin/")
-set(LIBRARY_OUTPUT_PATH "${CMAKE_SOURCE_DIR}/bin/libs/")
+set(EXECUTABLE_OUTPUT_PATH  "${CMAKE_SOURCE_DIR}/bin/")
+set(LIBRARY_OUTPUT_PATH     "${CMAKE_SOURCE_DIR}/bin/libs/")
 if(${UNIX})
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -O3")
-    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -std=c++0x -ggdb")
+  set(CMAKE_CXX_FLAGS         "${CMAKE_CXX_FLAGS} -std=c++0x")
+  set(CMAKE_CXX_FLAGS_DEBUG   "${CMAKE_CXX_FLAGS_DEBUG} -ggdb")
+  set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3 -DNDEBUG")
 endif()
 if(WIN32)
     add_definitions(/D _CRT_SECURE_NO_WARNINGS)
@@ -53,3 +54,4 @@ add_subdirectory(src)
         #COMMENT "Generating API documentation with Doxygen" VERBATIM
         #)
 #endif(DOXYGEN_FOUND)
+

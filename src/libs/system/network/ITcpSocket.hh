@@ -31,6 +31,10 @@ namespace network {
                 virtual int recv(char * packet, int maxPacketSize) = 0;
 
                 virtual int send(const char * packet, int packetSize) = 0;
+
+                virtual int getUnderlyingSocket() const = 0;
+
+                virtual bool hasPendingDatagram() const = 0;
         };
     }
 }

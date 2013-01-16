@@ -59,3 +59,7 @@ target_link_libraries(server
     csv-parser
     system
 )
+
+# temporary
+
+add_subdirectory(preroll)
