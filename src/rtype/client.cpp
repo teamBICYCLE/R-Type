@@ -4,7 +4,6 @@
 #include <string.h>
 #include <tchar.h>
 #endif
-#include <chrono>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <SFML/Window/Keyboard.hpp>
@@ -63,10 +62,6 @@ int main(int argc, char* argv[])
   s.setBlocking(false);
   s.bind(network::Addr(network::SI_ADDR_ANY, "4244", "UDP"));
 
-  //std::chrono::time_point<std::chrono::system_clock> currentTime = std::chrono::system_clock::now();
-  //std::chrono::time_point<std::chrono::system_clock> newTime;
-  //std::chrono::time_point<std::chrono::system_clock> lastDrawTime;
-  //std::chrono::milliseconds accumulator;
   sf::Clock clock;
   int lastFpsPrinted = 0;
   int accumulator = 0;
@@ -74,9 +69,6 @@ int main(int argc, char* argv[])
   window.setFramerateLimit(300);
   while (window.isOpen())
   {
-    //newTime = std::chrono::system_clock::now();
-    //std::chrono::milliseconds frameTime = std::chrono::duration_cast<std::chrono::milliseconds>
-    //                                      (newTime - currentTime);
     int frameTime = clock.getElapsedTime().asMilliseconds();
     if (frameTime > g_maxFrameTime)
       frameTime = g_maxFrameTime;
@@ -85,8 +77,6 @@ int main(int argc, char* argv[])
 
     std::cout << "Frame: " << frameTime << std::endl;
 
-    //std::chrono::time_point<std::chrono::system_clock> drawTime = std::chrono::system_clock::now();
-    //if (std::chrono::duration_cast<std::chrono::seconds>(drawTime - lastDrawTime) >= std::chrono::seconds(1))
     if (lastFpsPrinted >= 1000)
     {
       std::cout << timeDraw << "fps" << std::endl;
