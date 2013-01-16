@@ -26,7 +26,8 @@ public:
   void  update(const std::vector<communication::Packet>& v);
 
 public:
-  void  move();
+  void  moveOne(Player& p);
+  void  moveAll(void);
 
 protected:
   void  setPlayerDirection(int id, const Vector2D& dir);
