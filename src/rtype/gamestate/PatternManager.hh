@@ -21,6 +21,7 @@ public:
 
 private:
 	void load(void);
+	void loadShared(void);
 
 private:
 	std::vector<std::shared_ptr<Pattern>> _patterns;

@@ -41,7 +41,6 @@ add_executable(client
 add_executable(server
     ${UTILITIES}
     ${UNITS}
-    ${SHUNITS}
     ${SERVER_NETWORK}
     ${SERVER_GAMESTATE}
     input/Data.hh

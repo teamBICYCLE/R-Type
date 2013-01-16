@@ -14,7 +14,8 @@ namespace TBSystem
 		~ExploreDir(void);
 
 	public:
-		static std::vector<std::string> run(const std::string &dir);
+		static std::vector<std::string> run(const std::string &, const std::string &e = "");
+		static bool checkExtension(const std::string &file, const std::string &need);
 	};
 };
 
