@@ -12,7 +12,7 @@
 #include "ServerGameState.hh"
 
 ServerGameState::ServerGameState(const std::vector<std::shared_ptr<Player>>& v)
-  : GameState(v)//, _pm()
+  : GameState(v), _pm()
 {
    using namespace std::placeholders;
 
@@ -40,7 +40,8 @@ void  ServerGameState::updateWithInput(const communication::Packet& packet)
     }
     else
     {
-      std::cout << "==============================================Dropped. Last: " << player->getLastPacketSequence() << ". New: " << packet.getSequence() << std::endl;
+      std::cout << "==============================================Dropped. Last: " <<
+      player->getLastPacketSequence() << ". New: " << packet.getSequence() << std::endl;
       player->setLastPacketSequence(0);//So that the client can reconnect and his packets be treated, and not dropped
     }
   }
