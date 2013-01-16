@@ -12,6 +12,11 @@ include_directories(${PROJECT_SOURCE_DIR})
 add_executable(preroll_server
   Client.cpp
   Client.hh
+  Room.cpp
+  Room.hh
+  INetworkSerializable.hh
+  Lounge.cpp
+  Lounge.hh
   server.cpp
 )
 

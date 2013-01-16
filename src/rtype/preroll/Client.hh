@@ -11,20 +11,54 @@
 #define _CLIENT_H__
 
 #include <string>
-#include <system/network/Tcp.hh>
+#include <map>
+#include <system/network/Addr.hh>
+#include <system/network/ITcpSocket.hh>
 
-namespace preroll {
+class Lounge;
+
 class Client {
 public:
-  Client();
+  typedef std::function<bool (std::shared_ptr<
+                              TBSystem::network::sockets::ITcpSocket>&,
+                              Lounge& lounge,
+                              std::string params)>
+    protocolHandler;
+
+public:
+  Client(
+         std::shared_ptr<TBSystem::network::sockets::ITcpSocket>& socket,
+         TBSystem::network::Addr& addr
+         );
   ~Client();
 
+public:
+  bool  operator==(const Client& other) const;
+
+public:
+  bool  handleRcv(
+                  std::shared_ptr<TBSystem::network::sockets::ITcpSocket>& socket,
+                  Lounge& lounge
+                 );
+  bool  handleAsk(
+                  std::shared_ptr<TBSystem::network::sockets::ITcpSocket>& socket,
+                  std::string buf,
+                  Lounge& lounge
+                 );
+
+  void  welcome();
+public:
+  int getId() const;
+
 private:
-  unsigned int          _id;
+  static int            _s_lastID;
+  std::map<std::string, protocolHandler> _s_commands;
+
+  int                   _id;
   std::string           _ip;
-  std::string           _login;
-  TBSystem::network::sockets::Tcp _socket;
+  std::shared_ptr<TBSystem::network::sockets::ITcpSocket> _socket;
+  TBSystem::network::Addr _addr;
+  std::string             _commandLine;
 };
-}
 
 #endif /* !_CLIENT_H__ */
