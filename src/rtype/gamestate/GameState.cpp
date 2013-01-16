@@ -16,6 +16,7 @@ const float GameState::WINDOW_HEIGHT = 800.f;
 GameState::GameState(const std::vector<std::shared_ptr<Player>>& v)
   : _lastPacketSequence(0) 
   , _players(v)
+  , PLAYER_SPEED(200.f)
 {
 }
 

@@ -33,7 +33,7 @@ public:
   void  animationUpdate     (void);
 
 private:
-  const float BACKGROUND_SPEED = 800.f;
+  const float BACKGROUND_SPEED;
 
 private:
   sf::Texture *_backgroundTexture;

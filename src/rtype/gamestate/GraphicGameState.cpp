@@ -15,6 +15,7 @@ using namespace TBSystem;
 
 GraphicGameState::GraphicGameState(const std::vector<std::shared_ptr<Player>>& v)
   : GameState(v)
+  , BACKGROUND_SPEED(800.f)
   , _backgroundTexture(new sf::Texture)
   , _backgroundSprite1(new sf::Sprite)
   , _backgroundSprite2(new sf::Sprite)

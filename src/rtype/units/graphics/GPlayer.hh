@@ -12,6 +12,8 @@ public:
 	~GPlayer(void);
 
 public:
+	using Player::move;
+	using Player::clone;
 	const sf::Drawable *render(void) const;
 
 private:
