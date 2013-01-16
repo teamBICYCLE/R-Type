@@ -18,12 +18,15 @@
 namespace TBSystem {
 namespace network {
 class Listener {
-  typedef std::function<void (std::shared_ptr<sockets::ITcpSocket>&, Listener&)>
+  typedef std::function<bool (std::shared_ptr<sockets::ITcpSocket>&)>
     readCallback;
+  typedef std::function<void ()>
+    disconnectCallback;
 
   class Socket {
   public:
-    Socket(std::shared_ptr<sockets::ITcpSocket>& s, readCallback readCallback);
+    Socket(std::shared_ptr<sockets::ITcpSocket>& s, readCallback readCallback,
+           disconnectCallback disconnectCallback);
     ~Socket();
     Socket(const Socket& other);
     Socket(Socket&& other);
@@ -35,10 +38,9 @@ class Listener {
     Socket& operator=(Socket other);
 
   public:
-    bool  operator==(const Socket& other) const;
-
+    bool operator==(const Socket& other) const;
   public:
-    void  read(Listener& l);
+    bool  read();
 
     void  disconnect();
 
@@ -47,6 +49,7 @@ class Listener {
   private:
     std::shared_ptr<sockets::ITcpSocket> _socket;
     readCallback _readCallback;
+    disconnectCallback _disconnectCallback;
   };
 
 public:
@@ -54,7 +57,8 @@ public:
   ~Listener();
 
   void  addSocket(std::shared_ptr<sockets::ITcpSocket>& s,
-                    readCallback readCallback);
+                    readCallback readCallback,
+                    disconnectCallback disconnectCallback);
   void  removeSocket(std::shared_ptr<sockets::ITcpSocket>& s);
   template< class Rep, class Period >
   bool  waitEvent(std::chrono::duration<Rep, Period> waitDuration);

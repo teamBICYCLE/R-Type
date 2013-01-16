@@ -23,9 +23,11 @@ namespace network {
  *  callbacks
  */
 Listener::Socket::Socket(std::shared_ptr<sockets::ITcpSocket>& s,
-                         readCallback readCallback)
+                         readCallback readCallback,
+                         disconnectCallback disconnectCallback)
   : _socket(s)
   , _readCallback(readCallback)
+  , _disconnectCallback(disconnectCallback)
 {
 }
 
@@ -36,6 +38,7 @@ Listener::Socket::~Socket()
 Listener::Socket::Socket(const Socket& other)
   : _socket(other._socket)
   , _readCallback(other._readCallback)
+  , _disconnectCallback(other._disconnectCallback)
 {
 }
 
@@ -50,14 +53,19 @@ Listener::Socket& Listener::Socket::operator=(Socket other)
   return *this;
 }
 
-void  Listener::Socket::read(Listener& l)
+bool Listener::Socket::operator==(const Socket& other) const
 {
-  _readCallback(_socket, l);
+  return _socket->getUnderlyingSocket() == other._socket->getUnderlyingSocket();
+}
+
+bool  Listener::Socket::read()
+{
+  return _readCallback(_socket);
 }
 
 void  Listener::Socket::disconnect()
 {
-  log::notice << "Disconnect callback call is not implemented" << log::endl;
+  _disconnectCallback();
 }
 
 /**
@@ -72,19 +80,26 @@ Listener::~Listener()
 }
 
 void  Listener::addSocket(std::shared_ptr<sockets::ITcpSocket>& s,
-                    readCallback readCallback)
+                    readCallback readCallback,
+                    disconnectCallback disconnectCallback)
 {
-  _sockets.emplace_back(s, readCallback);
+  _sockets.emplace_back(s, readCallback, disconnectCallback);
 }
 
 void  Listener::execute()
 {
-  std::list<std::vector<Socket>::iterator> l;
+  std::list<Socket*> l;
 
   for (auto& s : _sockets) {
     if (FD_ISSET(s._socket->getUnderlyingSocket(), &_set)) {
-        s.read(*this);
+        if (!s.read()) {
+          s.disconnect();
+          l.push_back(&s);
+        }
     }
+  }
+  for (auto& s : l) {
+    _sockets.erase(std::find(_sockets.begin(), _sockets.end(), *s));
   }
 }
 }
