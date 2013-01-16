@@ -75,8 +75,6 @@ int main(int argc, char* argv[])
     accumulator += frameTime;
     lastFpsPrinted += frameTime;
 
-    std::cout << "Frame: " << frameTime << std::endl;
-
     if (lastFpsPrinted >= 1000)
     {
       std::cout << timeDraw << "fps" << std::endl;
@@ -88,7 +86,6 @@ int main(int argc, char* argv[])
 
     while (accumulator >= g_frameDelta)
     {
-      std::cout << "HERE" << std::endl;
       uint8_t buf[256];
 
       Input::Data i = cfg.getInput();
