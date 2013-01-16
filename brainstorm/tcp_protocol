@@ -1,79 +1,79 @@
-MISC
-====
-Connection
-----------
-*le client se connecte*
-server  : `hi id_client`
-
-Roomlist
---------
-client  : `ask roomlist`
-server  : `rep roomlist start`
-server  : `rep roomlist room ROOMSERIALIZATION`
-server  : `...`
-server  : `rep roomlist room ROOMSERIALIZATION`
-server  : `rep roomlist end`
-
-Room details
-------------
-client  : `ask room_details ID`
-client  : `ask room_details ID start`
-server  : `rep room_details ID room ROOMSERIALIZATION`
-server  : `rep room_details ID player status PLAYERSERIALIZATION`
-server  : `rep room_details ID player ...`
-server  : `rep room_details ID end`
-
-
-Interagir avec les room
-=======================
-- quand on rejoint/creer une partie, le joueur souscrit automatiquement aux 
-updates de cette room
-- les raisons sont toutes *url encoded*
-
-Join
-----
-client  : `ask join ID`
-server  : `rep join OK ID`
-OU
-server  : `rep join KO ID reason` 
-
-
-Create
-------
-client  : `ask create`
-server  : `rep create OK ID`
-OU
-server  : `rep create KO reason`
-
-Leave
------
-client  : `ask leave ID`
-server  : `rep leave OK`
-OU
-server  : `rep leave KO reason`
-
-Notifications
-=============
-
-Joueur
-------
-server  : `notif player join ROOM_ID PLAYERSERIALIZATION`
-server  : `notif player ready ROOM_ID PLAYERSERIALIZATION`
-server  : `notif player not_ready ROOM_ID PLAYERSERIALIZATION`
-server  : `notif player leave ROOM_ID PLAYERSERIALIZATION`
-
-Partie
-------
-server  : `notif gamestart ROOM_ID`
-server  : `notif gameend ROOM_ID distance_parcouru`
-
-Serialisation
-=============
-
-Joueur
-------
-`id ip login`
-
-Room
-----
-`id status playercount playermax maxdistance`
+MISC                                                                         
+====                                                                         
+Connection                                                                   
+----------                                                                   
+*le client se connecte*                                                      
+server  : `hi id_client`                                                     
+                                                                             
+Roomlist                                                                     
+--------                                                                     
+client  : `roomlist`                                                     
+server  : `rep roomlist start`                                               
+server  : `rep roomlist room ROOMSERIALIZATION`                              
+server  : `...`                                                              
+server  : `rep roomlist room ROOMSERIALIZATION`                              
+server  : `rep roomlist end`                                                 
+                                                                             
+Room details                                                                 
+------------                                                                 
+client  : `room_details ID`                                              
+client  : `rep room_details ID start`                                        
+server  : `rep room_details ID room ROOMSERIALIZATION`                       
+server  : `rep room_details ID player status PLAYERSERIALIZATION`            
+server  : `rep room_details ID player ...`                                   
+server  : `rep room_details ID end`                                          
+                                                                             
+                                                                             
+Interagir avec les room                                                      
+=======================                                                      
+- quand on rejoint/creer une partie, le joueur souscrit automatiquement aux  
+updates de cette room                                                        
+- les raisons sont toutes *url encoded*                                      
+                                                                             
+Join                                                                         
+----                                                                         
+client  : `join ID`                                                      
+server  : `rep join OK ID`                                                   
+OU                                                                           
+server  : `err reason`                                            
+                                                                             
+                                                                             
+Create                                                                       
+------                                                                       
+client  : `create`                                                       
+server  : `rep create OK ID`                                                 
+OU                                                                           
+server  : `err reason`                                             
+                                                                             
+Leave                                                                        
+-----                                                                        
+client  : `leave ID`                                                     
+server  : `rep leave OK`                                                     
+OU                                                                           
+server  : `err reason`                                              
+                                                                             
+Notifications                                                                
+=============                                                              
+                                                                           
+Joueur                                                                     
+------                                                                     
+server  : `notif player join ROOM_ID PLAYERSERIALIZATION`                  
+server  : `notif player ready ROOM_ID PLAYERSERIALIZATION`                 
+server  : `notif player not_ready ROOM_ID PLAYERSERIALIZATION`             
+server  : `notif player leave ROOM_ID PLAYERSERIALIZATION`                 
+                                                                           
+Partie                                                                     
+------                                                                     
+server  : `notif gamestart ROOM_ID`                                        
+server  : `notif gameend ROOM_ID`                                          
+                                                                           
+Serialisation                                                              
+=============                                                              
+                                                                           
+Joueur                                                                     
+------                                                                     
+`id ip login`                                                              
+                                                                           
+Room                                                                       
+----                                                                       
+`id status playercount playermax`
