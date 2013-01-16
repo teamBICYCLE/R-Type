@@ -4,7 +4,7 @@
 # include <map>
 # include <string>
 # include <vector>
-# include "SpriteBoard.hh"
+# include "Board.hh"
 
 namespace Sprite
 {
