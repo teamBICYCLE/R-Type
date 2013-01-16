@@ -69,7 +69,7 @@ void  GraphicGameState::simulate(const Input::Data& input)
   const int playerId = input.getId();
 
   if (playerId >= 0 && playerId < _players.size()) {
-      GameState::setPlayerDirection(playerId, input.getVector());
+    GameState::setPlayerDirection(playerId, input.getVector());
     _players[playerId]->move();
   }
 }
@@ -84,7 +84,6 @@ void  GraphicGameState::animationUpdate(void)
 	pos.y *= GameState::WINDOW_HEIGHT;
   _backgroundSprite1->setPosition(pos);
   pos.x += _backgroundTexture->getSize().x;
-  std::cout << "Pos.x=" << pos.x << std::endl;
   if (pos.x <= 0)//if the x of the second background is less than zero...
     _backgroundPos.x = 0;//then we reset the position of the first background to loop again
   _backgroundSprite2->setPosition(pos);
