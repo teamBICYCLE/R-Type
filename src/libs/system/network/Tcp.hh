@@ -15,31 +15,39 @@
 
 namespace TBSystem {
 namespace network {
-    namespace sockets {
-        class Tcp : public ITcpSocket {
-            public:
-                Tcp();
 
-                explicit Tcp(int socketDescriptor);
+class Listener;
+namespace sockets {
 
-                virtual ~Tcp();
+class Tcp : public ITcpSocket {
+public:
 
-                virtual void listen(int queueLenght);
+  Tcp();
 
-                virtual void bind(const IAddr & addr);
+  explicit Tcp(int socketDescriptor);
 
-                virtual std::shared_ptr<ITcpSocket> accept(IAddr & pair);
+  virtual ~Tcp();
 
-                virtual void connect(const IAddr & pair);
+  virtual void listen(int queueLenght);
 
-                virtual int recv(char * packet, int maxPacketSize);
+  virtual void bind(const IAddr & addr);
 
-                virtual int send(const char * packet, int packetSize);
+  virtual std::shared_ptr<ITcpSocket> accept(IAddr & pair);
 
-            private:
-                int _socket;
-        };
-    }
+  virtual void connect(const IAddr & pair);
+
+  virtual int recv(char * packet, int maxPacketSize);
+
+  virtual int send(const char * packet, int packetSize);
+
+  virtual int getUnderlyingSocket() const;
+
+  virtual bool hasPendingDatagram() const;
+
+private:
+  int _socket;
+};
+}
 }
 }
 

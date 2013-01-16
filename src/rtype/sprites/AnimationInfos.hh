@@ -23,7 +23,7 @@ namespace Sprite
 
 	private:
 	 	std::string _currentAnim;
-	 	std::chrono::system_clock::time_point _currentSpriteTime;
+	 	std::chrono::steady_clock::time_point _currentSpriteTime;
 	 	Board _spriteBoard;
 	};
 }

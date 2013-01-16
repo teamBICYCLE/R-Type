@@ -45,22 +45,27 @@ void  GameState::setPlayerDirection(int id, const Vector2D& dir)
   }
 }
 
-void  GameState::move()
+void  GameState::moveOne(Player& p)
+{
+  Vector2D  savedPos = p.getPos();
+
+  p.move();
+  for (auto& other : _players)
+  {
+    if (other->getId() != p.getId() &&
+        other->collideWith(p) == true)
+    {
+      p.setPos(savedPos);
+      std::cout << "COLLIDED" << std::endl;
+      break;
+    }
+  }
+}
+
+void  GameState::moveAll(void)
 {
    for (auto& p : _players) {
-     Vector2D  savedPos = p->getPos();
-
-     p->move();
-     for (auto& other : _players)
-     {
-       if (other->getId() != p->getId() &&
-           other->collideWith(*p) == true)
-       {
-         p->setPos(savedPos);
-         std::cout << "COLLIDED" << std::endl;
-         break;
-       }
-     }
+     moveOne(*p);
    }
 }
 
