@@ -18,6 +18,9 @@ ServerGameState::ServerGameState(const std::vector<std::shared_ptr<Player>>& v)
 
    _updateMap[communication::Packet::Type::INPUT] =
       std::bind(&ServerGameState::updateWithInput, this, _1);
+
+    // test
+    requireMonsters(Vector2D(), Vector2D());
 }
 
 ServerGameState::~ServerGameState()

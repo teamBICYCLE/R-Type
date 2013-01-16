@@ -3,8 +3,10 @@
 
 # include <vector>
 # include <list>
+# include <memory>
 # include "Pattern.hh"
 # include "units/Unit.hh"
+# include "utilities/Vector2D.hh"
 
 class PatternManager
 {
@@ -16,13 +18,12 @@ public:
 public:
 	// list peut etre constante ?
 	std::list<Unit *> get(const Vector2D &, const Vector2D &) const;
-	//void loadFile(const std::string &);
 
 private:
 	void load(void);
 
 private:
-	std::vector<Pattern> _patterns;
+	std::vector<std::shared_ptr<Pattern>> _patterns;
 };
 
 #endif /*!_PATTERN_MANAGER_HH_*/
