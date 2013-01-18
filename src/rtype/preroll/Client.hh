@@ -14,6 +14,7 @@
 #include <map>
 #include <system/network/Addr.hh>
 #include <system/network/ITcpSocket.hh>
+#include <functional>
 
 class Lounge;
 

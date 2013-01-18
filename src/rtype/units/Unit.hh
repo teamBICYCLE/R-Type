@@ -31,7 +31,7 @@ class   Unit : public IPackable
         friend void    swap(Unit& lhs, Unit& rhs);
 
     public:
-        int             getLastPacketSequence(void) const;
+        uint32_t        getLastPacketSequence(void) const;
         int             getId(void) const;
         const Vector2D& getPos(void) const;
         const Vector2D& getDir(void) const;

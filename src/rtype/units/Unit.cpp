@@ -60,7 +60,7 @@ void    swap(Unit& lhs, Unit& rhs)
     std::swap(lhs._hitboxRadius, rhs._hitboxRadius);
 }
 
-int     Unit::getLastPacketSequence(void) const
+uint32_t	Unit::getLastPacketSequence(void) const
 {
   return _lastPacketSequence;
 }
