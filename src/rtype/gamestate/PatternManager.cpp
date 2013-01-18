@@ -28,11 +28,15 @@ void PatternManager::load(void)
 void PatternManager::loadShared(void)
 {
 	using namespace TBSystem;
-	std::vector<std::string> files = ExploreDir::run("resources/shared", "dll");
+
+	std::vector<std::string> files = ExploreDir::run("resources/shared", SHARED_EXT);
 	if (files.size() < 0)
 		log::warn << "No Monster shared libraries" << log::endl;
 	for (auto it : files)
+	{
+		DLoader sharedLoader(it);
 		std::cout << it << std::endl;
+	}
 }
 
 std::list<Unit *> PatternManager::get(const Vector2D &left, const Vector2D &right) const

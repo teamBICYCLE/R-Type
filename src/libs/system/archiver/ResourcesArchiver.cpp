@@ -14,6 +14,7 @@
 #include <stdexcept>
 #include <functional>
 #include "system/log/Log.hh"
+#include "system/exploredir/ExploreDir.hh"
 #include "ResourcesArchiver.hh"
 
 using namespace TBSystem;
@@ -51,20 +52,10 @@ bool ResourcesArchiver::add(const std::string &file)
 
 bool ResourcesArchiver::addDirectory(const std::string &dir)
 {
-    DIR *dp;
-    struct dirent *entry;
-    unsigned char isFile = 0x8;
-    if (!(dp = opendir(dir.c_str())))
-    {
-        log::warn << "Error(" << errno << ") opening " << dir << log::endl;
+    using namespace TBSystem;
+    _files = ExploreDir::run(dir);
+    if (_files.size() == 0)
         return false;
-    }
-    
-    while ((entry = readdir(dp)))
-        if (entry->d_type == isFile)
-            _files.push_back(dir + "/" + entry->d_name);
-
-    closedir(dp);
     return true;
 }
 
