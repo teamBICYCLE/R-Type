@@ -11,6 +11,10 @@
 # include "units/Unit.hh"
 # include "utilities/Vector2D.hh"
 
+# define RESOURCES_PATH	"resources/"
+# define PATTERNS_PATH	RESOURCES_PATH "patterns"
+# define SHARED_PATH	RESOURCES_PATH "shared"
+# define SPRITE_PATH	RESOURCES_PATH "sprites/monster/"
 
 # ifdef     __gnu_linux__
 	#define SHARED_EXT ".so"
@@ -34,10 +38,11 @@ public:
 public:
 	typedef struct MonsterDefinition
 	{	
+		std::string name;
 		unsigned int pv;
 		unsigned int munition;
 		std::chrono::milliseconds timeToReload;
-		std::chrono::milliseconds timeBetweenFires;
+		std::chrono::milliseconds fireFrenquence;
 	} MonsterDefinition;
 
 private:

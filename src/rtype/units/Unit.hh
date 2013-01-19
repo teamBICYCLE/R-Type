@@ -1,11 +1,14 @@
 #ifndef     __UNIT_HH__
 # define    __UNIT_HH__
 
+# include   <chrono>
 # include   <ostream>
 # include   "utilities/Vector2D.hh"
 # include   "network/IPackable.hh"
 # include   "network/Packet.hh"
 # include   "utilities/Vector2D.hh"
+
+# define    UNLIMITED   -1;
 
 typedef union {
     struct _content {
@@ -31,12 +34,18 @@ class   Unit : public IPackable
         friend void    swap(Unit& lhs, Unit& rhs);
 
     public:
-        uint32_t        getLastPacketSequence(void) const;
-        int             getId(void) const;
-        const Vector2D& getPos(void) const;
-        const Vector2D& getDir(void) const;
-        const Vector2D& getHitboxCenter(void) const;
-        float           getHitboxRadius(void) const;
+        uint32_t            getLastPacketSequence(void) const;
+        int                 getId(void) const;
+        const Vector2D&     getPos(void) const;
+        const Vector2D&     getDir(void) const;
+        const Vector2D&     getHitboxCenter(void) const;
+        float               getHitboxRadius(void) const;
+        const std::string & getSpritePath(void) const;
+        unsigned int        getPv(void) const;
+        int                 getMunition(void);
+        const std::chrono::milliseconds &getTimeToReload(void) const;
+        const std::chrono::milliseconds &getFireFrequence(void) const;
+
 
     public:
         virtual void    move(void);
@@ -45,6 +54,11 @@ class   Unit : public IPackable
         void    setPos(const Vector2D& pos);
         void    setHitboxCenter(const Vector2D& center);
         void    setHitboxRadius(const float radius);
+        void    setSpritePath(const std::string &);
+        void    setPv(const unsigned int);
+        void    setMunition(const unsigned int);
+        void    setTimeToReload(const std::chrono::milliseconds &);
+        void    setFireFrequence(const std::chrono::milliseconds &);
 
     public:
         virtual size_t  pack(uint8_t *out, size_t outSize) const;
@@ -66,6 +80,12 @@ class   Unit : public IPackable
         //rocket, for example
         Vector2D  _hitboxCenter;
         float     _hitboxRadius;
+        //
+        std::string _spritePath;
+        unsigned int _pv;
+        int _munition;
+        std::chrono::milliseconds _timeToReload;
+        std::chrono::milliseconds _fireFrequence;
 };
 
 #endif /* !__UNIT_HH__ */

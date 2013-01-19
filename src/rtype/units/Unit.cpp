@@ -90,6 +90,11 @@ float           Unit::getHitboxRadius(void) const
   return _hitboxRadius;
 }
 
+const std::string &Unit::getSpritePath(void) const
+{
+  return _spritePath;
+}
+
 void  Unit::move(void)
 {
     _pos += _dir;
@@ -121,7 +126,51 @@ void    Unit::setHitboxRadius(const float radius)
   _hitboxRadius = radius;
 }
 
-  
+void    Unit::setSpritePath(const std::string &p)
+{
+  _spritePath = p;
+}
+
+void  Unit::setPv(const unsigned int v)
+{
+  _pv = v;
+}
+
+unsigned int Unit::getPv(void) const
+{
+  return _pv;
+}
+
+void  Unit::setMunition(const unsigned int v)
+{
+  _munition = v;
+}
+
+int Unit::getMunition(void)
+{
+  return _munition;
+}
+
+void    Unit::setTimeToReload(const std::chrono::milliseconds &t)
+{
+  _timeToReload = t;
+}
+
+void    Unit::setFireFrequence(const std::chrono::milliseconds &t)
+{
+  _fireFrequence = t;
+}
+
+const std::chrono::milliseconds &Unit::getTimeToReload(void) const
+{
+  return _timeToReload;
+}
+
+const std::chrono::milliseconds &Unit::getFireFrequence(void) const
+{
+  return _fireFrequence;
+}
+
 #define TO_SHORT(x) (x * ((uint16_t)-1))
 #define FROM_SHORT(x) (x / (float)((uint16_t)-1))
 
@@ -178,4 +227,9 @@ void  Unit::reset(void)
     _pos = Vector2D();
     _dir = Vector2D();
     _id = uint32_t();
+    // vas-y ken la
+    _pv = 1;
+    _munition = UNLIMITED;
+    _spritePath = std::string();
+
 }
