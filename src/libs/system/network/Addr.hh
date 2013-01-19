@@ -39,6 +39,8 @@ class Addr : public IAddr {
 public:
     Addr();
 
+    Addr(const Addr& other);
+
     Addr(const std::string & ip, const std::string & port, const std::string & proto);
 
     Addr(SpecialIp ip, const std::string & port, const std::string & proto);
@@ -62,6 +64,8 @@ public:
     virtual int     validSize() const;
 
     virtual const void*   getValid() const;
+
+    virtual bool  operator==(const IAddr& other) const;
 
 private:
     SpecialIp   _special;

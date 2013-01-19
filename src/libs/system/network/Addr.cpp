@@ -11,6 +11,7 @@
 #include <stdexcept>
 #include <iostream>
 #include <string.h>
+#include <system/log/Log.hh>
 #include "socketInit.hh"
 #ifdef __gnu_linux__
 # include <sys/types.h>
@@ -23,147 +24,165 @@
 
 namespace TBSystem {
 namespace network {
-    /*
-     * AddrInfo implementation
-     */
+/*
+ * AddrInfo implementation
+ */
 
-    AddrInfo::AddrInfo(void * addrinfo)
-    : _raw(static_cast< struct addrinfo * >(addrinfo))
-    {
-    }
+AddrInfo::AddrInfo(void * addrinfo)
+  : _raw(static_cast< struct addrinfo * >(addrinfo))
+{
+}
 
-    AddrInfo::~AddrInfo()
-    {}
+AddrInfo::~AddrInfo()
+{}
 
-    void*   AddrInfo::get()
-    {
-        return _raw->ai_addr;
-    }
+void*   AddrInfo::get()
+{
+  return _raw->ai_addr;
+}
 
-    int    AddrInfo::size() const
-    {
-        return _raw->ai_addrlen;
-    }
+int    AddrInfo::size() const
+{
+  return _raw->ai_addrlen;
+}
 
-    /*
-     * Addr implementation
-     */
-    Addr::Addr()
-    : _special(static_cast<SpecialIp>(-1))
-    , _infosRes(nullptr)
+/*
+ * Addr implementation
+ */
+Addr::Addr()
+  : _special(static_cast<SpecialIp>(-1))
+  , _infosRes(nullptr)
+  , _isValid(false)
+{
+  socketInit();
+}
+
+Addr::~Addr() {
+  //if (_infosRes) freeaddrinfo(_infosRes);
+}
+
+Addr::Addr(const Addr& other)
+  : _special(other._special)
+  , _ip(other._ip)
+  , _port(other._port)
+  , _proto(other._proto)
+  , _infosRes(other._infosRes)
+  , _isValid(other._isValid)
+{
+  memcpy(&_valid, &other._valid, sizeof(sockaddr_in));
+}
+
+Addr::Addr(const std::string & ip, const std::string & port,
+           const std::string & proto)
+  : _special(static_cast<SpecialIp>(-1))
+  , _infosRes(nullptr)
     , _isValid(false)
-    {
-        socketInit();
-    }
+{
+  set(ip, port, proto);
+}
 
-    Addr::~Addr() {
-        if (_infosRes) freeaddrinfo(_infosRes);
-    }
+Addr::Addr(SpecialIp ip, const std::string & port,
+           const std::string & proto)
+  : _special(static_cast<SpecialIp>(-1))
+  , _infosRes(nullptr)
+    , _isValid(false)
+{
+  set(ip, port, proto);
+}
 
-    Addr::Addr(const std::string & ip, const std::string & port,
+
+void Addr::set(SpecialIp ip, const std::string & port,
                const std::string & proto)
-    : _special(static_cast<SpecialIp>(-1))
-    , _infosRes(nullptr)
-    , _isValid(false)
-    {
-        set(ip, port, proto);
-    }
+{
+  _special = ip;
+  _port = port;
+  _proto = proto;
+  _isValid = false;
+}
 
-    Addr::Addr(SpecialIp ip, const std::string & port,
+void Addr::set(const std::string & ip, const std::string & port,
                const std::string & proto)
-    : _special(static_cast<SpecialIp>(-1))
-    , _infosRes(nullptr)
-    , _isValid(false)
-    {
-        set(ip, port, proto);
-    }
+{
+  _special = static_cast<SpecialIp>(-1);
+  _ip = ip;
+  _port = port;
+  _proto = proto;
+  _isValid = false;
+}
 
+std::tuple<std::string, std::string, std::string> Addr::get() const
+{
+  switch (_special) {
+    case SI_ADDR_ANY:
+      return std::make_tuple("ADDR_ANY", _port, _proto);
+      break;
+    case SI_ADDR_BROADCAST:
+      return std::make_tuple("ADDR_BROADCAST", _port, _proto);
+      break;
+    default:
+      return std::make_tuple(_ip, _port, _proto);
+      break;
+  }
+}
 
-    void Addr::set(SpecialIp ip, const std::string & port,
-                   const std::string & proto)
-    {
-        _special = ip;
-        _port = port;
-        _proto = proto;
-        _isValid = false;
-    }
+std::vector<std::shared_ptr<IAddrInfo>> Addr::infos() const
+{
+  // Free _infosRes from previous call
+  if (_infosRes) freeaddrinfo(_infosRes); _infosRes = nullptr;
 
-    void Addr::set(const std::string & ip, const std::string & port,
-                   const std::string & proto)
-    {
-        _special = static_cast<SpecialIp>(-1);
-        _ip = ip;
-        _port = port;
-        _proto = proto;
-        _isValid = false;
-    }
+  // Set the hint structure if ADDR_ANY is needed (suitable for bind)
+  struct addrinfo hint;
+  const char * node = _ip.c_str();
 
-    std::tuple<std::string, std::string, std::string> Addr::get() const
-    {
-        switch (_special) {
-            case SI_ADDR_ANY:
-                return std::make_tuple("ADDR_ANY", _port, _proto);
-                break;
-            case SI_ADDR_BROADCAST:
-                return std::make_tuple("ADDR_BROADCAST", _port, _proto);
-                break;
-            default:
-                return std::make_tuple(_ip, _port, _proto);
-                break;
-        }
-    }
+  memset(&hint, 0, sizeof(hint));
+  if (_special == SI_ADDR_ANY) {
+    hint.ai_flags = AI_PASSIVE;
+    node = nullptr;
+  }
+  protoent *protoent = getprotobyname(_proto.c_str());
 
-    std::vector<std::shared_ptr<IAddrInfo>> Addr::infos() const
-    {
-        // Free _infosRes from previous call
-        if (_infosRes) freeaddrinfo(_infosRes); _infosRes = nullptr;
+  if (!protoent) {
+    throw std::runtime_error("`" + _proto + "` No such protocol");
+  }
+  hint.ai_protocol = protoent->p_proto;
+  hint.ai_family = AF_UNSPEC;
 
-        // Set the hint structure if ADDR_ANY is needed (suitable for bind)
-        struct addrinfo hint;
-        const char * node = _ip.c_str();
+  // Request addrinfo and prepare return vector
+  std::vector<std::shared_ptr<IAddrInfo>> ret;
+  int err;
 
-        memset(&hint, 0, sizeof(hint));
-        if (_special == SI_ADDR_ANY) {
-            hint.ai_flags = AI_PASSIVE;
-            node = nullptr;
-        }
-        protoent *protoent = getprotobyname(_proto.c_str());
+  if ((err = getaddrinfo(node, _port.c_str(), &hint, &_infosRes))) {
+    throw std::runtime_error(gai_strerror(err));
+  }
+  for (addrinfo *res = _infosRes; res != nullptr; res = res->ai_next) {
+    ret.push_back(std::shared_ptr<IAddrInfo>(new AddrInfo(res)));
+  }
+  if (ret.size() < 1) throw std::runtime_error("Could not resolve Addr");
+  return ret;
+}
 
-        if (!protoent) {
-            throw std::runtime_error("`" + _proto + "` No such protocol");
-        }
-        hint.ai_protocol = protoent->p_proto;
-        hint.ai_family = AF_UNSPEC;
+bool    Addr::hasValidAddr() const {
+  return _isValid;
+}
 
-        // Request addrinfo and prepare return vector
-        std::vector<std::shared_ptr<IAddrInfo>> ret;
-        int err;
+void    Addr::setValid(const void * addr) const {
+  if (!_isValid)
+    memcpy(static_cast<void*>(&_valid), addr, sizeof(_valid));
+  _isValid = true;
+}
 
-        if ((err = getaddrinfo(node, _port.c_str(), &hint, &_infosRes))) {
-            throw std::runtime_error(gai_strerror(err));
-        }
-        for (addrinfo *res = _infosRes; res != nullptr; res = res->ai_next) {
-            ret.push_back(std::shared_ptr<IAddrInfo>(new AddrInfo(res)));
-        }
-        if (ret.size() < 1) throw std::runtime_error("Could not resolve Addr");
-        return ret;
-    }
+int     Addr::validSize() const {
+  return sizeof(sockaddr_in);
+}
 
-    bool    Addr::hasValidAddr() const {
-        return _isValid;
-    }
+const void *  Addr::getValid() const {
+  return &_valid;
+}
 
-    void    Addr::setValid(const void * addr) const {
-        memcpy(static_cast<void*>(&_valid), addr, sizeof(_valid));
-        _isValid = true;
-    }
+bool  Addr::operator==(const IAddr& other) const
+{
+  return memcmp(&_valid, other.getValid(), sizeof(_valid)) == 0;
+}
 
-    int     Addr::validSize() const {
-        return sizeof(sockaddr_in);
-    }
-
-    const void *  Addr::getValid() const {
-        return &_valid;
-    }
 }
 }
