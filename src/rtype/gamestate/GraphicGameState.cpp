@@ -15,6 +15,7 @@ using namespace TBSystem;
 
 GraphicGameState::GraphicGameState(const std::vector<std::shared_ptr<Player>>& v)
   : GameState(v)
+  , BACKGROUND_SPEED(800.f)
   , _backgroundTexture(new sf::Texture)
   , _backgroundSprite1(new sf::Sprite)
   , _backgroundSprite2(new sf::Sprite)
@@ -70,7 +71,7 @@ void  GraphicGameState::simulate(const Input::Data& input)
 
   if (playerId >= 0 && playerId < _players.size()) {
     GameState::setPlayerDirection(playerId, input.getVector());
-    _players[playerId]->move();
+    GameState::moveOne(*_players[playerId]);
   }
 }
 

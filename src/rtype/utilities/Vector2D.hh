@@ -1,7 +1,7 @@
 #ifndef		__VECTOR2D_HPP__
 # define	__VECTOR2D_HPP__
 
-# include	<iostream>
+# include <iostream>
 # include <SFML/System/Vector2.hpp>
 
 class Vector2D

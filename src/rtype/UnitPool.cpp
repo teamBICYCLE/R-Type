@@ -29,7 +29,8 @@ UnitPool::~UnitPool(void)
 		_collection[typeid(Monster).name()].size()
 	<< log::endl;
 	
-	_collection[typeid(Player).name()].clear();
+	for (auto it : _collection[typeid(Player).name()])
+		delete it;
 }
 
 UnitPool *UnitPool::getInstance(void)

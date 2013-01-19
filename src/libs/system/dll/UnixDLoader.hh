@@ -14,7 +14,7 @@ public:
     ~UnixDLoader();
 
     template<class T>
-    std::function<T> load(const std::string &symbol) const
+    std::function<T> load(const std::string &symbol)
     {
         char *error;
         dlerror();

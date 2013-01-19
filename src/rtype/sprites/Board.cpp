@@ -55,10 +55,10 @@ void Board::refreshAnimMap(csv::Parser &csvCfg)
 	}
 }
 
-Animation Board::createSpriteBoard(csv::Parser &csvCfg, unsigned int i)
+Animation Board::createSpriteBoard(csv::Parser &csvCfg, unsigned int cfgIndex)
 {
 	std::vector<sf::Rect<int>> tmp;
-	csv::Row row = csvCfg[i];
+	csv::Row row = csvCfg[cfgIndex];
 	unsigned int spritesNb = row.getValue<unsigned int>(FileIDX::SpriteLoaderNB)
 	, origX                = row.getValue<unsigned int>(FileIDX::ORIGX)
 	, origY                = row.getValue<unsigned int>(FileIDX::ORIGY)
@@ -67,10 +67,10 @@ Animation Board::createSpriteBoard(csv::Parser &csvCfg, unsigned int i)
 	unsigned int duration  = row.getValue<unsigned int>(FileIDX::DURATION);
 
 	if (spritesNb == 0) {
-		throw std::invalid_argument("Animation [" + csvCfg[i][FileIDX::NAME] + "] in file "
+		throw std::invalid_argument("Animation [" + csvCfg[cfgIndex][FileIDX::NAME] + "] in file "
  									+ csvCfg.getFileName() + " has 0 sprites numbers");
 	}
-	for (auto i = 0; i < spritesNb; ++i) {
+	for (unsigned int i = 0; i < spritesNb; ++i) {
 		sf::Rect<int> tmpRect;
 		tmpRect.width = sizeX;
 		tmpRect.height = sizeY;
@@ -80,7 +80,7 @@ Animation Board::createSpriteBoard(csv::Parser &csvCfg, unsigned int i)
 		tmp.push_back(tmpRect);
  	}
  	if (duration == 0) {
- 		throw std::invalid_argument("Animation [" + csvCfg[i][FileIDX::NAME] + "] in file "
+ 		throw std::invalid_argument("Animation [" + csvCfg[cfgIndex][FileIDX::NAME] + "] in file "
  									+ csvCfg.getFileName() + " has 0 milliseconds duration");
  	}
 	Animation sprites(tmp, duration);

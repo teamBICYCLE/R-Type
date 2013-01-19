@@ -41,12 +41,15 @@ add_executable(client
 add_executable(server
     ${UTILITIES}
     ${UNITS}
-    ${SHUNITS}
     ${SERVER_NETWORK}
     ${SERVER_GAMESTATE}
     input/Data.hh
     input/Data.cpp
     server.cpp
+    UnitFactory.hh
+    UnitFactory.cpp
+    UnitPool.hh
+    UnitPool.cpp
 )
 
 target_link_libraries(client

@@ -26,7 +26,8 @@ public:
   void  update(const std::vector<communication::Packet>& v);
 
 public:
-  void  move();
+  void  moveOne(Player& p);
+  void  moveAll(void);
 
 protected:
   void  setPlayerDirection(int id, const Vector2D& dir);
@@ -39,11 +40,11 @@ public:
   static const float WINDOW_HEIGHT;
 
 protected:
-  const float PLAYER_SPEED = 200.f;
   typedef std::function<void (const communication::Packet&)> UpdateFunction;
   uint32_t  _lastPacketSequence;
   std::vector<std::shared_ptr<Player>>  _players;
   std::map<communication::Packet::Type, UpdateFunction> _updateMap;
+  const float PLAYER_SPEED;
 };
 
 #endif /* !_GAMESTATE_H__ */

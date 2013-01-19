@@ -59,7 +59,7 @@ int     main(int argc, char *argv[])
     {
       // updates the player vectors from inputs
       g.update(nh.getIncomingPackets());
-      g.move();
+      g.moveAll();
       accumulator -= g_serverUpdateRate;
     }
     if (newTime - lastSent >= g_serverPacketRate)

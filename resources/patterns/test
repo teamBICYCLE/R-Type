@@ -1,7 +1,7 @@
 
 PATTERN_DEFINITION :
 
-char,name,move
+char,type,move
 a,defaultMonster,sin
 b,dumbMonster,linear
 c,defaultMonster,linear
