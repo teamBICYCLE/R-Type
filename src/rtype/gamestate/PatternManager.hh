@@ -4,10 +4,17 @@
 # include <vector>
 # include <list>
 # include <memory>
+# include <chrono>
+# include <memory>
+# include <map>
 # include "Pattern.hh"
 # include "units/Unit.hh"
 # include "utilities/Vector2D.hh"
 
+# define RESOURCES_PATH	"resources/"
+# define PATTERNS_PATH	RESOURCES_PATH "patterns"
+# define SHARED_PATH	RESOURCES_PATH "shared"
+# define SPRITE_PATH	RESOURCES_PATH "sprites/monster/"
 
 # ifdef     __gnu_linux__
 	#define SHARED_EXT ".so"
@@ -28,13 +35,24 @@ public:
 	// list peut etre constante ?
 	std::list<Unit *> get(const Vector2D &, const Vector2D &) const;
 
+public:
+	typedef struct MonsterDefinition
+	{	
+		std::string name;
+		unsigned int pv;
+		unsigned int munition;
+		std::chrono::milliseconds timeToReload;
+		std::chrono::milliseconds fireFrenquence;
+	} MonsterDefinition;
+
 private:
 	void load(void);
 	void loadShared(void);
-	bool checkShared(const std::string &);
+	void checkShared(const std::string &);
 
 private:
 	std::vector<std::shared_ptr<Pattern>> _patterns;
+	std::map<std::string, std::shared_ptr<MonsterDefinition>> _monsters;
 };
 
 #endif /*!_PATTERN_MANAGER_HH_*/

@@ -23,7 +23,7 @@ extern "C"
 		return std::chrono::milliseconds(50);
 	}
 
-	const std::chrono::milliseconds timeBetweenFires(void)
+	const std::chrono::milliseconds fireFrequence(void)
 	{
 		return std::chrono::milliseconds(2);
 	}
