@@ -34,9 +34,21 @@ void PatternManager::loadShared(void)
 		log::warn << "No Monster shared libraries" << log::endl;
 	for (auto it : files)
 	{
-		DLoader sharedLoader(it);
-		std::cout << it << std::endl;
+		try {
+			bool res = PatternManager::checkShared(it);
+		} catch (std::logic_error &e) {
+			log::warn << "Invalid Monster : " << e.what() << log::endl;
+		}
 	}
+}
+
+bool PatternManager::checkShared(const std::string &file)
+{
+	DLoader loader(file);
+
+	std::function<const std::string (void)>l = loader.load<const std::string (void)>("getName");
+	std::cout << l() << std::endl;
+	return true;
 }
 
 std::list<Unit *> PatternManager::get(const Vector2D &left, const Vector2D &right) const

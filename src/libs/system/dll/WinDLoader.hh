@@ -13,7 +13,7 @@ public:
     ~WinDLoader();
 
     template<class T>
-    std::function<T> load(const std::string &symbol) const
+    std::function<T> load(const std::string &symbol)
     {
         void* result = GetProcAddress(_handle, symbol.c_str());
         if (!result)

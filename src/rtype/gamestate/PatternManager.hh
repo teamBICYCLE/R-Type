@@ -31,6 +31,7 @@ public:
 private:
 	void load(void);
 	void loadShared(void);
+	bool checkShared(const std::string &);
 
 private:
 	std::vector<std::shared_ptr<Pattern>> _patterns;
