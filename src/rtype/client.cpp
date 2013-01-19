@@ -100,6 +100,7 @@ int main(int argc, char* argv[])
       while (s.recv(buf, sizeof(buf), server) != -1) {
         communication::Packet p((uint8_t*)buf, sizeof(buf));
 
+        //ROMAIN: ici tu recuperes le packet le plus tot possible
         packets.push_back(p);
         if (p.isReliable() == true) {//if the packet needs an ack, we send it
           p.setType(communication::Packet::Type::ACK);

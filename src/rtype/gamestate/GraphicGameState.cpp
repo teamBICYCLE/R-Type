@@ -55,6 +55,8 @@ void  GraphicGameState::updateWithPosition(const communication::Packet& packet)
 {
   const uint32_t id = packet.getId();
 
+  //ROMAIN: ici tu traites les packets de type POSITION
+  //(envoyes quand un monstre se deplace, donc)
   if (id >= 0 && id < _players.size()) {
     _players[id]->unpack(packet.getSequence(), packet.getContent());
   }
