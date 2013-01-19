@@ -8,7 +8,10 @@
  */
 
 #include "Room.hh"
+#include <system/log/Log.hh>
 #include "Lounge.hh"
+
+using namespace TBSystem;
 
 int Room::_s_lastID = 1;
 
@@ -53,11 +56,33 @@ std::vector<std::string> Room::playersStateStrings() const
 
 bool    Room::addPlayer(int id)
 {
-  if (_playersIds.size() + 1 < _maxplayers) {
+  auto it = std::find(_playersIds.begin(), _playersIds.end(), id);
+
+  if (_playersIds.size() + 1 < _maxplayers && it == _playersIds.end()) {
     _playersIds.push_back(id);
     return true;
   }
   else {
     return false;
   }
+}
+
+bool    Room::removePlayer(int id)
+{
+  auto it = std::find(_playersIds.begin(), _playersIds.end(), id);
+
+  if (it != _playersIds.end()) {
+    log::debug << "COULD WITH " << id << log::endl;
+    _playersIds.erase(it);
+    return true;
+  }
+  else {
+    log::debug << "could not do the thing with " << id << log::endl;
+    return false;
+  }
+}
+
+bool  Room::isEmpty() const
+{
+  return _playersIds.size() == 0;
 }

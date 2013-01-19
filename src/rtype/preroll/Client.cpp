@@ -35,14 +35,56 @@ Client::Client(
   , _socket(socket)
   , _addr(addr)
   , _commandLine("")
+  , _isInRoom(false)
 {
   using namespace std::placeholders;
   _s_commands = create_map();
   _s_commands["create"] = std::bind(&Lounge::createRoom, _2, _1, _3, _id);
+  _s_commands["join"] = [=](std::shared_ptr<TBSystem::network::sockets::ITcpSocket>& l_socket,
+                            Lounge& l_lounge,
+                            std::string l_params) -> bool {
+    std::stringstream ss(l_params);
+    std::string junk;
+    int roomId;
+
+    ss >> junk;
+    ss >> roomId;
+      std::string rep;
+    if (!_isInRoom && l_lounge.movePlayerToRoom(_id, roomId)) {
+      _isInRoom = true;
+      rep = "rep join OK " + std::to_string(roomId) + "\r\n";
+    }
+    else {
+      rep = "err could not join room\r\n";
+    }
+      l_socket->send(rep.c_str(), rep.size());
+  };
+  _s_commands["leave"] = [=](std::shared_ptr<TBSystem::network::sockets::ITcpSocket>& l_socket,
+                            Lounge& l_lounge,
+                            std::string l_params) -> bool {
+
+    std::stringstream ss(l_params);
+    std::string junk;
+    int roomId;
+
+    ss >> junk;
+    ss >> roomId;
+    log::debug << "tu m'as entendu " << roomId << " " << _id << log::endl;
+    std::string rep;
+    if (l_lounge.removePlayerFromRoom(_id, roomId)) {
+      _isInRoom = false;
+      rep = "rep leave OK " + std::to_string(roomId) + "\r\n";
+    }
+    else {
+      rep = "err your are not in this room\r\n";
+    }
+    l_socket->send(rep.c_str(), rep.size());
+  };
 }
 
 Client::~Client()
 {
+
 }
 
 bool  Client::operator==(const Client& other) const
@@ -93,4 +135,13 @@ void  Client::welcome()
 int Client::getId() const
 {
   return _id;
+}
+
+void Client::setInRoom(bool b)
+{
+  _isInRoom = b;
+}
+bool Client::isInRoom() const
+{
+  return _isInRoom;
 }

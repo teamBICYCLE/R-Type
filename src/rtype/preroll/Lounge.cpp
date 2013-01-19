@@ -52,7 +52,7 @@ bool  Lounge::acceptClient(std::shared_ptr<
     clientSock(socket->accept(clientAddr));
 
   // add him to the _client container, and get a reference to the object
-  _clients.push_back(Client(clientSock, clientAddr));
+  _clients.emplace_back(clientSock, clientAddr);
   Client& client = _clients.back();
 
   // bind client socket action to client
@@ -66,6 +66,7 @@ bool  Lounge::acceptClient(std::shared_ptr<
 
 void  Lounge::handleClientDisconnect(const Client& c)
 {
+  removePlayerFromRoom(c.getId());
   _clients.erase(std::find(_clients.begin(), _clients.end(), c));
   // pensay a enlevay de la room si nessessaire
 }
@@ -124,12 +125,27 @@ bool Lounge::createRoom(std::shared_ptr<
                 TBSystem::network::sockets::ITcpSocket>& socket,
                 std::string params, int playerId)
 {
-  if (_rooms.size() > 3) {
-    std::string err("err to much room already exist, try later\r\n");
+  std::string err;
+  bool hasErr = false;
 
+  if (std::find_if(_clients.begin(), _clients.end(), [playerId](Client& p) {
+                   return p.getId() == playerId;
+                   })->isInRoom()) {
+    err = "Your are already in a room\r\n";
+    log::debug << "MAIS iH " << err << log::endl;
+    hasErr = true;
+  }
+  if (_rooms.size() > 3) {
+    err = "err to much room already exist, try later\r\n";
+    log::debug << "MAIS aH " << err << log::endl;
+    hasErr = true;
+  }
+  if (hasErr == true) {
+    log::debug << "MAIS OH " << err << log::endl;
     socket->send(err.c_str(), err.size());
     return true;
   }
+  log::debug << "hello" << log::endl;
   _rooms.emplace_back(4, *this);
 
   std::string rep("rep create OK " + std::to_string(_rooms.back().getId())
@@ -150,12 +166,50 @@ bool Lounge::movePlayerToRoom(int playerId, int roomId)
                              [roomId](const Room& r) -> bool {
                              return r.getId() == roomId;
                              });
-  if (playerIt == _clients.end()
-      || roomIt == _rooms.end()
-      || !roomIt->addPlayer(playerIt->getId())) return false;
+
+  if (playerIt == _clients.end() || roomIt == _rooms.end()
+      || !roomIt->addPlayer(playerId)) {
+    return false;
+  }
+  playerIt->setInRoom(true);
+  return true;
 }
 
-const std::vector<Client>&
+bool Lounge::removePlayerFromRoom(int playerId)
+{
+  bool ret = false;
+  std::vector<std::list<Room>::iterator> itVect;
+
+  for (auto it = _rooms.begin(); it != _rooms.end(); ++it) {
+    ret |= it->removePlayer(playerId);
+    if (it->isEmpty()) itVect.push_back(it);
+  }
+  for (auto& it : itVect) _rooms.erase(it);
+  return ret;
+}
+
+bool  Lounge::removePlayerFromRoom(int playerId, int roomId)
+{
+  auto playerIt = std::find_if(_clients.begin(), _clients.end(),
+                               [playerId](const Client& c) -> bool {
+                                return c.getId() == playerId;
+                               });
+  auto roomIt = std::find_if(_rooms.begin(), _rooms.end(),
+                             [roomId](const Room& r) -> bool {
+                             return r.getId() == roomId;
+                             });
+
+  if (playerIt == _clients.end() || roomIt == _rooms.end()) {
+    return false;
+  }
+  if (roomIt->removePlayer(playerId)) {
+    if (roomIt->isEmpty()) _rooms.erase(roomIt);
+    return true;
+  }
+  return false;
+}
+
+const std::list<Client>&
 Lounge::getClients()
 {
   return _clients;

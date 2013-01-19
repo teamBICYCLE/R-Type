@@ -30,6 +30,7 @@ public:
          std::shared_ptr<TBSystem::network::sockets::ITcpSocket>& socket,
          TBSystem::network::Addr& addr
          );
+  Client(const Client& other);
   ~Client();
 
 public:
@@ -49,6 +50,8 @@ public:
   void  welcome();
 public:
   int getId() const;
+  void setInRoom(bool b);
+  bool isInRoom() const;
 
 private:
   static int            _s_lastID;
@@ -59,6 +62,7 @@ private:
   std::shared_ptr<TBSystem::network::sockets::ITcpSocket> _socket;
   TBSystem::network::Addr _addr;
   std::string             _commandLine;
+  bool _isInRoom;
 };
 
 #endif /* !_CLIENT_H__ */

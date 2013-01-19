@@ -32,6 +32,8 @@ public:
   virtual std::string toString() const;
   std::vector<std::string> playersStateStrings() const;
   bool    addPlayer(int c);
+  bool    removePlayer(int c);
+  bool    isEmpty() const;
 
 private:
   static int          _s_lastID;
