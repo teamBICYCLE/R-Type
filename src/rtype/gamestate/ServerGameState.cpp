@@ -74,6 +74,7 @@ void  ServerGameState::requireMonsters(const Vector2D &left, const Vector2D &rig
 void  ServerGameState::moveAll(void)
 {
    for (auto& p : _players) {
-     moveOne(*p);
+      if (p->isDead() == false) //only move alive player
+        moveOne(*p);
    }
 }

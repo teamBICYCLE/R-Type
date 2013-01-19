@@ -65,14 +65,6 @@ void  GameState::moveOne(Player& p)
   }
 }
 
-void  GameState::moveAll(void)
-{
-   for (auto& p : _players) {
-     if (p->isDead() == false) //only move alive player
-       moveOne(*p);
-   }
-}
-
 const std::vector<std::shared_ptr<Player>>& GameState::getPlayers() const
 {
   return _players;
