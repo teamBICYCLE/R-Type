@@ -57,6 +57,11 @@ void  GraphicGameState::updateWithPosition(const communication::Packet& packet)
   if (id >= 0 && id < _players.size()) {
     _players[id]->unpack(packet.getSequence(), packet.getContent());
   }
+  else
+  {
+    //UnitPool::getInstance()->get<>
+    //_enemies.push_back()
+  }
 }
 
 // client

@@ -59,6 +59,7 @@ int     main(int argc, char *argv[])
     {
       // updates the player vectors from inputs
       g.update(nh.getIncomingPackets());
+      g.updateWorld();
       g.moveAll();
       accumulator -= g_serverUpdateRate;
     }

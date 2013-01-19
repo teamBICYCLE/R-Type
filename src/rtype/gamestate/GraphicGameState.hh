@@ -7,12 +7,14 @@
  * -----------------------------------------------------------------------------
  */
 
-#ifndef _GRAPHICGAMESTATE_H__
-#define _GRAPHICGAMESTATE_H__
+#ifndef   _GRAPHICGAMESTATE_H__
+# define  _GRAPHICGAMESTATE_H__
 
-#include <SFML/Graphics.hpp>
-#include "input/Data.hh"
-#include "GameState.hh"
+# include <list>
+# include <SFML/Graphics.hpp>
+# include "input/Data.hh"
+# include "GameState.hh"
+# include "units/graphics/GUnit.hh"
 
 class GraphicGameState : public GameState, public sf::Drawable {
 public:
@@ -41,6 +43,7 @@ private:
   sf::Sprite  *_backgroundSprite2;
   Vector2D    _backgroundPos;
   Vector2D    _backgroundDirection;
+  std::list<GUnit*> _enemies;
 };
 
 #endif /* !_GRAPHICGAMESTATE_H__ */

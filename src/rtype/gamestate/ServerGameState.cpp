@@ -50,8 +50,28 @@ void  ServerGameState::updateWithInput(const communication::Packet& packet)
   }
 }
 
+void  ServerGameState::updateWorld(void)
+{
+  for (auto& e : _enemies) {
+    e->move();
+  }
+}
+
 void  ServerGameState::requireMonsters(const Vector2D &left, const Vector2D &right)
 {
   std::cout << "requireMonsters" << std::endl;
   std::list<Unit *> monsters = _pm.get(left, right);
+
+  for (auto it : monsters)
+  {
+      std::cout << it->getPos() << std::endl;
+  }
+  _enemies.insert(_enemies.end(), monsters.begin(), monsters.end());
+}
+
+void  ServerGameState::moveAll(void)
+{
+   for (auto& p : _players) {
+     moveOne(*p);
+   }
 }

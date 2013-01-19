@@ -251,5 +251,4 @@ void  Unit::reset(void)
     _pv = 1;
     _munition = UNLIMITED;
     _spritePath = std::string();
-
 }

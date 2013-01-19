@@ -91,6 +91,7 @@ std::list<Unit *> PatternManager::get(const Vector2D &left, const Vector2D &righ
 			monster->setFireFrequence(sharedDef->fireFrenquence);
 
 			// load pattern informations in monster
+			monster->setPos(Vector2D((*item)->posx, (*item)->posy));
 			ret.push_back(monster);
 			//std::cout << (*item)->posx << " " << (*item)->posy << " " << (*item)->type << " " << (*item)->moveStyle << std::endl;
 		}

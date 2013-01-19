@@ -63,13 +63,6 @@ void  GameState::moveOne(Player& p)
   }
 }
 
-void  GameState::moveAll(void)
-{
-   for (auto& p : _players) {
-     moveOne(*p);
-   }
-}
-
 const std::vector<std::shared_ptr<Player>>& GameState::getPlayers() const
 {
   return _players;
