@@ -1,11 +1,12 @@
 #ifndef     __UNIT_HH__
 # define    __UNIT_HH__
 
-# include   <ostream>
-# include   "utilities/Vector2D.hh"
-# include   "network/IPackable.hh"
-# include   "network/Packet.hh"
-# include   "utilities/Vector2D.hh"
+# include <ostream>
+# include <list>
+# include "utilities/Vector2D.hh"
+# include "network/IPackable.hh"
+# include "network/Packet.hh"
+# include "utilities/Vector2D.hh"
 
 typedef union {
     struct _content {
@@ -37,6 +38,8 @@ class   Unit : public IPackable
         const Vector2D& getDir(void) const;
         const Vector2D& getHitboxCenter(void) const;
         float           getHitboxRadius(void) const;
+        bool            isDead(void) const;
+        bool            wereOthersNotifiedOfDeath(void) const;
 
     public:
         virtual void    move(void);
@@ -45,6 +48,8 @@ class   Unit : public IPackable
         void    setPos(const Vector2D& pos);
         void    setHitboxCenter(const Vector2D& center);
         void    setHitboxRadius(const float radius);
+        void    setDead(bool b);
+        void    setOthersNotifiedOfDeath(bool b);
 
     public:
         virtual size_t  pack(uint8_t *out, size_t outSize) const;
@@ -62,10 +67,12 @@ class   Unit : public IPackable
         Vector2D	_dir;
         uint32_t  _id;
         //Hitbox center is different from _pos so
-        //that we can set to be the head of the
+        //that we can set it to be the head of the
         //rocket, for example
         Vector2D  _hitboxCenter;
         float     _hitboxRadius;
+        bool      _isDead;
+        bool      _othersNotifiedOfDeath;
 };
 
 #endif /* !__UNIT_HH__ */

@@ -14,7 +14,8 @@ public:
   {
     POSITION = 0,
     INPUT,
-    DEATH
+    DEATH,
+    ACK
   };
 
 public:
@@ -29,6 +30,7 @@ public:
   friend void swap(Packet& lhs, Packet& rhs);
 
 public:
+  bool            isReliable(void) const;
   uint32_t        getSequence(void) const;
   Type            getType(void) const;
   uint32_t        getId(void) const;
@@ -37,8 +39,16 @@ public:
   const uint8_t   *getData(void) const;
   size_t          getDataSize(void) const;
 
+public:
+  void    setType(communication::Packet::Type type);
+  void    setReliable(bool b);
+
+private:
+  void    rewriteHeader(void);
+
 private:
   struct {
+    bool      isReliable;
     uint32_t  sequence;
     Type      type;
     uint32_t  id;

@@ -12,6 +12,8 @@ Unit::Unit(int id, const Vector2D& pos, const Vector2D& dir)
   , _dir(dir)
   , _hitboxCenter(_pos)
   , _hitboxRadius(10.f)
+  , _isDead(false)
+  , _othersNotifiedOfDeath(false)
 {
 }
 
@@ -22,6 +24,8 @@ Unit::Unit(void)
   , _dir()
   , _hitboxCenter()
   , _hitboxRadius()
+  , _isDead(false)
+  , _othersNotifiedOfDeath(false)
 {
 }
 
@@ -32,6 +36,8 @@ Unit::Unit(const Unit& other)
   , _dir(other._dir)
   , _hitboxCenter(other._hitboxCenter)
   , _hitboxRadius(other._hitboxRadius)
+  , _isDead(other._isDead)
+  , _othersNotifiedOfDeath(other._othersNotifiedOfDeath)
 {
 }
 
@@ -58,6 +64,8 @@ void    swap(Unit& lhs, Unit& rhs)
     std::swap(lhs._dir, rhs._dir);
     std::swap(lhs._hitboxCenter, rhs._hitboxCenter);
     std::swap(lhs._hitboxRadius, rhs._hitboxRadius);
+    std::swap(lhs._isDead, rhs._isDead);
+    std::swap(lhs._othersNotifiedOfDeath, rhs._othersNotifiedOfDeath);
 }
 
 uint32_t	Unit::getLastPacketSequence(void) const
@@ -85,9 +93,19 @@ const Vector2D& Unit::getHitboxCenter(void) const
   return _hitboxCenter;
 }
 
-float           Unit::getHitboxRadius(void) const
+float Unit::getHitboxRadius(void) const
 {
   return _hitboxRadius;
+}
+
+bool  Unit::isDead(void) const
+{
+  return _isDead;
+}
+
+bool  Unit::wereOthersNotifiedOfDeath(void) const
+{
+  return _othersNotifiedOfDeath;
 }
 
 void  Unit::move(void)
@@ -121,6 +139,15 @@ void    Unit::setHitboxRadius(const float radius)
   _hitboxRadius = radius;
 }
 
+void    Unit::setDead(bool b)
+{
+  _isDead = b;
+}
+
+void    Unit::setOthersNotifiedOfDeath(bool b)
+{
+  _othersNotifiedOfDeath = b;
+}
   
 #define TO_SHORT(x) (x * ((uint16_t)-1))
 #define FROM_SHORT(x) (x / (float)((uint16_t)-1))
@@ -139,6 +166,11 @@ size_t  Unit::pack(uint8_t *out, size_t outSize) const
 
     if (outSize < packet.getDataSize())
         throw std::overflow_error("Output is too small for the packet to fit");
+    if (_isDead == true)//if the player is dead...
+    {
+      packet.setType(communication::Packet::Type::DEATH);
+      packet.setReliable(true);//the packet is set reliable so that the client must ack it
+    }
     std::memcpy(out, packet.getData(), packet.getDataSize());
     return packet.getDataSize();
 }

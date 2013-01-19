@@ -13,6 +13,7 @@
 #include <vector>
 #include <system/network/Udp.hh>
 #include <system/network/Addr.hh>
+#include "network/ReliablePacket.hh"
 #include "gamestate/GameState.hh"
 
 namespace communication {
@@ -32,6 +33,7 @@ public:
 private:
    TBSystem::network::sockets::Udp      _socket;
    std::vector<TBSystem::network::Addr> _outAddr;
+   std::list<ReliablePacket>            _reliablePackets;
 };
 
 }

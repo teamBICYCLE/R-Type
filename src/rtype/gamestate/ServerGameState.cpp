@@ -35,6 +35,8 @@ void  ServerGameState::updateWithInput(const communication::Packet& packet)
     Input::Data d;
     std::shared_ptr<Player>& player = _players[id];
 
+    if (player->isDead() == true)
+      return;//if the player is dead, ignore his inputs
     d.unpack(packet.getSequence(), packet.getContent());
     if (player->getLastPacketSequence() < packet.getSequence())
     {

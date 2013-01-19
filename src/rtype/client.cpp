@@ -101,6 +101,10 @@ int main(int argc, char* argv[])
         communication::Packet p((uint8_t*)buf, sizeof(buf));
 
         packets.push_back(p);
+        if (p.isReliable() == true) {//if the packet needs an ack, we send it
+          p.setType(communication::Packet::Type::ACK);
+          s.send(p.getData(), p.getDataSize(), server);
+        }
       }
       g.update(packets);
       accumulator -= g_frameDelta;
