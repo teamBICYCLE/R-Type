@@ -1,12 +1,13 @@
 #ifndef     __UNIT_HH__
 # define    __UNIT_HH__
 
-# include   <chrono>
-# include   <ostream>
-# include   "utilities/Vector2D.hh"
-# include   "network/IPackable.hh"
-# include   "network/Packet.hh"
-# include   "utilities/Vector2D.hh"
+# include <chrono>
+# include <ostream>
+# include <list>
+# include "utilities/Vector2D.hh"
+# include "network/IPackable.hh"
+# include "network/Packet.hh"
+# include "utilities/Vector2D.hh"
 
 # define    UNLIMITED   (-1)
 
@@ -40,12 +41,13 @@ class   Unit : public IPackable
         const Vector2D&     getDir(void) const;
         const Vector2D&     getHitboxCenter(void) const;
         float               getHitboxRadius(void) const;
+        bool                isDead(void) const;
+        bool                wereOthersNotifiedOfDeath(void) const;
         const std::string & getSpritePath(void) const;
         unsigned int        getPv(void) const;
         int                 getMunition(void);
         const std::chrono::milliseconds &getTimeToReload(void) const;
         const std::chrono::milliseconds &getFireFrequence(void) const;
-
 
     public:
         virtual void    move(void);
@@ -54,6 +56,8 @@ class   Unit : public IPackable
         void    setPos(const Vector2D& pos);
         void    setHitboxCenter(const Vector2D& center);
         void    setHitboxRadius(const float radius);
+        void    setDead(bool b);
+        void    setOthersNotifiedOfDeath(bool b);
         void    setSpritePath(const std::string &);
         void    setPv(const unsigned int);
         void    setMunition(const unsigned int);
@@ -76,11 +80,12 @@ class   Unit : public IPackable
         Vector2D	_dir;
         uint32_t  _id;
         //Hitbox center is different from _pos so
-        //that we can set to be the head of the
+        //that we can set it to be the head of the
         //rocket, for example
         Vector2D  _hitboxCenter;
         float     _hitboxRadius;
-        //
+        bool      _isDead;
+        bool      _othersNotifiedOfDeath;
         std::string _spritePath;
         unsigned int _pv;
         int _munition;

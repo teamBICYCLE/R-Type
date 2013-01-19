@@ -12,6 +12,8 @@ Unit::Unit(int id, const Vector2D& pos, const Vector2D& dir)
   , _id(id)
   , _hitboxCenter(_pos)
   , _hitboxRadius(10.f)
+  , _isDead(false)
+  , _othersNotifiedOfDeath(false)
   , _pv(1)
   , _munition(UNLIMITED)
   , _timeToReload(0)
@@ -26,6 +28,8 @@ Unit::Unit(void)
   , _id()
   , _hitboxCenter()
   , _hitboxRadius()
+  , _isDead(false)
+  , _othersNotifiedOfDeath(false)
   , _spritePath()
   , _pv()
   , _munition()
@@ -41,6 +45,8 @@ Unit::Unit(const Unit& other)
   , _id(other._id)
   , _hitboxCenter(other._hitboxCenter)
   , _hitboxRadius(other._hitboxRadius)
+  , _isDead(other._isDead)
+  , _othersNotifiedOfDeath(other._othersNotifiedOfDeath)
   , _spritePath(other._spritePath)
   , _pv(other._pv)
   , _munition(other._munition)
@@ -72,7 +78,8 @@ void    swap(Unit& lhs, Unit& rhs)
     std::swap(lhs._dir, rhs._dir);
     std::swap(lhs._hitboxCenter, rhs._hitboxCenter);
     std::swap(lhs._hitboxRadius, rhs._hitboxRadius);
-
+    std::swap(lhs._isDead, rhs._isDead);
+    std::swap(lhs._othersNotifiedOfDeath, rhs._othersNotifiedOfDeath);
     std::swap(lhs._spritePath, rhs._spritePath);
     std::swap(lhs._pv, rhs._pv);
     std::swap(lhs._munition, rhs._munition);
@@ -105,9 +112,19 @@ const Vector2D& Unit::getHitboxCenter(void) const
   return _hitboxCenter;
 }
 
-float           Unit::getHitboxRadius(void) const
+float Unit::getHitboxRadius(void) const
 {
   return _hitboxRadius;
+}
+
+bool  Unit::isDead(void) const
+{
+  return _isDead;
+}
+
+bool  Unit::wereOthersNotifiedOfDeath(void) const
+{
+  return _othersNotifiedOfDeath;
 }
 
 const std::string &Unit::getSpritePath(void) const
@@ -146,6 +163,16 @@ void    Unit::setHitboxRadius(const float radius)
   _hitboxRadius = radius;
 }
 
+void    Unit::setDead(bool b)
+{
+  _isDead = b;
+}
+
+void    Unit::setOthersNotifiedOfDeath(bool b)
+{
+  _othersNotifiedOfDeath = b;
+}
+  
 void    Unit::setSpritePath(const std::string &p)
 {
   _spritePath = p;
@@ -208,6 +235,11 @@ size_t  Unit::pack(uint8_t *out, size_t outSize) const
 
     if (outSize < packet.getDataSize())
         throw std::overflow_error("Output is too small for the packet to fit");
+    if (_isDead == true)//if the player is dead...
+    {
+      packet.setType(communication::Packet::Type::DEATH);
+      packet.setReliable(true);//the packet is set reliable so that the client must ack it
+    }
     std::memcpy(out, packet.getData(), packet.getDataSize());
     return packet.getDataSize();
 }
@@ -247,8 +279,10 @@ void  Unit::reset(void)
     _pos = Vector2D();
     _dir = Vector2D();
     _id = uint32_t();
-    // vas-y ken la
+    _isDead = false;
+    _othersNotifiedOfDeath = false;
     _pv = 1;
     _munition = UNLIMITED;
     _spritePath = std::string();
 }
+
