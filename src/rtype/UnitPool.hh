@@ -37,7 +37,7 @@ public:
 			T *ptr;
 			if (!_collection[type].empty() > 0)
 			{
-				ptr = static_cast<T *>(_collection[type].front());
+				ptr = dynamic_cast<T *>(_collection[type].front());
 				_collection[type].pop_front();
 			}
 			else

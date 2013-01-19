@@ -46,6 +46,10 @@ add_executable(server
     input/Data.hh
     input/Data.cpp
     server.cpp
+    UnitFactory.hh
+    UnitFactory.cpp
+    UnitPool.hh
+    UnitPool.cpp
 )
 
 target_link_libraries(client
