@@ -7,31 +7,45 @@ using namespace TBSystem;
 
 Unit::Unit(int id, const Vector2D& pos, const Vector2D& dir)
   : _lastPacketSequence(0)
-  , _id(id)
   , _pos(pos)
   , _dir(dir)
+  , _id(id)
   , _hitboxCenter(_pos)
   , _hitboxRadius(10.f)
+  , _pv(1)
+  , _munition(UNLIMITED)
+  , _timeToReload(0)
+  , _fireFrequence(10)
 {
 }
 
 Unit::Unit(void)
   : _lastPacketSequence(0)
-  , _id()
   , _pos()
   , _dir()
+  , _id()
   , _hitboxCenter()
   , _hitboxRadius()
+  , _spritePath()
+  , _pv()
+  , _munition()
+  , _timeToReload()
+  , _fireFrequence()
 {
 }
 
 Unit::Unit(const Unit& other)
   : _lastPacketSequence(other._lastPacketSequence)
-  , _id(other._id)
   , _pos(other._pos)
   , _dir(other._dir)
+  , _id(other._id)
   , _hitboxCenter(other._hitboxCenter)
   , _hitboxRadius(other._hitboxRadius)
+  , _spritePath(other._spritePath)
+  , _pv(other._pv)
+  , _munition(other._munition)
+  , _timeToReload(other._timeToReload)
+  , _fireFrequence(other._fireFrequence)
 {
 }
 
@@ -58,6 +72,12 @@ void    swap(Unit& lhs, Unit& rhs)
     std::swap(lhs._dir, rhs._dir);
     std::swap(lhs._hitboxCenter, rhs._hitboxCenter);
     std::swap(lhs._hitboxRadius, rhs._hitboxRadius);
+
+    std::swap(lhs._spritePath, rhs._spritePath);
+    std::swap(lhs._pv, rhs._pv);
+    std::swap(lhs._munition, rhs._munition);
+    std::swap(lhs._timeToReload, rhs._timeToReload);
+    std::swap(lhs._fireFrequence, rhs._fireFrequence);
 }
 
 uint32_t	Unit::getLastPacketSequence(void) const

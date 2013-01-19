@@ -8,7 +8,7 @@
 # include   "network/Packet.hh"
 # include   "utilities/Vector2D.hh"
 
-# define    UNLIMITED   -1;
+# define    UNLIMITED   (-1)
 
 typedef union {
     struct _content {

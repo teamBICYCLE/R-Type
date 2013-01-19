@@ -83,17 +83,16 @@ std::list<Unit *> PatternManager::get(const Vector2D &left, const Vector2D &righ
 			std::shared_ptr<MonsterDefinition> sharedDef = sharedm->second;
 			Monster *monster = pool->get<Monster>();
 
-			// load definition on monster
+			// load definition in monster
 			monster->setSpritePath(SPRITE_PATH + sharedDef->name);
 			monster->setPv(sharedDef->pv);
 			monster->setMunition(sharedDef->munition);
 			monster->setTimeToReload(sharedDef->timeToReload);
 			monster->setFireFrequence(sharedDef->fireFrenquence);
 
-			// changer timeBetweenFires
-
+			// load pattern informations in monster
 			ret.push_back(monster);
-			std::cout << (*item)->posx << " " << (*item)->posy << " " << (*item)->type << " " << (*item)->moveStyle << std::endl;
+			//std::cout << (*item)->posx << " " << (*item)->posy << " " << (*item)->type << " " << (*item)->moveStyle << std::endl;
 		}
 		else
 			log::warn << "Undefined reference to Monster " << (*item)->type << " (passed)" << log::endl;
