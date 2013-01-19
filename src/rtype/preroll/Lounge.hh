@@ -10,7 +10,7 @@
 #ifndef _LOUNGE_H__
 #define _LOUNGE_H__
 
-#include <vector>
+#include <list>
 #include <memory>
 #include <system/network/ITcpSocket.hh>
 #include <system/network/Listener.hh>
@@ -46,15 +46,17 @@ public:
 
 public:
   bool movePlayerToRoom(int playerId, int roomId);
+  bool removePlayerFromRoom(int playerId);
+  bool removePlayerFromRoom(int playerId, int roomId);
 
 public:
   void addClient(std::shared_ptr<Client>& c);
-  const std::vector<Client>& getClients();
+  const std::list<Client>& getClients();
 
 private:
   TBSystem::network::Listener _listener;
-  std::vector<Client>         _clients;
-  std::vector<Room>           _rooms;
+  std::list<Client>         _clients;
+  std::list<Room>           _rooms;
 };
 
 #endif /* !_LOUNGE_H__ */
