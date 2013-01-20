@@ -2,7 +2,7 @@
 #include <iterator>
 
 ListView::ListView(const sf::Vector2f &pos, const sf::Vector2f &itemSize, unsigned int maxRow)
-  : _position(pos), _itemSize(itemSize), _maxRow(maxRow), _background()
+  : _position(pos), _itemSize(itemSize), _background(), _maxRow(maxRow)
 {
   _background.setFillColor(sf::Color(0,0,0,128));
   _background.setOutlineColor(sf::Color::Black);
@@ -38,7 +38,7 @@ bool	ListView::checkClick(sf::Vector2i coord) const
 
 void	ListView::draw(sf::RenderTarget& target)
 {
-  int	countRow = 0;
+  unsigned int	countRow = 0;
 
   _background.setSize(sf::Vector2f(_itemSize.x,(_maxRow * _itemSize.y + ((_maxRow - 1) * VERTICAL_ITEM_SPACING))));
   _background.setPosition(_position);
