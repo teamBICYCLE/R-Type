@@ -17,7 +17,7 @@
 namespace TBSystem {
 namespace network {
     namespace sockets {
-        class Udp : IUdpSocket {
+        class Udp : public IUdpSocket {
             public:
                 Udp();
 
