@@ -57,7 +57,7 @@ void  GraphicGameState::updateWithPosition(const communication::Packet& packet)
 
   //ROMAIN: ici tu traites les packets de type POSITION
   //(envoyes quand un monstre se deplace, donc)
-  if (id >= 0 && id < _players.size()) {
+  if (id < _players.size()) {
     _players[id]->unpack(packet.getSequence(), packet.getContent());
   }
   else
@@ -73,7 +73,7 @@ void  GraphicGameState::updateWithDeath(const communication::Packet& packet)
   const uint32_t id = packet.getId();
 
   std::cout << "DEATH" << std::endl;
-  if (id >= 0 && id < _players.size()) {
+  if (id < _players.size()) {
     _players[id]->setDead(true);
   }
   //need to look for a monster/missile with this id and remove it

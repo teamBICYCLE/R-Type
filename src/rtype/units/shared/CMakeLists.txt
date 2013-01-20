@@ -6,3 +6,7 @@ add_library(DefaultMonster SHARED
 	${CMAKE_CURRENT_LIST_DIR}/DefaultMonster.cpp
 )
 
+add_library(DumbMonster SHARED
+	${CMAKE_CURRENT_LIST_DIR}/DumbMonster.cpp
+)
+

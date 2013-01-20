@@ -52,11 +52,13 @@ void PatternManager::checkShared(const std::string &file)
 	DLoader loader(file);
 	std::shared_ptr<MonsterDefinition> def = std::shared_ptr<MonsterDefinition>(new MonsterDefinition());
 	std::function<const std::string (void)>n = loader.load<const std::string (void)>("getName");
+	std::function<unsigned int (void)>i = loader.load<unsigned int(void)>("getResourceId");
 	std::function<unsigned int (void)>p = loader.load<unsigned int(void)>("getPv");
 	std::function<unsigned int (void)>m = loader.load<unsigned int(void)>("getMunition");
 	std::function<const std::chrono::milliseconds (void)>r = loader.load<const std::chrono::milliseconds (void)>("timeToReload");
 	std::function<const std::chrono::milliseconds (void)>f = loader.load<const std::chrono::milliseconds (void)>("fireFrequence");
 	def->name = n();
+	def->resourceId = i();
 	def->pv = p();
 	def->munition = m();
 	def->timeToReload = r();
@@ -74,7 +76,6 @@ std::list<Unit *> PatternManager::get(const Vector2D &left, const Vector2D &righ
 	UnitPool *pool = UnitPool::getInstance();
 	std::list<Unit *> ret;
 
-	std::cout << random << std::endl;
 	for (auto item  = elements.begin(); item != elements.end(); ++item)
 	{
 		auto sharedm = _monsters.find((*item)->type);
@@ -84,7 +85,8 @@ std::list<Unit *> PatternManager::get(const Vector2D &left, const Vector2D &righ
 			Monster *monster = pool->get<Monster>();
 
 			// load definition in monster
-			monster->setSpritePath(SPRITE_PATH + sharedDef->name);
+			//monster->setSpritePath(SPRITE_PATH + sharedDef->name);
+			monster->setResourceId(sharedDef->resourceId);
 			monster->setPv(sharedDef->pv);
 			monster->setMunition(sharedDef->munition);
 			monster->setTimeToReload(sharedDef->timeToReload);
@@ -99,6 +101,5 @@ std::list<Unit *> PatternManager::get(const Vector2D &left, const Vector2D &righ
 			log::warn << "Undefined reference to Monster " << (*item)->type << " (passed)" << log::endl;
 	}
 
-	std::cout << ret.size() << std::endl;
 	return ret;
 }

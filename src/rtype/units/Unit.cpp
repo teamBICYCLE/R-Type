@@ -14,6 +14,7 @@ Unit::Unit(int id, const Vector2D& pos, const Vector2D& dir)
   , _hitboxRadius(10.f)
   , _isDead(false)
   , _othersNotifiedOfDeath(false)
+  , _resourceId(1)
   , _pv(1)
   , _munition(UNLIMITED)
   , _timeToReload(0)
@@ -30,7 +31,8 @@ Unit::Unit(void)
   , _hitboxRadius()
   , _isDead(false)
   , _othersNotifiedOfDeath(false)
-  , _spritePath()
+  //, _spritePath()
+  , _resourceId()
   , _pv()
   , _munition()
   , _timeToReload()
@@ -47,7 +49,8 @@ Unit::Unit(const Unit& other)
   , _hitboxRadius(other._hitboxRadius)
   , _isDead(other._isDead)
   , _othersNotifiedOfDeath(other._othersNotifiedOfDeath)
-  , _spritePath(other._spritePath)
+  //, _spritePath(other._spritePath)
+  , _resourceId(other._resourceId)
   , _pv(other._pv)
   , _munition(other._munition)
   , _timeToReload(other._timeToReload)
@@ -80,7 +83,8 @@ void    swap(Unit& lhs, Unit& rhs)
     std::swap(lhs._hitboxRadius, rhs._hitboxRadius);
     std::swap(lhs._isDead, rhs._isDead);
     std::swap(lhs._othersNotifiedOfDeath, rhs._othersNotifiedOfDeath);
-    std::swap(lhs._spritePath, rhs._spritePath);
+    //std::swap(lhs._spritePath, rhs._spritePath);
+    std::swap(lhs._resourceId, rhs._resourceId);
     std::swap(lhs._pv, rhs._pv);
     std::swap(lhs._munition, rhs._munition);
     std::swap(lhs._timeToReload, rhs._timeToReload);
@@ -127,10 +131,10 @@ bool  Unit::wereOthersNotifiedOfDeath(void) const
   return _othersNotifiedOfDeath;
 }
 
-const std::string &Unit::getSpritePath(void) const
-{
-  return _spritePath;
-}
+// const std::string &Unit::getSpritePath(void) const
+// {
+//   return _spritePath;
+// }
 
 void  Unit::move(void)
 {
@@ -173,9 +177,19 @@ void    Unit::setOthersNotifiedOfDeath(bool b)
   _othersNotifiedOfDeath = b;
 }
   
-void    Unit::setSpritePath(const std::string &p)
+// void    Unit::setSpritePath(const std::string &p)
+// {
+//   _spritePath = p;
+// }
+
+void  Unit::setResourceId(const unsigned int v)
 {
-  _spritePath = p;
+  _resourceId = v;
+}
+
+unsigned int Unit::getResourceId(void) const
+{
+  return _resourceId;
 }
 
 void  Unit::setPv(const unsigned int v)
@@ -283,6 +297,7 @@ void  Unit::reset(void)
     _othersNotifiedOfDeath = false;
     _pv = 1;
     _munition = UNLIMITED;
-    _spritePath = std::string();
+    //_spritePath = std::string();
+    _resourceId = 1;
 }
 

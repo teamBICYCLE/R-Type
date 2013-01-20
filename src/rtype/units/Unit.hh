@@ -43,7 +43,8 @@ class   Unit : public IPackable
         float               getHitboxRadius(void) const;
         bool                isDead(void) const;
         bool                wereOthersNotifiedOfDeath(void) const;
-        const std::string & getSpritePath(void) const;
+        //const std::string & getSpritePath(void) const;
+        unsigned int        getResourceId(void) const;
         unsigned int        getPv(void) const;
         int                 getMunition(void);
         const std::chrono::milliseconds &getTimeToReload(void) const;
@@ -58,7 +59,8 @@ class   Unit : public IPackable
         void    setHitboxRadius(const float radius);
         void    setDead(bool b);
         void    setOthersNotifiedOfDeath(bool b);
-        void    setSpritePath(const std::string &);
+        //void    setSpritePath(const std::string &);
+        void    setResourceId(const unsigned int);
         void    setPv(const unsigned int);
         void    setMunition(const unsigned int);
         void    setTimeToReload(const std::chrono::milliseconds &);
@@ -86,7 +88,8 @@ class   Unit : public IPackable
         float     _hitboxRadius;
         bool      _isDead;
         bool      _othersNotifiedOfDeath;
-        std::string _spritePath;
+        //std::string _spritePath;
+        unsigned int _resourceId;
         unsigned int _pv;
         int _munition;
         std::chrono::milliseconds _timeToReload;

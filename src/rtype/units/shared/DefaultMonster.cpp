@@ -8,6 +8,11 @@ extern "C"
 		return "defaultMonster";
 	}
 
+	unsigned int getResourceId(void)
+	{
+		return 1;
+	}
+
 	unsigned int getPv(void)
 	{
 		return 1;

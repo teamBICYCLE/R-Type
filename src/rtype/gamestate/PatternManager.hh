@@ -39,6 +39,7 @@ public:
 	typedef struct MonsterDefinition
 	{	
 		std::string name;
+		unsigned int resourceId;
 		unsigned int pv;
 		unsigned int munition;
 		std::chrono::milliseconds timeToReload;
