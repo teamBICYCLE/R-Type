@@ -20,9 +20,6 @@ ServerGameState::ServerGameState(const std::vector<std::shared_ptr<Player>>& v)
 
    _updateMap[communication::Packet::Type::INPUT] =
       std::bind(&ServerGameState::updateWithInput, this, _1);
-
-    // test
-    requireMonsters();
 }
 
 ServerGameState::~ServerGameState()
@@ -58,6 +55,15 @@ void  ServerGameState::updateWithInput(const communication::Packet& packet)
 
 void  ServerGameState::updateWorld(void)
 {
+  //SHIT -v
+  static bool first = true;
+
+  if (first == true)
+  {
+    requireMonsters(Vector2D(0.f, 0.f), Vector2D(1.f, 1.f));
+    first = false;
+  }
+
   for (auto& e : _enemies) {
     e->move();
   }
@@ -65,6 +71,8 @@ void  ServerGameState::updateWorld(void)
 
 void  ServerGameState::requireMonsters(const Vector2D &left, const Vector2D &right)
 {
+  //SHIT -v
+  int id = 5;
   std::cout << "requireMonsters" << std::endl;
   std::list<Unit *> monsters = _pm.get(left, right);
 
@@ -80,6 +88,8 @@ void  ServerGameState::requireMonsters(const Vector2D &left, const Vector2D &rig
       float newX = randx + (originalPos.x * 0.03);
       float newY = randy + (originalPos.y * 0.03);
       it->setPos(Vector2D(newX, newY));
+      //SHIT -v
+      it->setId(id++);
       std::cout << it->getResourceId() << std::endl;
   }
   _enemies.insert(_enemies.end(), monsters.begin(), monsters.end());
@@ -122,4 +132,9 @@ void  ServerGameState::setPlayerDirection(uint32_t id, const Vector2D& dir)
 const std::vector<std::shared_ptr<Player>>& ServerGameState::getPlayers() const
 {
   return _players;
+}
+
+const std::list<Unit*>&   ServerGameState::getEnemies() const
+{
+  return _enemies;
 }

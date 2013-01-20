@@ -9,9 +9,9 @@ GUnitPool::GUnitPool(void) :
 	GUnitFactory f;
 
 	// create Player
-	for (int i = 0; i != PLAYER_NB; ++i)
+	for (int i = 0; i != PLAYER_NB + MONSTER_NB + ROCKET_NB; ++i)
 	{
-		_collection[typeid(GPlayer).name()].push_back(f.create<GPlayer>());
+		_collection[typeid(GUnit).name()].push_back(f.create<GUnit>());
 	}
 }
 
