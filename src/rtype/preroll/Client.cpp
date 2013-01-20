@@ -57,7 +57,8 @@ Client::Client(
     else {
       rep = "err could not join room\r\n";
     }
-      l_socket->send(rep.c_str(), rep.size());
+    l_socket->send(rep.c_str(), rep.size());
+    return true;
   };
   _s_commands["leave"] = [=](std::shared_ptr<TBSystem::network::sockets::ITcpSocket>& l_socket,
                             Lounge& l_lounge,
@@ -79,12 +80,12 @@ Client::Client(
       rep = "err your are not in this room\r\n";
     }
     l_socket->send(rep.c_str(), rep.size());
+    return true;
   };
 }
 
 Client::~Client()
 {
-
 }
 
 bool  Client::operator==(const Client& other) const
@@ -99,7 +100,6 @@ bool  Client::handleRcv(
                         Lounge& lounge
                        )
 {
-  std::regex  ask_regex("ask");
   char  buf[512];
   std::string::size_type pos;
 
@@ -128,13 +128,18 @@ bool  Client::handleRcv(
 
 void  Client::welcome()
 {
-  std::string welcomeString = "hi #" + std::to_string(_id) + "\r\n";
+  std::string welcomeString = "hi " + std::to_string(_id) + "\r\n";
   _socket->send(welcomeString.c_str(), welcomeString.size());
 }
 
 int Client::getId() const
 {
   return _id;
+}
+
+const TBSystem::network::Addr& Client::getAddr() const
+{
+  return _addr;
 }
 
 void Client::setInRoom(bool b)

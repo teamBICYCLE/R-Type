@@ -86,3 +86,35 @@ bool  Room::isEmpty() const
 {
   return _playersIds.size() == 0;
 }
+
+void* launchServer(void* players);
+
+void Room::launchGame(const Lounge& lounge)
+{
+  std::vector<network::Addr> playersAddr;
+
+  for (int id : _playersIds) {
+    auto it =
+      std::find_if(lounge.getClients().begin(), lounge.getClients().end(),
+                   [id](const Client& c) {
+                   return c.getId() == id;
+                   });
+
+    playersAddr.push_back(it->getAddr());
+  }
+  t.start(&launchServer, &playersAddr);
+}
+
+void server(std::vector<network::Addr>& players)
+{
+  while (1) {
+    log::debug << "hello" << log::endl;
+  }
+}
+
+void* launchServer(void* param) {
+  std::vector<network::Addr> *players = (std::vector<network::Addr>*) param;
+
+  server(*players);
+  return nullptr;
+}

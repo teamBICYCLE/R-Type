@@ -19,20 +19,14 @@
 
 class GameState {
 public:
-  GameState(const std::vector<std::shared_ptr<Player>>& v);
+  GameState();
   virtual ~GameState();
 
   void  update(const communication::Packet& packet);
   void  update(const std::vector<communication::Packet>& v);
-
-public:
-  void  moveOne(Player& p);
-
+  
 protected:
-  void  setPlayerDirection(int id, const Vector2D& dir);
-
-public:
-  const std::vector<std::shared_ptr<Player>>& getPlayers() const;
+  Vector2D  convertToSpeed(const Vector2D& direction) const;
 
 public:
   static const float WINDOW_WIDTH;
@@ -40,8 +34,6 @@ public:
 
 protected:
   typedef std::function<void (const communication::Packet&)> UpdateFunction;
-  uint32_t  _lastPacketSequence;
-  std::vector<std::shared_ptr<Player>>  _players;
   std::map<communication::Packet::Type, UpdateFunction> _updateMap;
   const float PLAYER_SPEED;
 };

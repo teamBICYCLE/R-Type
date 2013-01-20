@@ -42,15 +42,11 @@ public:
                   std::shared_ptr<TBSystem::network::sockets::ITcpSocket>& socket,
                   Lounge& lounge
                  );
-  bool  handleAsk(
-                  std::shared_ptr<TBSystem::network::sockets::ITcpSocket>& socket,
-                  std::string buf,
-                  Lounge& lounge
-                 );
 
   void  welcome();
 public:
   int getId() const;
+  const TBSystem::network::Addr& getAddr() const;
   void setInRoom(bool b);
   bool isInRoom() const;
 

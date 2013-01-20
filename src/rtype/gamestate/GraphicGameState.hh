@@ -14,11 +14,11 @@
 # include <SFML/Graphics.hpp>
 # include "input/Data.hh"
 # include "GameState.hh"
-# include "units/graphics/GUnit.hh"
+# include "units/graphics/GPlayer.hh"
 
 class GraphicGameState : public GameState, public sf::Drawable {
 public:
-  GraphicGameState(const std::vector<std::shared_ptr<Player>>& v);
+  GraphicGameState(std::shared_ptr<GPlayer> player);
   virtual ~GraphicGameState();
 
 private:
@@ -35,6 +35,9 @@ public:
   void  animationUpdate     (void);
 
 private:
+  GUnit *findEntityById(const uint32_t id);
+
+private:
   const float BACKGROUND_SPEED;
 
 private:
@@ -43,7 +46,8 @@ private:
   sf::Sprite  *_backgroundSprite2;
   Vector2D    _backgroundPos;
   Vector2D    _backgroundDirection;
-  std::list<GUnit*> _enemies;
+  std::shared_ptr<GPlayer>  _player;
+  std::list<GUnit*>         _others;
 };
 
 #endif /* !_GRAPHICGAMESTATE_H__ */

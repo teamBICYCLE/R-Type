@@ -13,10 +13,18 @@ public:
   void  updateWithInput(const communication::Packet& packet);
   void	updateWorld(void);
   void  requireMonsters(const Vector2D &left = Vector2D(1.0f, 0.0f), const Vector2D &right = Vector2D(1.15f, 1.0f));
+  void  moveOne(Player& p);
   void  moveAll(void);
 
 private:
+  void  setPlayerDirection(uint32_t id, const Vector2D& dir);
+
+public:
+  const std::vector<std::shared_ptr<Player>>& getPlayers() const;
+
+private:
 	const PatternManager _pm;
+  std::vector<std::shared_ptr<Player>>  _players;
 	std::list<Unit*>	 _enemies;
 };
 

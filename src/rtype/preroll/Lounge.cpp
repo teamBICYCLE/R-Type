@@ -10,12 +10,14 @@
 #include "Lounge.hh"
 #include <functional>
 #include <system/log/Log.hh>
+#include <system/network/Udp.hh>
 #include "Client.hh"
 #include "Room.hh"
 
 using namespace TBSystem;
 
 Lounge::Lounge(std::shared_ptr<network::sockets::ITcpSocket>& serverSocket)
+  : _bcSocket(new network::sockets::Udp)
 {
   using namespace std::placeholders;
 
@@ -35,6 +37,7 @@ int Lounge::exec()
   while (1) {
     _listener.waitEvent(std::chrono::seconds(1));
     _listener.execute();
+    broadcastInfos();
     log::info << "client connected count = " << _clients.size() << log::endl;
   }
   return 0;
@@ -150,9 +153,9 @@ bool Lounge::createRoom(std::shared_ptr<
 
   std::string rep("rep create OK " + std::to_string(_rooms.back().getId())
                   + "\r\n");
-
   movePlayerToRoom(playerId, _rooms.back().getId());
   socket->send(rep.c_str(), rep.size());
+  _rooms.back().launchGame(*this);
   return true;
 }
 
@@ -210,7 +213,17 @@ bool  Lounge::removePlayerFromRoom(int playerId, int roomId)
 }
 
 const std::list<Client>&
-Lounge::getClients()
+Lounge::getClients() const
 {
   return _clients;
+}
+
+void Lounge::broadcastInfos()
+{
+  std::string s("42");
+  network::Addr addr("255.0.0.37", "42424", "UDP");
+
+  log::debug << "TODO ! " << s << log::endl;
+  log::debug << "wrote = " << _bcSocket->send((uint8_t*)s.c_str(),
+                                              s.size(), addr) << log::endl;
 }

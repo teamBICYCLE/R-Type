@@ -96,7 +96,7 @@ uint32_t	Unit::getLastPacketSequence(void) const
   return _lastPacketSequence;
 }
 
-int     Unit::getId(void) const
+uint32_t  Unit::getId(void) const
 {
     return _id;
 }
@@ -140,6 +140,11 @@ void  Unit::move(void)
 {
     _pos += _dir;
     _hitboxCenter = _pos;
+}
+
+void  Unit::setId(const uint32_t id)
+{
+    _id = id;
 }
 
 void  Unit::setDir(const Vector2D& dir)
