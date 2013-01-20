@@ -75,7 +75,7 @@ private:
 template< class Rep, class Period >
 bool  Listener::waitEvent(std::chrono::duration<Rep, Period> waitDuration)
 {
-  int maxfd;
+  int maxfd = -1;
   struct timeval tv;
   int retval;
 
