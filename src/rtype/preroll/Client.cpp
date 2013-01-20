@@ -82,6 +82,8 @@ Client::Client(
     l_socket->send(rep.c_str(), rep.size());
     return true;
   };
+  _s_commands["start"] = std::bind(&Client::startGame, this,
+                                   _1, _2, _3);
 }
 
 Client::~Client()
@@ -122,6 +124,28 @@ bool  Client::handleRcv(
 
       socket->send(error.c_str(), error.size());
     }
+  }
+  return true;
+}
+
+bool  Client::startGame(
+                        std::shared_ptr<
+                        TBSystem::network::sockets::ITcpSocket
+                        >& socket,
+                        Lounge& lounge,
+                        std::string params
+                       )
+{
+  std::stringstream ss(params);
+  std::string trash;
+  int roomId;
+
+  ss >> trash;
+  ss >> roomId;
+  if (!lounge.tryStartRoom(_id, roomId)) {
+    trash = "rep could not start game\r\n";
+
+    socket->send(trash.c_str(), trash.size());
   }
   return true;
 }

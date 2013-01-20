@@ -102,6 +102,7 @@ void Room::launchGame(const Lounge& lounge)
 
     playersAddr.push_back(it->getAddr());
   }
+  log::debug << "start game LOL !" << log::endl;
   t.start(&launchServer, &playersAddr);
 }
 
@@ -117,4 +118,9 @@ void* launchServer(void* param) {
 
   server(*players);
   return nullptr;
+}
+
+bool  Room::isIn(int playerId) {
+  return std::find(_playersIds.begin(), _playersIds.end(), playerId) !=
+    _playersIds.end();
 }

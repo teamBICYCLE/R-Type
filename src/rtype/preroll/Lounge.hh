@@ -52,6 +52,7 @@ public:
   bool movePlayerToRoom(int playerId, int roomId);
   bool removePlayerFromRoom(int playerId);
   bool removePlayerFromRoom(int playerId, int roomId);
+  bool tryStartRoom(int playerId, int roomId);
 
 public:
   void addClient(std::shared_ptr<Client>& c);
