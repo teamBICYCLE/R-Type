@@ -13,14 +13,15 @@
 
 using namespace TBSystem;
 
-GraphicGameState::GraphicGameState(const std::vector<std::shared_ptr<Player>>& v)
-  : GameState(v)
+GraphicGameState::GraphicGameState(std::shared_ptr<GPlayer> player)
+  : GameState()
   , BACKGROUND_SPEED(800.f)
   , _backgroundTexture(new sf::Texture)
   , _backgroundSprite1(new sf::Sprite)
   , _backgroundSprite2(new sf::Sprite)
   , _backgroundPos()
   , _backgroundDirection(-1.f, 0.f)
+  , _player(player)
 {
   using namespace std::placeholders;
 
@@ -42,11 +43,13 @@ GraphicGameState::~GraphicGameState()
 }
 
 void GraphicGameState::draw(sf::RenderTarget &target, sf::RenderStates states) const {
+  (void)states;
   target.draw(*_backgroundSprite1);
   target.draw(*_backgroundSprite2);
-  for (auto& p : _players) {
-    if (p->isDead() == false)
-      target.draw(static_cast<GPlayer&>(*p));//only draw alive players
+  if (_player->isDead() == false)
+    target.draw(static_cast<GUnit&>(*_player));//only draw alive players
+  for (auto& entity : _others) {
+      target.draw(static_cast<GUnit&>(*entity));//only draw alive players
   }
 }
 
@@ -57,13 +60,20 @@ void  GraphicGameState::updateWithPosition(const communication::Packet& packet)
 
   //ROMAIN: ici tu traites les packets de type POSITION
   //(envoyes quand un monstre se deplace, donc)
-  if (id < _players.size()) {
-    _players[id]->unpack(packet.getSequence(), packet.getContent());
-  }
+  if (id == _player->getId())
+    _player->unpack(packet.getSequence(), packet.getContent());
   else
   {
-    //UnitPool::getInstance()->get<>
-    //_enemies.push_back()
+    GUnit *entity = findEntityById(id);
+
+    if (entity != nullptr)
+      entity->unpack(packet.getSequence(), packet.getContent());
+    else
+    {
+      //utiliser la pool !
+      _others.push_back(new GPlayer(id, Vector2D(), Vector2D()));
+      _others.back()->unpack(packet.getSequence(), packet.getContent());
+    }
   }
 }
 
@@ -73,21 +83,29 @@ void  GraphicGameState::updateWithDeath(const communication::Packet& packet)
   const uint32_t id = packet.getId();
 
   std::cout << "DEATH" << std::endl;
-  if (id < _players.size()) {
-    _players[id]->setDead(true);
+  if (id == _player->getId())//if it's me..
+    _player->setDead(true);
+  else//search for an enemy/ally/bullet
+  {
+    GUnit *entity = findEntityById(id);
+
+    //someting like deleteLater, juste to animate the death
+    if (entity != nullptr) {
+      _others.remove(entity);
+      delete entity;//call pool release!
+    }
   }
-  //need to look for a monster/missile with this id and remove it
 }
 
 void  GraphicGameState::simulate(const Input::Data& input)
 {
-  const int playerId = input.getId();
+  const uint32_t playerId = input.getId();
 
-  if (playerId >= 0 && playerId < _players.size()) {
-    if (_players[playerId]->isDead() == false) {//only simulate if player is alive
-      GameState::setPlayerDirection(playerId, input.getVector());
-      GameState::moveOne(*_players[playerId]);
-    }
+  if (playerId == _player->getId() &&
+      _player->isDead() == false)//simulate only if player is alive
+  {
+    _player->setDir(GameState::convertToSpeed(input.getVector()));
+    _player->move();
   }
 }
 
@@ -104,4 +122,16 @@ void  GraphicGameState::animationUpdate(void)
   if (pos.x <= 0)//if the x of the second background is less than zero...
     _backgroundPos.x = 0;//then we reset the position of the first background to loop again
   _backgroundSprite2->setPosition(pos);
+}
+
+GUnit *GraphicGameState::findEntityById(const uint32_t id)
+{
+  auto  entityIt = std::find_if(_others.begin(), _others.end(),
+                                [&id](const GUnit* entity) -> bool {
+                                return id == entity->getId();
+                                });
+
+  if (entityIt != _others.end())
+    return *entityIt;
+  return nullptr;
 }

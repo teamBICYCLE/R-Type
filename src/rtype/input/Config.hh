@@ -14,6 +14,7 @@
 #include "Data.hh"
 
 namespace Input {
+
 class Config {
 public:
     Config();
@@ -35,6 +36,7 @@ public:
     sf::Keyboard::Key   _left;
     sf::Keyboard::Key   _fire;
 };
+
 }
 
 #endif /* !_INPUTCONFIG_H__ */

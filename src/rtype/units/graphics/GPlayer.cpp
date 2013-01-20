@@ -5,8 +5,28 @@ GPlayer::GPlayer(unsigned int id, const Vector2D& pos, const Vector2D& dir)
     : Unit(id, pos, dir)
     , GUnit(id, pos, dir)
     , Player(id, pos, dir)
+    , _circle(10.f)    
+{
+	
+}
+
+GPlayer::GPlayer()
+	: Unit()
+    , GUnit()
+    , Player()
     , _circle(10.f)
 {
+
+}
+
+GPlayer::~GPlayer(void)
+{
+
+}
+
+void GPlayer::setId(const uint32_t id)
+{
+	_id = id;
 	switch (_id) {
 		case 0 :
 			_circle.setFillColor(sf::Color::Green);
@@ -23,12 +43,12 @@ GPlayer::GPlayer(unsigned int id, const Vector2D& pos, const Vector2D& dir)
 	}
 }
 
-GPlayer::~GPlayer(void)
-{
-
-}
-
 const sf::Drawable *GPlayer::render(void) const
 {
 	return &_circle;
+}
+
+GPlayer *GPlayer::clone(void)
+{
+	return (new GPlayer(*this));
 }

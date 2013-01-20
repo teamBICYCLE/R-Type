@@ -36,7 +36,7 @@ class   Unit : public IPackable
 
     public:
         uint32_t            getLastPacketSequence(void) const;
-        int                 getId(void) const;
+        uint32_t            getId(void) const;
         const Vector2D&     getPos(void) const;
         const Vector2D&     getDir(void) const;
         const Vector2D&     getHitboxCenter(void) const;
@@ -52,6 +52,7 @@ class   Unit : public IPackable
 
     public:
         virtual void    move(void);
+        void    setId(const uint32_t);
         void    setDir(const Vector2D& dir);
         void    setLastPacketSequence(uint32_t newPacketSequence);
         void    setPos(const Vector2D& pos);

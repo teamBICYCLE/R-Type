@@ -7,26 +7,33 @@
 # include <stdexcept>
 # include <libs/system/log/Log.hh>
 # include "units/Unit.hh"
-# include "UnitFactory.hh"
+# include "pool/UnitFactory.hh"
 # include "units/Player.hh"
+# include "units/graphics/GPlayer.hh"
+# include "units/graphics/GUnit.hh"
 # include "units/Monster.hh"
 
 # define	PLAYER_NB	4
 # define	MONSTER_NB	50
 # define	ROCKET_NB	150
 
+
 class UnitPool
 {
 
-private:
+public:
+	
+	enum Type {
+		GRAPHIC = 0,
+		SERVER = 1
+	};
+
+public:
 	UnitPool(void);
-	~UnitPool(void);
+	virtual ~UnitPool(void);
 
 public:
-	static UnitPool *getInstance(void);
-	static void	deleteInstance(void);
-
-public:
+	
 	template <typename T>
 	T *get(void)
 	{
@@ -74,7 +81,7 @@ public:
 		return false;
 	}
 
-private:
+protected:
 	std::map<const char *, std::list< Unit *>> _collection;
 };
 

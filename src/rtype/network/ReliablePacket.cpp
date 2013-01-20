@@ -62,6 +62,7 @@ bool  ReliablePacket::checkAnswer(const TBSystem::network::Addr& clientAddr,
     if (packet.getSequence() == packetIt->getSequence() &&
         packet.getType() == communication::Packet::Type::ACK)
     {
+      std::cout << "SAFE id=" << packet.getSequence() << std::endl;
       clientIt->second = true;//it arrived safely
       return true;
     }
@@ -80,7 +81,7 @@ void  ReliablePacket::tryAgain(TBSystem::network::sockets::Udp& socket)
   {
     if (clientIt->second == false)//if the user did not receive my packet
     {
-      std::cout << "Need to try again with this one :(" << std::endl;
+      //std::cout << "Need to try again with this one :(" << std::endl;
       //send it again
       socket.send(packetIt->getData(), packetIt->getDataSize(), clientIt->first);
     }

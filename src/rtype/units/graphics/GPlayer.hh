@@ -9,12 +9,16 @@ class GPlayer : public GUnit, public Player
 {
 public:
 	GPlayer(unsigned int id, const Vector2D& pos, const Vector2D& dir);
-	~GPlayer(void);
+	GPlayer();
+	virtual ~GPlayer(void);
 
 public:
 	using Player::move;
-	using Player::clone;
-	const sf::Drawable *render(void) const;
+	virtual const sf::Drawable *render(void) const;
+	GPlayer *clone(void);
+
+public:
+	void setId(const uint32_t id);
 
 private:
 	sf::CircleShape _circle;

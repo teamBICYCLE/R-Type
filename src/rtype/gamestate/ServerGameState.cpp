@@ -12,7 +12,9 @@
 #include "ServerGameState.hh"
 
 ServerGameState::ServerGameState(const std::vector<std::shared_ptr<Player>>& v)
-  : GameState(v), _pm()
+  : GameState()
+  , _pm()
+  , _players(v)
 {
    using namespace std::placeholders;
 
@@ -41,7 +43,9 @@ void  ServerGameState::updateWithInput(const communication::Packet& packet)
     if (player->getLastPacketSequence() < packet.getSequence())
     {
       player->setLastPacketSequence(packet.getSequence());
-      GameState::setPlayerDirection(id, d.getVector());
+      setPlayerDirection(id, d.getVector());
+      if (d.isFiring() == true)
+      {}
     }
     else
     {
@@ -81,10 +85,41 @@ void  ServerGameState::requireMonsters(const Vector2D &left, const Vector2D &rig
   _enemies.insert(_enemies.end(), monsters.begin(), monsters.end());
 }
 
+void  ServerGameState::moveOne(Player& p)
+{
+  Vector2D  savedPos = p.getPos();
+
+  p.move();
+  for (auto& other : _players)
+  {
+    //if both player are alive and collide
+    if (p.isDead() == false && other->isDead() == false &&
+        other->getId() != p.getId() && other->collideWith(p) == true)
+    {
+      p.setPos(savedPos);
+      p.setDead(true);//only one set to die for now, both will be
+      std::cout << "COLLIDED" << std::endl;
+      break;
+    }
+  }
+}
+
 void  ServerGameState::moveAll(void)
 {
    for (auto& p : _players) {
       if (p->isDead() == false) //only move alive player
         moveOne(*p);
    }
+}
+
+void  ServerGameState::setPlayerDirection(uint32_t id, const Vector2D& dir)
+{
+  if (id < _players.size()) {
+    _players[id]->setDir(GameState::convertToSpeed(dir));
+  }
+}
+
+const std::vector<std::shared_ptr<Player>>& ServerGameState::getPlayers() const
+{
+  return _players;
 }

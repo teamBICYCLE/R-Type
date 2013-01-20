@@ -8,10 +8,6 @@
 #include "units/Unit.hh"
 #include "units/Player.hh"
 
-enum UnitType {
-	PLAYER = 0,
-};
-
 class UnitFactory
 {
 
@@ -33,7 +29,7 @@ public:
 		return NULL;
 	}
 
-private:
+protected:
 	std::vector<std::pair<const char *, Unit *>> _collection;
 };
 

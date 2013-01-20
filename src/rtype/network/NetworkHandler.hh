@@ -14,7 +14,7 @@
 #include <system/network/Udp.hh>
 #include <system/network/Addr.hh>
 #include "network/ReliablePacket.hh"
-#include "gamestate/GameState.hh"
+#include "gamestate/ServerGameState.hh"
 
 namespace communication {
 
@@ -24,7 +24,7 @@ public:
    ~NetworkHandler();
 
 public:
-   void  broadcast(const GameState& g);
+   void  broadcast(const ServerGameState& g);
    std::vector<communication::Packet> getIncomingPackets();
 
 public:
