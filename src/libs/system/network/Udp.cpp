@@ -70,10 +70,10 @@ int Udp::send(const uint8_t * packet, int packetSize, const IAddr & pair)
                    pair.validSize());
   }
   else {
-    for (auto hint : pair.infos()) {
-      if (::sendto(_socket, packet, packetSize, 0,
+    for (auto& hint : pair.infos()) {
+      if ((ret = ::sendto(_socket, packet, packetSize, 0,
                    static_cast<const sockaddr *>(hint->get()),
-                   hint->size())
+                   hint->size()))
           != -1) {
         pair.setValid(hint->get());
         break;
