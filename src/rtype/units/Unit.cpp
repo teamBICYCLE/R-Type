@@ -96,7 +96,7 @@ uint32_t	Unit::getLastPacketSequence(void) const
   return _lastPacketSequence;
 }
 
-int     Unit::getId(void) const
+uint32_t  Unit::getId(void) const
 {
     return _id;
 }
