@@ -15,6 +15,15 @@ target_link_libraries(test-lol system ${SFML_LIBRARIES})
 add_executable(thread_test thread_test.cpp)
 target_link_libraries(thread_test system)
 
+add_executable(client_before_game
+		client_test.cpp
+		PreGame.cpp
+		PreGame.hh
+)
+
+target_link_libraries(client_before_game system csv-parser ${SFML_LIBRARIES})
+
+
 # add_executable(archiver_test archiver_test.cpp)
 # target_link_libraries(archiver_test system)
 
