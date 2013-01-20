@@ -9,6 +9,7 @@
 
 #include <system/log/Log.hh>
 #include "GraphicGameState.hh"
+#include "pool/GUnitPool.hh"
 #include "units/graphics/GPlayer.hh"
 
 using namespace TBSystem;
@@ -49,7 +50,7 @@ void GraphicGameState::draw(sf::RenderTarget &target, sf::RenderStates states) c
   if (_player->isDead() == false)
     target.draw(static_cast<GUnit&>(*_player));//only draw alive players
   for (auto& entity : _others) {
-      target.draw(static_cast<GUnit&>(*entity));//only draw alive players
+      target.draw(*entity);
   }
 }
 
@@ -58,8 +59,6 @@ void  GraphicGameState::updateWithPosition(const communication::Packet& packet)
 {
   const uint32_t id = packet.getId();
 
-  //ROMAIN: ici tu traites les packets de type POSITION
-  //(envoyes quand un monstre se deplace, donc)
   if (id == _player->getId())
     _player->unpack(packet.getSequence(), packet.getContent());
   else
@@ -70,8 +69,9 @@ void  GraphicGameState::updateWithPosition(const communication::Packet& packet)
       entity->unpack(packet.getSequence(), packet.getContent());
     else
     {
-      //utiliser la pool !
-      _others.push_back(new GPlayer(id, Vector2D(), Vector2D()));
+      GUnit *newEntity = GUnitPool::getInstance()->get<GUnit>();
+      newEntity->setId(id);
+      _others.push_back(newEntity);
       _others.back()->unpack(packet.getSequence(), packet.getContent());
     }
   }
@@ -89,10 +89,10 @@ void  GraphicGameState::updateWithDeath(const communication::Packet& packet)
   {
     GUnit *entity = findEntityById(id);
 
-    //someting like deleteLater, juste to animate the death
+    //need someting like deleteLater, juste to animate the death
     if (entity != nullptr) {
       _others.remove(entity);
-      delete entity;//call pool release!
+      GUnitPool::getInstance()->release<GUnit>(entity);
     }
   }
 }

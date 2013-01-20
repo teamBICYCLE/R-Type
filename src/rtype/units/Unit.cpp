@@ -28,10 +28,9 @@ Unit::Unit(void)
   , _dir()
   , _id()
   , _hitboxCenter()
-  , _hitboxRadius()
+  , _hitboxRadius(10.f)
   , _isDead(false)
   , _othersNotifiedOfDeath(false)
-  //, _spritePath()
   , _resourceId()
   , _pv()
   , _munition()
@@ -49,7 +48,6 @@ Unit::Unit(const Unit& other)
   , _hitboxRadius(other._hitboxRadius)
   , _isDead(other._isDead)
   , _othersNotifiedOfDeath(other._othersNotifiedOfDeath)
-  //, _spritePath(other._spritePath)
   , _resourceId(other._resourceId)
   , _pv(other._pv)
   , _munition(other._munition)
@@ -76,14 +74,12 @@ Unit&  Unit::operator=(Unit other)
 void    swap(Unit& lhs, Unit& rhs)
 {
     std::swap(lhs._lastPacketSequence, rhs._lastPacketSequence);
-    std::swap(lhs._id, rhs._id);
     std::swap(lhs._pos, rhs._pos);
     std::swap(lhs._dir, rhs._dir);
     std::swap(lhs._hitboxCenter, rhs._hitboxCenter);
     std::swap(lhs._hitboxRadius, rhs._hitboxRadius);
     std::swap(lhs._isDead, rhs._isDead);
     std::swap(lhs._othersNotifiedOfDeath, rhs._othersNotifiedOfDeath);
-    //std::swap(lhs._spritePath, rhs._spritePath);
     std::swap(lhs._resourceId, rhs._resourceId);
     std::swap(lhs._pv, rhs._pv);
     std::swap(lhs._munition, rhs._munition);
@@ -298,11 +294,11 @@ void  Unit::reset(void)
     _pos = Vector2D();
     _dir = Vector2D();
     _id = uint32_t();
+    _hitboxCenter = _pos;
     _isDead = false;
     _othersNotifiedOfDeath = false;
+    _resourceId = 1;
     _pv = 1;
     _munition = UNLIMITED;
-    //_spritePath = std::string();
-    _resourceId = 1;
 }
 

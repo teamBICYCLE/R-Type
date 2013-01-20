@@ -86,6 +86,16 @@ void  NetworkHandler::broadcast(const ServerGameState& g)
       }
     }
   }
+  //SHIT -v
+  for (auto& monster : g.getEnemies()) {
+    uint8_t  buf[communication::Packet::MAX_PACKET_SIZE];
+    int      packetSize;
+
+    packetSize = monster->pack(buf, sizeof(buf));
+    for (auto& addr : _outAddr) {//player is not dead so send its positions
+      _socket.send(buf, packetSize, addr);
+    }
+  }
   for (auto& packet : _reliablePackets)
     packet.tryAgain(_socket);
 }

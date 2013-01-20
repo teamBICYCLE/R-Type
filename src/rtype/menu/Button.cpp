@@ -24,7 +24,7 @@ void	Button::onClick(void)
     _callback();
 }
 
-const bool		Button::isClicked(sf::Vector2i coord) const
+bool		Button::isClicked(sf::Vector2i coord) const
 {
   float			x, y;
   x = coord.x;
