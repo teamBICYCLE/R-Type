@@ -59,7 +59,7 @@ std::vector<communication::Packet> NetworkHandler::getIncomingPackets()
   return inputs;
 }
 
-void  NetworkHandler::broadcast(const GameState& g)
+void  NetworkHandler::broadcast(const ServerGameState& g)
 {
   for (auto& p : g.getPlayers()) {
     if (p->isDead() == false ||

@@ -13,10 +13,8 @@
 const float GameState::WINDOW_WIDTH = 800.f;
 const float GameState::WINDOW_HEIGHT = 800.f;
 
-GameState::GameState(const std::vector<std::shared_ptr<Player>>& v)
-  : _lastPacketSequence(0) 
-  , _players(v)
-  , PLAYER_SPEED(200.f)
+GameState::GameState()
+  : PLAYER_SPEED(200.f)
 {
 }
 
@@ -39,33 +37,7 @@ void  GameState::update(const std::vector<communication::Packet>& v)
    }
 }
 
-void  GameState::setPlayerDirection(int id, const Vector2D& dir)
+Vector2D  GameState::convertToSpeed(const Vector2D& direction) const
 {
-  if (id >= 0 && id < _players.size()) {
-    _players[id]->setDir(dir / GameState::PLAYER_SPEED);
-  }
-}
-
-void  GameState::moveOne(Player& p)
-{
-  Vector2D  savedPos = p.getPos();
-
-  p.move();
-  for (auto& other : _players)
-  {
-    //if both player are alive and collide
-    if (p.isDead() == false && other->isDead() == false &&
-        other->getId() != p.getId() && other->collideWith(p) == true)
-    {
-      p.setPos(savedPos);
-      p.setDead(true);//only one set to die for one, both will be
-      std::cout << "COLLIDED" << std::endl;
-      break;
-    }
-  }
-}
-
-const std::vector<std::shared_ptr<Player>>& GameState::getPlayers() const
-{
-  return _players;
+  return direction / GameState::PLAYER_SPEED;
 }

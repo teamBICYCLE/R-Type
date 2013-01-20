@@ -46,19 +46,18 @@ int main(int argc, char* argv[])
   cfg._left = sf::Keyboard::Left;
   cfg._right = sf::Keyboard::Right;
   cfg._fire = sf::Keyboard::Space;
-  std::vector<std::shared_ptr<Player>> players;
 
-  players.push_back(std::shared_ptr<Player>(new GPlayer(0, Vector2D(0.1f, 0.1f), Vector2D(0.f, 0.f))));
-  players.push_back(std::shared_ptr<Player>(new GPlayer(1, Vector2D(0.1f, 0.2f), Vector2D(0.f, 0.f))));
-  players.push_back(std::shared_ptr<Player>(new GPlayer(2, Vector2D(0.1f, 0.3f), Vector2D(0.f, 0.f))));
-  players.push_back(std::shared_ptr<Player>(new GPlayer(3, Vector2D(0.1f, 0.4f), Vector2D(0.f, 0.f))));
-
-
-  sf::RenderWindow window(sf::VideoMode(GameState::WINDOW_WIDTH, GameState::WINDOW_HEIGHT),
+  sf::RenderWindow window(sf::VideoMode(GraphicGameState::WINDOW_WIDTH, GraphicGameState::WINDOW_HEIGHT),
                           "RForceType v"
                           + std::to_string(RTYPE_VERSION_MAJOR)
                           + "." + std::to_string(RTYPE_VERSION_MINOR));
-  GraphicGameState  g(players);
+
+  //GPlayer *player = GUnitPool::getInstance()->get<GPlayer>();
+  //player->setId(std::stoi(argv[3]));
+  //player->setPos(Vector2D(0.1f, 0.1f));
+  //player->setDir(Vector2D(0.f, 0.f));
+  GraphicGameState  g(std::shared_ptr<GPlayer>(new GPlayer(std::stoi(argv[3]),
+                                  Vector2D(0.1f, 0.1f), Vector2D(0.f, 0.f))));
 
   s.setBlocking(false);
   s.bind(network::Addr(network::SI_ADDR_ANY, "4244", "UDP"));
