@@ -1,3 +1,4 @@
+
 #ifdef _WIN32
 #include <windows.h>
 #include <stdlib.h>
@@ -16,7 +17,7 @@
 #include "RTypeConfig.h"
 #include "gamestate/GraphicGameState.hh"
 
-#include "UnitPool.hh"
+#include "pool/GUnitPool.hh"
 #include "units/Player.hh"
 
 #include <memory>
@@ -47,12 +48,23 @@ int main(int argc, char* argv[])
   cfg._right = sf::Keyboard::Right;
   cfg._fire = sf::Keyboard::Space;
   std::vector<std::shared_ptr<Player>> players;
+  GUnitPool *p = GUnitPool::getInstance();
 
-  players.push_back(std::shared_ptr<Player>(new GPlayer(0, Vector2D(0.1f, 0.1f), Vector2D(0.f, 0.f))));
-  players.push_back(std::shared_ptr<Player>(new GPlayer(1, Vector2D(0.1f, 0.2f), Vector2D(0.f, 0.f))));
-  players.push_back(std::shared_ptr<Player>(new GPlayer(2, Vector2D(0.1f, 0.3f), Vector2D(0.f, 0.f))));
-  players.push_back(std::shared_ptr<Player>(new GPlayer(3, Vector2D(0.1f, 0.4f), Vector2D(0.f, 0.f))));
+  float pos = 0.1f;
+  for (int i = 0; i != 4; i++)
+  {
+    GPlayer *player = p->get<GPlayer>();
+    player->setId(i);
+    player->setPos(Vector2D(pos, 0.1f));
+    player->setDir(Vector2D(0.f, 0.f));
+    players.push_back(std::shared_ptr<Player>(player));
+    pos += 0.1f;
+  }
 
+  // players.push_back(std::shared_ptr<Player>(new GPlayer(0, Vector2D(0.1f, 0.1f), Vector2D(0.f, 0.f))));
+  // players.push_back(std::shared_ptr<Player>(new GPlayer(1, Vector2D(0.1f, 0.2f), Vector2D(0.f, 0.f))));
+  // players.push_back(std::shared_ptr<Player>(new GPlayer(2, Vector2D(0.1f, 0.3f), Vector2D(0.f, 0.f))));
+  // players.push_back(std::shared_ptr<Player>(new GPlayer(3, Vector2D(0.1f, 0.4f), Vector2D(0.f, 0.f))));
 
   sf::RenderWindow window(sf::VideoMode(GameState::WINDOW_WIDTH, GameState::WINDOW_HEIGHT),
                           "RForceType v"

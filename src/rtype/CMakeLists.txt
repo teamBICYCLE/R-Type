@@ -22,6 +22,7 @@ include("input/CMakeLists.txt")
 include("gamestate/CMakeLists.txt")
 include("network/CMakeLists.txt")
 include("sprites/CMakeLists.txt")
+include("pool/CMakeLists.txt")
 
 add_executable(client
     ${GUI_TYPE} # Prevent windows from spawning a terminal window
@@ -31,11 +32,8 @@ add_executable(client
     ${CLIENT_NETWORK}
     ${CLIENT_GAMESTATE}
     ${SPRITES}
+    ${CLIENT_POOL}
     client.cpp
-    UnitFactory.hh
-    UnitFactory.cpp
-    UnitPool.hh
-    UnitPool.cpp
 )
 
 add_executable(server
@@ -43,13 +41,10 @@ add_executable(server
     ${UNITS}
     ${SERVER_NETWORK}
     ${SERVER_GAMESTATE}
+    ${SERVER_POOL}
     input/Data.hh
     input/Data.cpp
     server.cpp
-    UnitFactory.hh
-    UnitFactory.cpp
-    UnitPool.hh
-    UnitPool.cpp
 )
 
 target_link_libraries(client
