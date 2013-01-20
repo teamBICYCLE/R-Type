@@ -11,6 +11,14 @@ PreGame::PreGame(const std::string &ip, const std::string &port)
 	_cmdType["err"] = std::bind(&PreGame::handleError, this, std::placeholders::_1);
 	_cmdType["rep"] = std::bind(&PreGame::handleResponse, this, std::placeholders::_1);
 
+	_notifType["gamestart"] = std::bind(&PreGame::handleGameStart, this, std::placeholders::_1);
+	_notifType["gameend"] = std::bind(&PreGame::handleGameEnd, this, std::placeholders::_1);
+	_notifType["player"] = std::bind(&PreGame::handlePlayer, this, std::placeholders::_1);
+	
+	_playerAction["join"] = std::bind(&PreGame::handlePlayerJoin, this, std::placeholders::_1);
+	_playerAction["leave"] = std::bind(&PreGame::handlePlayerLeave, this, std::placeholders::_1);
+	_playerAction["ready"] = std::bind(&PreGame::handlePlayerReady, this, std::placeholders::_1);
+	_playerAction["not_ready"] = std::bind(&PreGame::handlePlayerNotReady, this, std::placeholders::_1);
 
   	try {
   		_socket.reset(new TBSystem::network::sockets::Tcp);
@@ -27,7 +35,7 @@ PreGame::PreGame(const std::string &ip, const std::string &port)
 
 PreGame::PreGame(const PreGame &other)
 	: _listener(other._listener), _socket(other._socket), _gameIsLaunched(false),
-	_cmdType(other._cmdType)
+	_cmdType(other._cmdType), _notifType(other._notifType)
 {}
 
 PreGame::PreGame(PreGame&& other)
@@ -37,9 +45,7 @@ PreGame::PreGame(PreGame&& other)
 
 PreGame &PreGame::operator=(PreGame other)
 {
-	if (this != &other) {
-		swap(*this, other);
-	}
+	swap(*this, other);
 	return (*this);
 }
 
@@ -49,6 +55,7 @@ void swap(PreGame &lhs, PreGame &rhs)
 	lhs._gameIsLaunched = rhs._gameIsLaunched;
 	lhs._listener = rhs._listener;
 	lhs._cmdType = rhs._cmdType;
+	lhs._notifType = rhs._notifType;
 }
 
 PreGame::~PreGame(void)
@@ -105,12 +112,25 @@ TBSystem::log::info << " coucou " << msg << TBSystem::log::endl;
 
 void PreGame::handleNotif(const std::string &notif)
 {
+	std::istringstream iss(notif);
+	std::string notifType;
+
+	iss >> notifType;
+  	std::istreambuf_iterator<char> eos;
+  	std::string s(std::istreambuf_iterator<char>(iss), eos);
+  	if (_notifType.find(notifType) != _notifType.end()) {
+  	_notifType.find(notifType)->second(s);
+	}
 	TBSystem::log::info << " NOTIFS !|" << notif << TBSystem::log::endl;
 }
 
 void PreGame::handleWelcome(const std::string &welcome)
 {
-	TBSystem::log::info << " WELCOME !|" << welcome << TBSystem::log::endl;
+	std::istringstream iss(welcome);
+	unsigned int i;
+
+	iss >> i;
+	TBSystem::log::info << i << " WELCOME !|" << welcome << TBSystem::log::endl;
 }
 
 void PreGame::handleError(const std::string &error)
@@ -121,4 +141,72 @@ void PreGame::handleError(const std::string &error)
 void PreGame::handleResponse(const std::string &response)
 {
 	TBSystem::log::info << " Error !|" << response << TBSystem::log::endl;		
+}
+
+void PreGame::handleGameStart(const std::string &roomId)
+{
+	std::istringstream iss(roomId);
+	unsigned int id;
+
+	iss >> id;
+	TBSystem::log::info << id << " GAMESTART !|" << roomId << TBSystem::log::endl;
+}
+
+void PreGame::handleGameEnd(const std::string &roomId)
+{
+	std::istringstream iss(roomId);
+	unsigned int id;
+
+	iss >> id;
+	TBSystem::log::info << id << " GAMEEND !|" << roomId << TBSystem::log::endl;
+}
+
+void PreGame::handlePlayer(const std::string &player)
+{
+	std::istringstream iss(player);
+	std::string playerAction;
+
+	iss >> playerAction;
+  	std::istreambuf_iterator<char> eos;
+  	std::string s(std::istreambuf_iterator<char>(iss), eos);
+  	if (_notifType.find(playerAction) != _notifType.end()) {
+  	_notifType.find(playerAction)->second(s);
+	}
+	TBSystem::log::info  << " PLAYER !|" << player << TBSystem::log::endl;	
+}
+
+void PreGame::handlePlayerJoin(const std::string &player)
+{
+	std::istringstream iss(player);
+	unsigned int id;
+
+	iss >> id;	
+	TBSystem::log::info << id << " PLAYERJOIN !|" << player << TBSystem::log::endl;	
+}
+
+void PreGame::handlePlayerLeave(const std::string &player)
+{
+	std::istringstream iss(player);
+	unsigned int id;
+
+	iss >> id;	
+	TBSystem::log::info << id << " PLAYERLEAVE !|" << player << TBSystem::log::endl;	
+}
+
+void PreGame::handlePlayerReady(const std::string &player)
+{
+	std::istringstream iss(player);
+	unsigned int id;
+
+	iss >> id;	
+	TBSystem::log::info << id << " PLAYERReady !|" << player << TBSystem::log::endl;
+}
+
+void PreGame::handlePlayerNotReady(const std::string &player)
+{
+	std::istringstream iss(player);
+	unsigned int id;
+
+	iss >> id;
+	TBSystem::log::info << id << " PLAYERNOTREADY !|" << player << TBSystem::log::endl;
 }

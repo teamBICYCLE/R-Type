@@ -2,25 +2,25 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 #include "Board.hh"
+#include "AnimationManager.hh"
 
 
+#include <iostream>
 int main(void)
 {
 	sf::RenderWindow window(sf::VideoMode(800, 600), "SFML window");
-	Sprite::Board sprite("teambicycle.png", "config.cfg");
 
-	Sprite::AnimationInfos *animInfos = sprite.generateAnimInfo();
-	animInfos->setAnimationName("destroy");
-	animInfos->startAnimation();
-	Sprite::AnimationInfos *moveanim = sprite.generateAnimInfo();
-	if (!moveanim->setAnimationName("move"))
-		return 0;
-	moveanim->startAnimation();
+	Sprite::AnimationManager toto;
 
-	// sf::Texture _texture;
-	//  _texture.loadFromFile("teambicycle.png");
-	// sf::Sprite _board;
-	// _board.setTexture(_texture);
+	toto.addSourceFolder("testloading");
+	Sprite::AnimationInfos	*anim1 = toto["testloading/r-typesheet22.png"]->generateAnimInfo();
+	Sprite::AnimationInfos	*anim2 = toto["testloading/r-typesheet22.png"]->generateAnimInfo();
+
+
+	if (anim1->setAnimationName("destroy") && anim2->setAnimationName("move"))
+	{
+		anim1->startAnimation();
+		anim2->startAnimation();
 
 	while (window.isOpen())
 	{
@@ -37,13 +37,14 @@ int main(void)
 		          // if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 		          //   sprite.move(0,1);
 		}
-	      window.clear(sf::Color::White);
- 	     //	window.draw(animInfos.getRect());
-	// sprite.getSprite();
-		window.draw(animInfos->getSprite());
-	    window.draw(moveanim->getSprite());
-
+	    window.clear(sf::Color::White);
+	    window.draw(anim1->getSprite());
+	    // window.draw(anim2->getSprite());
+		// window.draw(toto["testloading/teambicycle.png"].getAnimInfo()->getSprite());
+		// window.draw(toto["testloading/Screenshot.png"].getAnimInfo()->getSprite());
 	    window.display();
 	}
+}else
+ std::cout << "fail" << std::endl;
 	return (0);
 }

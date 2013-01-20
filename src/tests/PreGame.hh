@@ -30,6 +30,14 @@ private:
 	void handleError(const std::string &error);
 	void handleResponse(const std::string &response);
 
+	void handleGameStart(const std::string &roomId);
+	void handleGameEnd(const std::string &roomId);
+	void handlePlayer(const std::string &player);
+
+	void handlePlayerJoin(const std::string &action);
+	void handlePlayerLeave(const std::string &action);
+	void handlePlayerReady(const std::string &action);
+	void handlePlayerNotReady(const std::string &action);
 
 private:
 	TBSystem::network::Listener _listener;
@@ -38,6 +46,8 @@ private:
 
 private:
 	std::map<std::string, std::function<void (const std::string &)>> _cmdType;
+	std::map<std::string, std::function<void (const std::string &)>> _notifType;	
+	std::map<std::string, std::function<void (const std::string &)>> _playerAction;	
 };
 
 #endif /*!__PRE_GAME__ */
