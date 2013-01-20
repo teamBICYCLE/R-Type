@@ -14,6 +14,7 @@
 #include <vector>
 #include <string>
 #include <system/network/ITcpSocket.hh>
+#include <system/threads/Thread.hh>
 #include "INetworkSerializable.hh"
 #include "Client.hh"
 
@@ -35,6 +36,8 @@ public:
   bool    removePlayer(int c);
   bool    isEmpty() const;
 
+  void    launchGame(const Lounge& lounge);
+
 private:
   static int          _s_lastID;
   int                 _id;
@@ -42,6 +45,7 @@ private:
   unsigned int           _maxplayers;
   std::vector<int>    _playersIds;
   Lounge&             _lounge;
+  Thread              t;
 };
 
 #endif /* !_ROOM_H__ */

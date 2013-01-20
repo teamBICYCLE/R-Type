@@ -13,6 +13,7 @@
 #include <list>
 #include <memory>
 #include <system/network/ITcpSocket.hh>
+#include <system/network/IUdpSocket.hh>
 #include <system/network/Listener.hh>
 
 class Client;
@@ -26,6 +27,9 @@ public:
 
 public:
   int exec();
+
+public:
+  void broadcastInfos();
 
 public:
   bool acceptClient(std::shared_ptr<
@@ -51,12 +55,13 @@ public:
 
 public:
   void addClient(std::shared_ptr<Client>& c);
-  const std::list<Client>& getClients();
+  const std::list<Client>& getClients() const;
 
 private:
   TBSystem::network::Listener _listener;
   std::list<Client>         _clients;
   std::list<Room>           _rooms;
+  std::shared_ptr<TBSystem::network::sockets::IUdpSocket> _bcSocket;
 };
 
 #endif /* !_LOUNGE_H__ */
