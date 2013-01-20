@@ -20,7 +20,7 @@ ServerGameState::ServerGameState(const std::vector<std::shared_ptr<Player>>& v)
       std::bind(&ServerGameState::updateWithInput, this, _1);
 
     // test
-    requireMonsters(Vector2D(), Vector2D());
+    requireMonsters();
 }
 
 ServerGameState::~ServerGameState()
@@ -31,10 +31,12 @@ void  ServerGameState::updateWithInput(const communication::Packet& packet)
 {
   const uint32_t  id = packet.getId();
 
-  if (id >= 0 && id <= _players.size()) {
+  if (id <= _players.size()) {
     Input::Data d;
     std::shared_ptr<Player>& player = _players[id];
 
+    if (player->isDead() == true)
+      return;//if the player is dead, ignore his inputs
     d.unpack(packet.getSequence(), packet.getContent());
     if (player->getLastPacketSequence() < packet.getSequence())
     {
@@ -50,8 +52,39 @@ void  ServerGameState::updateWithInput(const communication::Packet& packet)
   }
 }
 
+void  ServerGameState::updateWorld(void)
+{
+  for (auto& e : _enemies) {
+    e->move();
+  }
+}
+
 void  ServerGameState::requireMonsters(const Vector2D &left, const Vector2D &right)
 {
   std::cout << "requireMonsters" << std::endl;
   std::list<Unit *> monsters = _pm.get(left, right);
+
+  float randx = left.x + ((float)rand()) / ((float)RAND_MAX / (right.x - left.x));
+  float randy = left.y + ((float)rand()) / ((float)RAND_MAX / (right.y - left.y));
+
+  // pour l'instant on verifie rien
+  // a voir a l'utilisation
+  // mais peut etre que ca passe bien
+  for (auto it : monsters)
+  { 
+      Vector2D originalPos = it->getPos();
+      float newX = randx + (originalPos.x * 0.03);
+      float newY = randy + (originalPos.y * 0.03);
+      it->setPos(Vector2D(newX, newY));
+      std::cout << it->getResourceId() << std::endl;
+  }
+  _enemies.insert(_enemies.end(), monsters.begin(), monsters.end());
+}
+
+void  ServerGameState::moveAll(void)
+{
+   for (auto& p : _players) {
+      if (p->isDead() == false) //only move alive player
+        moveOne(*p);
+   }
 }

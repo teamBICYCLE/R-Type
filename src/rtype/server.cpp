@@ -11,7 +11,7 @@
 using namespace TBSystem;
 
 static const std::chrono::milliseconds g_serverUpdateRate(16);
-static const std::chrono::milliseconds g_serverPacketRate(100);
+static const std::chrono::milliseconds g_serverPacketRate(16);
 
 void intTobinary(int num){
   if(num>0){
@@ -59,6 +59,7 @@ int     main(int argc, char *argv[])
     {
       // updates the player vectors from inputs
       g.update(nh.getIncomingPackets());
+      g.updateWorld();
       g.moveAll();
       accumulator -= g_serverUpdateRate;
     }

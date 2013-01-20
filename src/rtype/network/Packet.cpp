@@ -13,6 +13,7 @@ Packet::Packet(Type type, uint32_t id,
 {
   static uint32_t packetSequence = 1;
 
+  _header.isReliable = false;
   _header.sequence = packetSequence;
   packetSequence++;
   _header.type = type;
@@ -33,9 +34,9 @@ Packet::~Packet()
 {
 }
 
-  Packet::Packet(const Packet& other)
+Packet::Packet(const Packet& other)
   : _header(other._header)
-    , _dataSize(other._dataSize)
+  , _dataSize(other._dataSize)
 {
   std::memcpy(_data, other._data, other._dataSize);
 }
@@ -56,6 +57,11 @@ void    swap(Packet& lhs, Packet& rhs)
   std::swap(lhs._header, rhs._header);
   std::swap(lhs._data, rhs._data);
   std::swap(lhs._dataSize, rhs._dataSize);
+}
+
+bool    Packet::isReliable(void) const
+{
+  return _header.isReliable;
 }
 
 uint32_t    Packet::getSequence(void) const
@@ -91,6 +97,23 @@ const uint8_t *Packet::getData(void) const
 size_t  Packet::getDataSize(void) const
 {
   return _dataSize;
+}
+
+void  Packet::setType(communication::Packet::Type type)
+{
+  _header.type = type;
+  rewriteHeader();
+}
+
+void  Packet::setReliable(bool b)
+{
+  _header.isReliable = b;
+  rewriteHeader();
+}
+
+void  Packet::rewriteHeader(void)
+{
+  std::memcpy(_data, &_header, sizeof(_header));
 }
 
 }

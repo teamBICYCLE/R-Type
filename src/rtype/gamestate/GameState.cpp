@@ -53,21 +53,16 @@ void  GameState::moveOne(Player& p)
   p.move();
   for (auto& other : _players)
   {
-    if (other->getId() != p.getId() &&
-        other->collideWith(p) == true)
+    //if both player are alive and collide
+    if (p.isDead() == false && other->isDead() == false &&
+        other->getId() != p.getId() && other->collideWith(p) == true)
     {
       p.setPos(savedPos);
+      p.setDead(true);//only one set to die for one, both will be
       std::cout << "COLLIDED" << std::endl;
       break;
     }
   }
-}
-
-void  GameState::moveAll(void)
-{
-   for (auto& p : _players) {
-     moveOne(*p);
-   }
 }
 
 const std::vector<std::shared_ptr<Player>>& GameState::getPlayers() const

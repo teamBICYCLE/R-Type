@@ -27,7 +27,6 @@ public:
 
 public:
   void  moveOne(Player& p);
-  void  moveAll(void);
 
 protected:
   void  setPlayerDirection(int id, const Vector2D& dir);

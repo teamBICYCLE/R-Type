@@ -7,6 +7,7 @@
  * -----------------------------------------------------------------------------
  */
 
+#include <algorithm>
 #include <system/log/Log.hh>
 #include "NetworkHandler.hh"
 
@@ -38,8 +39,22 @@ std::vector<communication::Packet> NetworkHandler::getIncomingPackets()
          != -1) {
     communication::Packet p(buf, ret);
 
-    // TODO: verifier que clt est dans la liste des clients
-    inputs.push_back(p);
+    //if (std::find(_outAddr.begin(), _outAddr.end(), clt) != _outAddr.end())
+    //{
+      if (p.getType() == communication::Packet::Type::INPUT)
+        inputs.push_back(p);
+      else if (p.getType() == communication::Packet::Type::ACK)
+      {
+        auto it = _reliablePackets.begin();
+        while (it != _reliablePackets.end())//check all reliable packets..
+        {
+          it->checkAnswer(clt, p);//if the received packet is an answer to them..
+          if (it->allSent() == true)//and every client received their packet..
+            _reliablePackets.erase(it);//then discard it
+          ++it;
+        }
+      }
+    //}
   }
   return inputs;
 }
@@ -47,14 +62,32 @@ std::vector<communication::Packet> NetworkHandler::getIncomingPackets()
 void  NetworkHandler::broadcast(const GameState& g)
 {
   for (auto& p : g.getPlayers()) {
-    uint8_t  buf[communication::Packet::MAX_PACKET_SIZE];
-    int      packetSize;
+    if (p->isDead() == false ||
+        p->wereOthersNotifiedOfDeath() == false)
+    {
+      uint8_t  buf[communication::Packet::MAX_PACKET_SIZE];
+      int      packetSize;
 
-    packetSize = p->pack(buf, sizeof(buf));
-    for (auto& addr : _outAddr) {
-      _socket.send(buf, packetSize, addr);
+      packetSize = p->pack(buf, sizeof(buf));
+      if (p->isDead() == false)
+      {
+        for (auto& addr : _outAddr) {//player is not dead so send its positions
+          _socket.send(buf, packetSize, addr);
+        }
+      }
+      else
+      {
+        Packet tmp(buf, packetSize);
+
+        std::cout << "RELIABLE" << std::endl;
+        _reliablePackets.emplace_back(_outAddr, tmp);//player is dead, send this to everyone
+        p->setOthersNotifiedOfDeath(true);//others are planned to be notified,
+                                          //no need to handle the dead player anymore
+      }
     }
   }
+  for (auto& packet : _reliablePackets)
+    packet.tryAgain(_socket);
 }
 
 void NetworkHandler::setClients(const std::vector<network::Addr>& c)

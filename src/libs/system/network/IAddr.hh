@@ -53,6 +53,8 @@ public:
 
     virtual const void*   getValid() const = 0;
 
+    virtual bool  operator==(const IAddr& other) const = 0;
+
 };
 }
 }

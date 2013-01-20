@@ -10,11 +10,14 @@ public:
   virtual ~ServerGameState();
 
 public:
-  void  updateWithInput    (const communication::Packet& packet);
-  void  requireMonsters(const Vector2D &left, const Vector2D &right);
+  void  updateWithInput(const communication::Packet& packet);
+  void	updateWorld(void);
+  void  requireMonsters(const Vector2D &left = Vector2D(1.0f, 0.0f), const Vector2D &right = Vector2D(1.15f, 1.0f));
+  void  moveAll(void);
 
 private:
 	const PatternManager _pm;
+	std::list<Unit*>	 _enemies;
 };
 
 #endif /* !_SERVERGAMESTATE_H__ */

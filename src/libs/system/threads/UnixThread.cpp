@@ -64,10 +64,10 @@ bool	UnixThread::isRunning(void) const
 
 void    *UnixThread::internalRoutine(void)
 {
-    return _threadRoutine(_threadArg);
+  return _threadRoutine(_threadArg);
 }
 
 void    *unixThreadTrampolineRoutine(void *arg)
 {
-    return reinterpret_cast<UnixThread*>(arg)->internalRoutine();
+  return reinterpret_cast<UnixThread*>(arg)->internalRoutine();
 }

@@ -64,7 +64,7 @@ int Udp::send(const uint8_t * packet, int packetSize, const IAddr & pair)
 {
   int ret;
 
-  if (pair.hasValidAddr() && 0) {
+  if (pair.hasValidAddr()) {
     ret = ::sendto(_socket, packet, packetSize, 0,
                    static_cast<const sockaddr *>(pair.getValid()),
                    pair.validSize());

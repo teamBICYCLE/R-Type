@@ -5,12 +5,12 @@ extern "C"
 {
 	const std::string getName(void)
 	{
-		return "defaultMonster";
+		return "dumbMonster";
 	}
 
 	unsigned int getResourceId(void)
 	{
-		return 1;
+		return 2;
 	}
 
 	unsigned int getPv(void)
@@ -20,7 +20,7 @@ extern "C"
 
 	unsigned int getMunition(void)
 	{
-		return 10;
+		return 0;
 	}
 
 	const std::chrono::milliseconds timeToReload(void)

@@ -45,7 +45,8 @@ void GraphicGameState::draw(sf::RenderTarget &target, sf::RenderStates states) c
   target.draw(*_backgroundSprite1);
   target.draw(*_backgroundSprite2);
   for (auto& p : _players) {
-    target.draw(static_cast<GPlayer&>(*p));
+    if (p->isDead() == false)
+      target.draw(static_cast<GPlayer&>(*p));//only draw alive players
   }
 }
 
@@ -54,15 +55,28 @@ void  GraphicGameState::updateWithPosition(const communication::Packet& packet)
 {
   const uint32_t id = packet.getId();
 
-  if (id >= 0 && id < _players.size()) {
+  //ROMAIN: ici tu traites les packets de type POSITION
+  //(envoyes quand un monstre se deplace, donc)
+  if (id < _players.size()) {
     _players[id]->unpack(packet.getSequence(), packet.getContent());
+  }
+  else
+  {
+    //UnitPool::getInstance()->get<>
+    //_enemies.push_back()
   }
 }
 
 // client
 void  GraphicGameState::updateWithDeath(const communication::Packet& packet)
 {
-   //assert(false);
+  const uint32_t id = packet.getId();
+
+  std::cout << "DEATH" << std::endl;
+  if (id < _players.size()) {
+    _players[id]->setDead(true);
+  }
+  //need to look for a monster/missile with this id and remove it
 }
 
 void  GraphicGameState::simulate(const Input::Data& input)
@@ -70,8 +84,10 @@ void  GraphicGameState::simulate(const Input::Data& input)
   const int playerId = input.getId();
 
   if (playerId >= 0 && playerId < _players.size()) {
-    GameState::setPlayerDirection(playerId, input.getVector());
-    GameState::moveOne(*_players[playerId]);
+    if (_players[playerId]->isDead() == false) {//only simulate if player is alive
+      GameState::setPlayerDirection(playerId, input.getVector());
+      GameState::moveOne(*_players[playerId]);
+    }
   }
 }
 

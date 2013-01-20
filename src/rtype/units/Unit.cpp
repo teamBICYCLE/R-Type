@@ -7,31 +7,54 @@ using namespace TBSystem;
 
 Unit::Unit(int id, const Vector2D& pos, const Vector2D& dir)
   : _lastPacketSequence(0)
-  , _id(id)
   , _pos(pos)
   , _dir(dir)
+  , _id(id)
   , _hitboxCenter(_pos)
   , _hitboxRadius(10.f)
+  , _isDead(false)
+  , _othersNotifiedOfDeath(false)
+  , _resourceId(1)
+  , _pv(1)
+  , _munition(UNLIMITED)
+  , _timeToReload(0)
+  , _fireFrequence(10)
 {
 }
 
 Unit::Unit(void)
   : _lastPacketSequence(0)
-  , _id()
   , _pos()
   , _dir()
+  , _id()
   , _hitboxCenter()
   , _hitboxRadius()
+  , _isDead(false)
+  , _othersNotifiedOfDeath(false)
+  //, _spritePath()
+  , _resourceId()
+  , _pv()
+  , _munition()
+  , _timeToReload()
+  , _fireFrequence()
 {
 }
 
 Unit::Unit(const Unit& other)
   : _lastPacketSequence(other._lastPacketSequence)
-  , _id(other._id)
   , _pos(other._pos)
   , _dir(other._dir)
+  , _id(other._id)
   , _hitboxCenter(other._hitboxCenter)
   , _hitboxRadius(other._hitboxRadius)
+  , _isDead(other._isDead)
+  , _othersNotifiedOfDeath(other._othersNotifiedOfDeath)
+  //, _spritePath(other._spritePath)
+  , _resourceId(other._resourceId)
+  , _pv(other._pv)
+  , _munition(other._munition)
+  , _timeToReload(other._timeToReload)
+  , _fireFrequence(other._fireFrequence)
 {
 }
 
@@ -58,6 +81,14 @@ void    swap(Unit& lhs, Unit& rhs)
     std::swap(lhs._dir, rhs._dir);
     std::swap(lhs._hitboxCenter, rhs._hitboxCenter);
     std::swap(lhs._hitboxRadius, rhs._hitboxRadius);
+    std::swap(lhs._isDead, rhs._isDead);
+    std::swap(lhs._othersNotifiedOfDeath, rhs._othersNotifiedOfDeath);
+    //std::swap(lhs._spritePath, rhs._spritePath);
+    std::swap(lhs._resourceId, rhs._resourceId);
+    std::swap(lhs._pv, rhs._pv);
+    std::swap(lhs._munition, rhs._munition);
+    std::swap(lhs._timeToReload, rhs._timeToReload);
+    std::swap(lhs._fireFrequence, rhs._fireFrequence);
 }
 
 uint32_t	Unit::getLastPacketSequence(void) const
@@ -85,10 +116,25 @@ const Vector2D& Unit::getHitboxCenter(void) const
   return _hitboxCenter;
 }
 
-float           Unit::getHitboxRadius(void) const
+float Unit::getHitboxRadius(void) const
 {
   return _hitboxRadius;
 }
+
+bool  Unit::isDead(void) const
+{
+  return _isDead;
+}
+
+bool  Unit::wereOthersNotifiedOfDeath(void) const
+{
+  return _othersNotifiedOfDeath;
+}
+
+// const std::string &Unit::getSpritePath(void) const
+// {
+//   return _spritePath;
+// }
 
 void  Unit::move(void)
 {
@@ -121,7 +167,71 @@ void    Unit::setHitboxRadius(const float radius)
   _hitboxRadius = radius;
 }
 
+void    Unit::setDead(bool b)
+{
+  _isDead = b;
+}
+
+void    Unit::setOthersNotifiedOfDeath(bool b)
+{
+  _othersNotifiedOfDeath = b;
+}
   
+// void    Unit::setSpritePath(const std::string &p)
+// {
+//   _spritePath = p;
+// }
+
+void  Unit::setResourceId(const unsigned int v)
+{
+  _resourceId = v;
+}
+
+unsigned int Unit::getResourceId(void) const
+{
+  return _resourceId;
+}
+
+void  Unit::setPv(const unsigned int v)
+{
+  _pv = v;
+}
+
+unsigned int Unit::getPv(void) const
+{
+  return _pv;
+}
+
+void  Unit::setMunition(const unsigned int v)
+{
+  _munition = v;
+}
+
+int Unit::getMunition(void)
+{
+  return _munition;
+}
+
+void    Unit::setTimeToReload(const std::chrono::milliseconds &t)
+{
+  _timeToReload = t;
+}
+
+void    Unit::setFireFrequence(const std::chrono::milliseconds &t)
+{
+  _fireFrequence = t;
+}
+
+const std::chrono::milliseconds &Unit::getTimeToReload(void) const
+{
+  return _timeToReload;
+}
+
+const std::chrono::milliseconds &Unit::getFireFrequence(void) const
+{
+  return _fireFrequence;
+}
+
 #define TO_SHORT(x) (x * ((uint16_t)-1))
 #define FROM_SHORT(x) (x / (float)((uint16_t)-1))
 
@@ -139,6 +249,11 @@ size_t  Unit::pack(uint8_t *out, size_t outSize) const
 
     if (outSize < packet.getDataSize())
         throw std::overflow_error("Output is too small for the packet to fit");
+    if (_isDead == true)//if the player is dead...
+    {
+      packet.setType(communication::Packet::Type::DEATH);
+      packet.setReliable(true);//the packet is set reliable so that the client must ack it
+    }
     std::memcpy(out, packet.getData(), packet.getDataSize());
     return packet.getDataSize();
 }
@@ -178,4 +293,11 @@ void  Unit::reset(void)
     _pos = Vector2D();
     _dir = Vector2D();
     _id = uint32_t();
+    _isDead = false;
+    _othersNotifiedOfDeath = false;
+    _pv = 1;
+    _munition = UNLIMITED;
+    //_spritePath = std::string();
+    _resourceId = 1;
 }
+
