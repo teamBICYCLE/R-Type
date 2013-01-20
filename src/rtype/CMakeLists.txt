@@ -61,3 +61,4 @@ target_link_libraries(server
 # temporary
 
 add_subdirectory(preroll)
+add_subdirectory(menu)
