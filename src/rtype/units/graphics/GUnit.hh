@@ -7,12 +7,16 @@
 class GUnit : public virtual Unit, public sf::Drawable
 {
 public:
-	GUnit(unsigned int id, const Vector2D& pos, const Vector2D& dir);
-	~GUnit(void);
+	GUnit(int id, const Vector2D& pos, const Vector2D& dir);
+	GUnit(void);
+	virtual ~GUnit(void);
 
 public:
-	void draw(sf::RenderTarget &target, sf::RenderStates states) const;
+	virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
 	virtual const sf::Drawable *render(void) const = 0;
+
+private:
+	sf::CircleShape _circle;
 };
 
 #endif /*!_G_UNIT_HH_*/

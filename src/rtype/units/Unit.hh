@@ -52,6 +52,7 @@ class   Unit : public IPackable
 
     public:
         virtual void    move(void);
+        void    setId(const uint32_t);
         void    setDir(const Vector2D& dir);
         void    setLastPacketSequence(uint32_t newPacketSequence);
         void    setPos(const Vector2D& pos);

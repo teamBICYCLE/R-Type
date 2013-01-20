@@ -142,6 +142,11 @@ void  Unit::move(void)
     _hitboxCenter = _pos;
 }
 
+void  Unit::setId(const uint32_t id)
+{
+    _id = id;
+}
+
 void  Unit::setDir(const Vector2D& dir)
 {
     _dir = dir;

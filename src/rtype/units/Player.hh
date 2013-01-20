@@ -20,7 +20,7 @@ public:
   virtual ~Player();
 
 public:
-  virtual bool  collideWith(const Player& other) const;
+  bool  collideWith(const Player& other) const;
   virtual void  move(void);
 
 public:

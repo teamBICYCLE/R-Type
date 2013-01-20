@@ -4,7 +4,7 @@
 #include <system/dll/DLoader.hh>
 #include <ctime>
 #include <cstdlib> 
-#include "UnitPool.hh"
+#include "pool/SUnitPool.hh"
 #include "PatternManager.hh"
 
 PatternManager::PatternManager(void)
@@ -73,7 +73,7 @@ std::list<Unit *> PatternManager::get(const Vector2D &left, const Vector2D &righ
 	//std::shared_ptr<Pattern> pattern = _patterns[random];
 	std::list<std::shared_ptr<Pattern::Element>> elements;
 	elements = _patterns[random]->getPatternElements();
-	UnitPool *pool = UnitPool::getInstance();
+	SUnitPool *pool = SUnitPool::getInstance();
 	std::list<Unit *> ret;
 
 	for (auto item  = elements.begin(); item != elements.end(); ++item)

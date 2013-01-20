@@ -1,3 +1,4 @@
+
 #ifdef _WIN32
 #include <windows.h>
 #include <stdlib.h>
@@ -16,7 +17,7 @@
 #include "RTypeConfig.h"
 #include "gamestate/GraphicGameState.hh"
 
-#include "UnitPool.hh"
+#include "pool/GUnitPool.hh"
 #include "units/Player.hh"
 
 #include <memory>
