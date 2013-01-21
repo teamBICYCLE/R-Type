@@ -4,6 +4,7 @@
 #include <system/dll/DLoader.hh>
 #include <ctime>
 #include <cstdlib> 
+#include <cmath>
 #include "pool/SUnitPool.hh"
 #include "PatternManager.hh"
 
@@ -71,14 +72,20 @@ void PatternManager::createMoveStyles(void)
 {
 	moveStyle linearfct = [](const Vector2D &pos) {
 		(void)pos;
-		Vector2D v; v.x += 100;
+
+		Vector2D v; v.x -= 1 / MONSTER_SPEED;
 		return v;
 	};
 
 	moveStyle sinfct = [](const Vector2D &pos) {
-		(void)pos;
-		Vector2D v; v.y += 20;
-		return v;
+
+		// float posx = pos.x * 800;
+		// float posy = pos.y * 800;
+		// float newPosx = posx;
+		// float newPosy = std::sin(pos.x)
+		Vector2D newPos(pos.x, std::sin(pos.x));
+		//Vector2D v(newPos - pos) / MONSTER_SPEED;
+		return (newPos - pos);
 	};
 
 	_moveStyles.insert(std::make_pair("linear", linearfct));

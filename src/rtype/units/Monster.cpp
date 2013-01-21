@@ -28,5 +28,6 @@ Monster *Monster::clone(void)
 void	Monster::move(void)
 {
 	_dir = _movefct(_pos);
+	//std::cout << _dir << std::endl;
 	Unit::move();
 }

@@ -80,10 +80,8 @@ void  ServerGameState::requireMonsters(const Vector2D &left, const Vector2D &rig
   float randy = left.y + ((float)rand()) / ((float)RAND_MAX / (right.y - left.y));
 
   // pour l'instant on verifie rien
-  // a voir a l'utilisation
-  // mais peut etre que ca passe bien
   for (auto it : monsters)
-  { 
+  {
       Vector2D originalPos = it->getPos();
       float newX = randx + (originalPos.x * 0.03);
       float newY = randy + (originalPos.y * 0.05);
@@ -100,14 +98,11 @@ void  ServerGameState::moveOne(Player& p)
   Vector2D  savedPos = p.getPos();
 
   p.move();
-  for (auto& other : _players)
+  for (auto& enemy : _enemies)
   {
-    //if both player are alive and collide
-    if (p.isDead() == false && other->isDead() == false &&
-        other->getId() != p.getId() && other->collideWith(p) == true)
+    if (p.collideWith(*enemy) == true)
     {
-      p.setPos(savedPos);
-      p.setDead(true);//only one set to die for now, both will be
+      p.setDead(true);
       std::cout << "COLLIDED" << std::endl;
       break;
     }
