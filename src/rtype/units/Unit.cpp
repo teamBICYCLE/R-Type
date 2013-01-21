@@ -237,17 +237,24 @@ const std::chrono::milliseconds &Unit::getFireFrequence(void) const
   return _fireFrequence;
 }
 
-#define TO_SHORT(x) (x * 10000)
-#define FROM_SHORT(x) (x / 10000.f)
+inline int16_t  to_short(float f)
+{
+  return f * 10000;
+}
+
+inline float  to_float(short s)
+{
+  return s / 10000.f;
+}
 
 size_t  Unit::pack(uint8_t *out, size_t outSize) const
 {
     UnitPacket_u            packetContent;
 
-    packetContent.info.x = TO_SHORT(_pos.x);
-    packetContent.info.y = TO_SHORT(_pos.y);
-    packetContent.info.dx = TO_SHORT(_dir.x);
-    packetContent.info.dy = TO_SHORT(_dir.y);
+    packetContent.info.x = to_short(_pos.x);
+    packetContent.info.y = to_short(_pos.y);
+    packetContent.info.dx = to_short(_dir.x);
+    packetContent.info.dy = to_short(_dir.y);
 
     communication::Packet packet(communication::Packet::Type::POSITION, _id,
                                   packetContent.whole, sizeof(packetContent.whole));
@@ -270,10 +277,10 @@ void    Unit::unpack(const uint32_t newPacketSequence, const uint8_t* content)
   if (_lastPacketSequence < newPacketSequence)
   {
     _lastPacketSequence = newPacketSequence;
-    _pos.x = FROM_SHORT(info->info.x);
-    _pos.y = FROM_SHORT(info->info.y);
-    _dir.x = FROM_SHORT(info->info.dx);
-    _dir.y = FROM_SHORT(info->info.dy);
+    _pos.x = to_float(info->info.x);
+    _pos.y = to_float(info->info.y);
+    _dir.x = to_float(info->info.dx);
+    _dir.y = to_float(info->info.dy);
   }
   else
   {
