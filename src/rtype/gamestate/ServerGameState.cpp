@@ -74,7 +74,6 @@ void  ServerGameState::requireMonsters(const Vector2D &left, const Vector2D &rig
 {
   //SHIT -v
   int id = 5;
-  std::cout << "requireMonsters" << std::endl;
   std::list<Unit *> monsters = _pm.get();
 
   float randx = left.x + ((float)rand()) / ((float)RAND_MAX / (right.x - left.x));
