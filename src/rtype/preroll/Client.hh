@@ -49,6 +49,11 @@ public:
   const TBSystem::network::Addr& getAddr() const;
   void setInRoom(bool b);
   bool isInRoom() const;
+  bool startGame(
+                  std::shared_ptr<TBSystem::network::sockets::ITcpSocket>& socket,
+                  Lounge& lounge,
+                  std::string params
+                 );
 
 private:
   static int            _s_lastID;

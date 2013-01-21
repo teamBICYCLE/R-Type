@@ -4,7 +4,7 @@
 GUnitFactory::GUnitFactory() :
 	UnitFactory()
 {
-	_collection.push_back(std::make_pair(typeid(GPlayer).name(), new GPlayer()));
+	_collection.push_back(std::make_pair(typeid(GUnit).name(), new GUnit()));
 	//std::cout << _collection[typeid(GPlayer).name()] << std::endl;
 }
 

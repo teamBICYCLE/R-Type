@@ -21,6 +21,7 @@ private:
 
 public:
   const std::vector<std::shared_ptr<Player>>& getPlayers() const;
+  const std::list<Unit*>&     getEnemies() const;
 
 private:
 	const PatternManager _pm;

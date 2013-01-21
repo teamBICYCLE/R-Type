@@ -14,16 +14,16 @@ protected:
   std::function<void()>		_callback;
   void				*_param;
   sf::Vector2f			_dimension;
-  
+
 public:
   Button(const sf::Vector2f& dimension, const sf::Vector2f& position = sf::Vector2f(0,0),
-	 const std::string& texture = DEFAULT_BUTTON_TEXTURE);
+         const std::string& texture = DEFAULT_BUTTON_TEXTURE);
   virtual ~Button();
 
   virtual void		draw(sf::RenderTarget& target);
   void			onClick();
 
-  const bool		isClicked(sf::Vector2i coord) const;
+  bool		isClicked(sf::Vector2i coord) const;
   const sf::Vector2f&	getPosition() const;
   virtual void		setPosition(const sf::Vector2f &pos);
   const sf::Vector2f&	getDimension() const;

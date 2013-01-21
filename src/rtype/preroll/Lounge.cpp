@@ -155,7 +155,6 @@ bool Lounge::createRoom(std::shared_ptr<
                   + "\r\n");
   movePlayerToRoom(playerId, _rooms.back().getId());
   socket->send(rep.c_str(), rep.size());
-  _rooms.back().launchGame(*this);
   return true;
 }
 
@@ -210,6 +209,17 @@ bool  Lounge::removePlayerFromRoom(int playerId, int roomId)
     return true;
   }
   return false;
+}
+
+bool Lounge::tryStartRoom(int playerId, int roomId)
+{
+  auto roomIt = std::find_if(_rooms.begin(), _rooms.end(),
+                             [roomId](const Room& r) -> bool {
+                             return r.getId() == roomId;
+                             });
+  if (roomIt == _rooms.end() || !roomIt->isIn(playerId)) return false;
+  roomIt->launchGame(*this);
+  return true;
 }
 
 const std::list<Client>&

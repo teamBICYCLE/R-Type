@@ -38,6 +38,8 @@ public:
 
   void    launchGame(const Lounge& lounge);
 
+  bool    isIn(int playerId);
+
 private:
   static int          _s_lastID;
   int                 _id;

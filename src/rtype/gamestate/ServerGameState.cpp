@@ -9,6 +9,7 @@
 
 #include <list>
 #include "input/Data.hh"
+#include "units/Monster.hh"
 #include "ServerGameState.hh"
 
 ServerGameState::ServerGameState(const std::vector<std::shared_ptr<Player>>& v)
@@ -20,9 +21,6 @@ ServerGameState::ServerGameState(const std::vector<std::shared_ptr<Player>>& v)
 
    _updateMap[communication::Packet::Type::INPUT] =
       std::bind(&ServerGameState::updateWithInput, this, _1);
-
-    // test
-    requireMonsters();
 }
 
 ServerGameState::~ServerGameState()
@@ -58,15 +56,25 @@ void  ServerGameState::updateWithInput(const communication::Packet& packet)
 
 void  ServerGameState::updateWorld(void)
 {
+  //SHIT -v
+  static bool first = true;
+
+  if (first == true)
+  {
+    requireMonsters(Vector2D(0.1f, 0.1f), Vector2D(0.9f, 0.9f));
+    first = false;
+  }
+
   for (auto& e : _enemies) {
-    e->move();
+    (dynamic_cast<Monster *>(e))->move();
   }
 }
 
 void  ServerGameState::requireMonsters(const Vector2D &left, const Vector2D &right)
 {
-  std::cout << "requireMonsters" << std::endl;
-  std::list<Unit *> monsters = _pm.get(left, right);
+  //SHIT -v
+  int id = 5;
+  std::list<Unit *> monsters = _pm.get();
 
   float randx = left.x + ((float)rand()) / ((float)RAND_MAX / (right.x - left.x));
   float randy = left.y + ((float)rand()) / ((float)RAND_MAX / (right.y - left.y));
@@ -78,8 +86,10 @@ void  ServerGameState::requireMonsters(const Vector2D &left, const Vector2D &rig
   { 
       Vector2D originalPos = it->getPos();
       float newX = randx + (originalPos.x * 0.03);
-      float newY = randy + (originalPos.y * 0.03);
+      float newY = randy + (originalPos.y * 0.05);
       it->setPos(Vector2D(newX, newY));
+      //SHIT -v
+      it->setId(id++);
       std::cout << it->getResourceId() << std::endl;
   }
   _enemies.insert(_enemies.end(), monsters.begin(), monsters.end());
@@ -122,4 +132,9 @@ void  ServerGameState::setPlayerDirection(uint32_t id, const Vector2D& dir)
 const std::vector<std::shared_ptr<Player>>& ServerGameState::getPlayers() const
 {
   return _players;
+}
+
+const std::list<Unit*>&   ServerGameState::getEnemies() const
+{
+  return _enemies;
 }

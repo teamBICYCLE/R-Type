@@ -4,7 +4,7 @@
 #include <SFML/Graphics.hpp>
 
 View::View(const std::string& texture, const sf::Vector2u& size, const sf::Vector2f& listItemSize)
-  : _size(size), _buttonOne(NULL), _buttonTwo(NULL)
+  : _buttonOne(NULL), _buttonTwo(NULL), _size(size)
 {
   float x,y;
 

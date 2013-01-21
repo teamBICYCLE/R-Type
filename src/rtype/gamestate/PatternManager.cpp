@@ -9,9 +9,10 @@
 
 PatternManager::PatternManager(void)
 {
+	std::srand(std::time(0));
 	PatternManager::load();
 	PatternManager::loadShared();
-	std::srand(std::time(0));
+	PatternManager::createMoveStyles();
 }
 
 PatternManager::~PatternManager(void)
@@ -66,11 +67,29 @@ void PatternManager::checkShared(const std::string &file)
 	_monsters.insert(std::make_pair(n(), def));
 }
 
-std::list<Unit *> PatternManager::get(const Vector2D &left, const Vector2D &right) const
+void PatternManager::createMoveStyles(void)
+{
+	moveStyle linearfct = [](const Vector2D &pos) {
+		(void)pos;
+		Vector2D v; v.x += 100;
+		return v;
+	};
+
+	moveStyle sinfct = [](const Vector2D &pos) {
+		(void)pos;
+		Vector2D v; v.y += 20;
+		return v;
+	};
+
+	_moveStyles.insert(std::make_pair("linear", linearfct));
+	_moveStyles.insert(std::make_pair("sin", sinfct));
+}
+
+std::list<Unit *> PatternManager::get(void) const
 {
 	using namespace TBSystem;
+
 	int random = (std::rand() % _patterns.size());
-	//std::shared_ptr<Pattern> pattern = _patterns[random];
 	std::list<std::shared_ptr<Pattern::Element>> elements;
 	elements = _patterns[random]->getPatternElements();
 	SUnitPool *pool = SUnitPool::getInstance();
@@ -94,6 +113,10 @@ std::list<Unit *> PatternManager::get(const Vector2D &left, const Vector2D &righ
 
 			// load pattern informations in monster
 			monster->setPos(Vector2D((*item)->posx, (*item)->posy));
+			auto style = _moveStyles.find((*item)->moveStyle);
+			if (style == _moveStyles.end())
+				style = _moveStyles.find("linear");
+			monster->setMoveStyle(style->second);
 			ret.push_back(monster);
 			//std::cout << (*item)->posx << " " << (*item)->posy << " " << (*item)->type << " " << (*item)->moveStyle << std::endl;
 		}

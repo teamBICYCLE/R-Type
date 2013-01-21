@@ -7,14 +7,14 @@ GPlayer::GPlayer(unsigned int id, const Vector2D& pos, const Vector2D& dir)
     , Player(id, pos, dir)
     , _circle(10.f)    
 {
-	
+	setId(id);
 }
 
 GPlayer::GPlayer()
 	: Unit()
-    , GUnit()
-    , Player()
-    , _circle(10.f)
+  , GUnit()
+  , Player()
+  , _circle(10.f)
 {
 
 }
