@@ -26,7 +26,6 @@ void  runServer(const std::vector<std::string>& clientsAddr, const std::string& 
   std::vector<network::Addr> clients;
 
   for (auto& addr : clientsAddr) {
-    std::cout << "addr=" << addr << std::endl;
     clients.push_back(network::Addr(addr, port, "UDP"));
   }
 
