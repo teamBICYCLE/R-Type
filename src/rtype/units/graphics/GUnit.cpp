@@ -10,7 +10,6 @@ GUnit::GUnit(int id, const Vector2D& pos, const Vector2D& dir)
   setId(_id);
   toto.addSourceFolder("resources/sprites");
   _anim.reset(toto["resources/sprites/vaisseau.bmp"]->generateAnimInfo());
-
 }
 
 GUnit::GUnit(void)

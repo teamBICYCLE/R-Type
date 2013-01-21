@@ -7,13 +7,13 @@
 class SUnitPool : public UnitPool
 {
 
-private:
+public:
 	SUnitPool(void);
 	~SUnitPool(void);
 
-public:
-	static SUnitPool *getInstance(void);
-	static void	deleteInstance(void);
+// public:
+// 	static SUnitPool *getInstance(void);
+// 	static void	deleteInstance(void);
 };
 
 #endif /*!_GUNIT_POOL_HH_*/

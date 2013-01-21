@@ -1,7 +1,7 @@
 #include "GUnitPool.hh"
 #include "GUnitFactory.hh"
 
-static GUnitPool *	_instance = NULL;
+// static GUnitPool *	_instance = NULL;
 
 GUnitPool::GUnitPool(void) :
 	UnitPool()
@@ -20,15 +20,15 @@ GUnitPool::~GUnitPool(void)
 
 }
 
-GUnitPool *GUnitPool::getInstance(void)
-{
-	if (!_instance)
-		_instance = new GUnitPool();
-	return _instance;
-}
+// GUnitPool *GUnitPool::getInstance(void)
+// {
+// 	if (!_instance)
+// 		_instance = new GUnitPool();
+// 	return _instance;
+// }
 
-void	GUnitPool::deleteInstance(void)
-{
-	delete _instance;
-	_instance = NULL;
-}
+// void	GUnitPool::deleteInstance(void)
+// {
+// 	delete _instance;
+// 	_instance = NULL;
+// }

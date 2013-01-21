@@ -18,7 +18,7 @@
 
 class GraphicGameState : public GameState, public sf::Drawable {
 public:
-  GraphicGameState(std::shared_ptr<GPlayer> player);
+  GraphicGameState(const std::shared_ptr<UnitPool> &, std::shared_ptr<GPlayer> player);
   virtual ~GraphicGameState();
 
 private:

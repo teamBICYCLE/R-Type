@@ -14,8 +14,8 @@
 
 using namespace TBSystem;
 
-GraphicGameState::GraphicGameState(std::shared_ptr<GPlayer> player)
-  : GameState()
+GraphicGameState::GraphicGameState(const std::shared_ptr<UnitPool> &p, std::shared_ptr<GPlayer> player)
+  : GameState(p)
   , BACKGROUND_SPEED(800.f)
   , _backgroundTexture(new sf::Texture)
   , _backgroundSprite1(new sf::Sprite)
@@ -69,7 +69,7 @@ void  GraphicGameState::updateWithPosition(const communication::Packet& packet)
       entity->unpack(packet.getSequence(), packet.getContent());
     else
     {
-      GUnit *newEntity = GUnitPool::getInstance()->get<GUnit>();
+      GUnit *newEntity = _pool->get<GUnit>();
       newEntity->setId(id);
       _others.push_back(newEntity);
       _others.back()->unpack(packet.getSequence(), packet.getContent());
@@ -92,7 +92,7 @@ void  GraphicGameState::updateWithDeath(const communication::Packet& packet)
     //need someting like deleteLater, juste to animate the death
     if (entity != nullptr) {
       _others.remove(entity);
-      GUnitPool::getInstance()->release<GUnit>(entity);
+      _pool->release<GUnit>(entity);
     }
   }
 }

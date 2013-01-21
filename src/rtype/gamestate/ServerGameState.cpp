@@ -12,8 +12,8 @@
 #include "units/Monster.hh"
 #include "ServerGameState.hh"
 
-ServerGameState::ServerGameState(const std::vector<Player*>& v)
-  : GameState()
+ServerGameState::ServerGameState(const std::shared_ptr<UnitPool> &p, const std::vector<Player*>& v)
+  : GameState(p)
   , _pm()
   , _players(v)
 {
@@ -83,7 +83,7 @@ void  ServerGameState::requireMonsters(const Vector2D &left, const Vector2D &rig
 {
   //SHIT -v
   int id = 5;
-  std::list<Unit *> monsters = _pm.get();
+  std::list<Unit *> monsters = _pm.get(_pool);
 
   float randx = left.x + ((float)rand()) / ((float)RAND_MAX / (right.x - left.x));
   float randy = left.y + ((float)rand()) / ((float)RAND_MAX / (right.y - left.y));

@@ -52,6 +52,7 @@ public:
 				UnitFactory f;
 				ptr = f.create<T>();
 			}
+			ptr->setId(_currentId++);
 			return ptr;
 		}
 		else
@@ -83,6 +84,7 @@ public:
 
 protected:
 	std::map<const char *, std::list< Unit *>> _collection;
+	unsigned int _currentId;
 };
 
 #endif /*!_UNIT_POOL_HH_*/

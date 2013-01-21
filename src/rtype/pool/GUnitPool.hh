@@ -6,13 +6,9 @@
 class GUnitPool : public UnitPool
 {
 
-private:
+public:
 	GUnitPool(void);
 	~GUnitPool(void);
-
-public:
-	static GUnitPool *getInstance(void);
-	static void	deleteInstance(void);
 };
 
 #endif /*!_GUNIT_POOL_HH_*/

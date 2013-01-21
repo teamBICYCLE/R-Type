@@ -16,10 +16,11 @@
 #include <memory>
 #include "units/Player.hh"
 #include "network/Packet.hh"
+#include "pool/UnitPool.hh"
 
 class GameState {
 public:
-  GameState();
+  GameState(const std::shared_ptr<UnitPool> &p);
   virtual ~GameState();
 
   void  update(const communication::Packet& packet);
@@ -36,6 +37,7 @@ protected:
   typedef std::function<void (const communication::Packet&)> UpdateFunction;
   std::map<communication::Packet::Type, UpdateFunction> _updateMap;
   const float PLAYER_SPEED;
+  std::shared_ptr<UnitPool> _pool;
 };
 
 #endif /* !_GAMESTATE_H__ */

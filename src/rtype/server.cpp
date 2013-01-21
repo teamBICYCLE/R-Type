@@ -30,10 +30,10 @@ void  runServer(const std::vector<std::string>& clientsAddr, const std::string& 
   }
 
   std::vector<Player*> players;
-
+  std::shared_ptr<UnitPool> pool = std::shared_ptr<UnitPool>(new SUnitPool());
   for (int i = 0; i < 4; i++)
   {
-    Player *player = SUnitPool::getInstance()->get<Player>();
+    Player *player = pool->get<Player>();
     player->setId(i);
     player->setPos(Vector2D(0.1f, 0.1f * (float)(i + 1)));
     player->setDir(Vector2D(0.f, 0.f));
@@ -49,7 +49,7 @@ void  runServer(const std::vector<std::string>& clientsAddr, const std::string& 
 
   nh.setClients(clients);
   network::sockets::Udp s;
-  ServerGameState g(players);
+  ServerGameState g(pool, players);
   while (1)
   {
     newTime = std::chrono::system_clock::now();
@@ -84,7 +84,8 @@ int     main(int argc, char *argv[])
 
   clients.push_back("10.23.99.201");
   clients.push_back("10.23.99.200");
-  clients.push_back("10.23.98.230");
+  //clients.push_back("10.23.98.230");
+  clients.push_back("192.168.1.32");
   clients.push_back("10.23.98.165");
   runServer(clients, "4244");
   return EXIT_SUCCESS;
