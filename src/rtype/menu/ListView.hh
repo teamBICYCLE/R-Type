@@ -30,6 +30,7 @@ public:
 
   const std::vector<ListItem*>&	getList() const;
   const sf::Vector2f&		getPosition() const;
+  const sf::Vector2f&		getSize() const;
   const sf::Vector2f&		getItemSize() const;
 
   void		setGlobalCallback(std::function<void()>);
