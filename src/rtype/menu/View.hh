@@ -16,6 +16,7 @@ private:
   sf::Texture		_texture;
   sf::Sprite		_background;
   sf::Vector2u		_size;
+  sf::Text		_title;
 
 public:
   View(const std::string& texture, const sf::Vector2u& size, const sf::Vector2f& listItemSize);
@@ -32,6 +33,7 @@ public:
   void		setGlobalCallback(std::function<void()>);
   void		setButtonOne(const sf::Vector2f& dim, std::function<void()> f, const std::string&);
   void		setButtonTwo(const sf::Vector2f& dim, std::function<void()> f, const std::string&);
+  void		setTitle(const std::string& s);
 };
 
 #endif // !__VIEW_HH__

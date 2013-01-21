@@ -24,8 +24,8 @@ void	listCallback()
 
 int	main()
 {
-  sf::RenderWindow window(sf::VideoMode(800, 600), "SFML window");
-  View		view("../bg.jpg", window.getSize(), sf::Vector2f(500.0,50.0));
+  sf::RenderWindow window(sf::VideoMode(1200, 800), "SFML RType");
+  View		view("../resources/menu_background.jpg", window.getSize(), sf::Vector2f(500.0,50.0));
 
   std::vector<void*>	test;
 
@@ -34,6 +34,7 @@ int	main()
   test.push_back(new std::string("toto"));
   test.push_back(new std::string("toto"));
 
+  view.setTitle("Select your server:");
   view.setButtonOne(sf::Vector2f(100,100), std::bind(playCallback), "");
   view.setButtonTwo(sf::Vector2f(100,100), std::bind(quitCallback), "");
   view.setGlobalCallback(std::bind(listCallback));
