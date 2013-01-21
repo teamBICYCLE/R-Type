@@ -9,6 +9,7 @@
 
 #include <list>
 #include "input/Data.hh"
+#include "units/Monster.hh"
 #include "ServerGameState.hh"
 
 ServerGameState::ServerGameState(const std::vector<std::shared_ptr<Player>>& v)
@@ -60,12 +61,12 @@ void  ServerGameState::updateWorld(void)
 
   if (first == true)
   {
-    requireMonsters(Vector2D(0.f, 0.f), Vector2D(1.f, 1.f));
+    requireMonsters(Vector2D(0.1f, 0.1f), Vector2D(0.9f, 0.9f));
     first = false;
   }
 
   for (auto& e : _enemies) {
-    e->move();
+    (dynamic_cast<Monster *>(e))->move();
   }
 }
 
@@ -73,8 +74,7 @@ void  ServerGameState::requireMonsters(const Vector2D &left, const Vector2D &rig
 {
   //SHIT -v
   int id = 5;
-  std::cout << "requireMonsters" << std::endl;
-  std::list<Unit *> monsters = _pm.get(left, right);
+  std::list<Unit *> monsters = _pm.get();
 
   float randx = left.x + ((float)rand()) / ((float)RAND_MAX / (right.x - left.x));
   float randy = left.y + ((float)rand()) / ((float)RAND_MAX / (right.y - left.y));
@@ -86,7 +86,7 @@ void  ServerGameState::requireMonsters(const Vector2D &left, const Vector2D &rig
   {
       Vector2D originalPos = it->getPos();
       float newX = randx + (originalPos.x * 0.03);
-      float newY = randy + (originalPos.y * 0.03);
+      float newY = randy + (originalPos.y * 0.05);
       it->setPos(Vector2D(newX, newY));
       //SHIT -v
       it->setId(id++);

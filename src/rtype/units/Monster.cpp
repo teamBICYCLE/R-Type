@@ -15,7 +15,18 @@ Monster::~Monster(void)
 
 }
 
+void Monster::setMoveStyle(const moveStyle &m)
+{
+	_movefct = m;
+}
+
 Monster *Monster::clone(void)
 {
 	return (new Monster(*this));
+}
+
+void	Monster::move(void)
+{
+	_dir = _movefct(_pos);
+	Unit::move();
 }

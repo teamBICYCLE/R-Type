@@ -24,6 +24,8 @@
 #	error "Unsupported architecture."
 # endif
 
+typedef std::function<const Vector2D(const Vector2D &)> moveStyle;
+
 class PatternManager
 {
 
@@ -33,7 +35,7 @@ public:
 
 public:
 	// list peut etre constante ?
-	std::list<Unit *> get(const Vector2D &, const Vector2D &) const;
+	std::list<Unit *> get(void) const;
 
 public:
 	typedef struct MonsterDefinition
@@ -50,10 +52,12 @@ private:
 	void load(void);
 	void loadShared(void);
 	void checkShared(const std::string &);
+	void createMoveStyles(void);
 
 private:
 	std::vector<std::shared_ptr<Pattern>> _patterns;
 	std::map<std::string, std::shared_ptr<MonsterDefinition>> _monsters;
+	std::map<std::string, moveStyle> _moveStyles;
 };
 
 #endif /*!_PATTERN_MANAGER_HH_*/
