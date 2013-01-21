@@ -67,6 +67,8 @@ public:
 
     virtual bool  operator==(const IAddr& other) const;
 
+    virtual std::string getIpString() const;
+
 private:
     SpecialIp   _special;
     std::string _ip;

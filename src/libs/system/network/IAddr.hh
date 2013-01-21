@@ -55,6 +55,8 @@ public:
 
     virtual bool  operator==(const IAddr& other) const = 0;
 
+    virtual std::string getIpString() const = 0;
+
 };
 }
 }

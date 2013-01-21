@@ -14,23 +14,15 @@ using namespace TBSystem;
 static const std::chrono::milliseconds g_serverUpdateRate(16);
 static const std::chrono::milliseconds g_serverPacketRate(16);
 
-void intTobinary(int num){
-  if(num>0){
-    intTobinary(num/2);
-    printf("%d",num%2);
-  }
-}
-
-void  runServer(const std::vector<std::string>& clientsAddr, const std::string& port)
+void  runServer(const std::vector<std::string>& clientsIps,
+                const std::string& port)
 {
+  std::vector<std::shared_ptr<Player>> players;
   std::vector<network::Addr> clients;
 
-  for (auto& addr : clientsAddr) {
-    clients.push_back(network::Addr(addr, port, "UDP"));
+  for (auto& addr : clientsIps) {
+    clients.push_back(network::Addr(addr, "4244", "UDP"));
   }
-
-  std::vector<std::shared_ptr<Player>> players;
-
   for (int i = 0; i < 4; i++)
   {
     Player *player = SUnitPool::getInstance()->get<Player>();
@@ -41,7 +33,7 @@ void  runServer(const std::vector<std::string>& clientsAddr, const std::string& 
   }
 
   // START OF THE REAL LOOP
-  communication::NetworkHandler   nh;
+  communication::NetworkHandler   nh(port);
   std::chrono::time_point<std::chrono::system_clock> currentTime = std::chrono::system_clock::now();
   std::chrono::time_point<std::chrono::system_clock> newTime;
   std::chrono::time_point<std::chrono::system_clock> lastSent;
@@ -78,13 +70,13 @@ void  runServer(const std::vector<std::string>& clientsAddr, const std::string& 
   }
 }
 
-int     main(int argc, char *argv[])
-{
-  std::vector<std::string>  clients;
+//int     main(int argc, char *argv[])
+//{
+  //std::vector<std::string>  clients;
 
-  clients.push_back("10.23.99.201");
-  clients.push_back("10.23.99.200");
-  clients.push_back("10.23.98.230");
-  runServer(clients, "4244");
-  return EXIT_SUCCESS;
-}
+  //clients.emplace_back("10.23.99.201");
+  //clients.emplace_back("10.23.99.200");
+  //clients.emplace_back("10.23.98.230");
+  //runServer(clients, "4242");
+  //return EXIT_SUCCESS;
+//}

@@ -20,7 +20,7 @@ namespace communication {
 
 class NetworkHandler {
 public:
-   NetworkHandler();
+   NetworkHandler(const std::string& port);
    ~NetworkHandler();
 
 public:

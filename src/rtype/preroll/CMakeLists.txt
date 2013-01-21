@@ -18,8 +18,17 @@ add_executable(preroll_server
   Lounge.cpp
   Lounge.hh
   server.cpp
+  ${UTILITIES}
+  ${UNITS}
+  ${SERVER_NETWORK}
+  ${SERVER_GAMESTATE}
+  ${SERVER_POOL}
+  ../input/Data.hh
+  ../input/Data.cpp
+  ../server.cpp
 )
 
 target_link_libraries(preroll_server
   system
+  csv-parser
 )
