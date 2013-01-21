@@ -15,7 +15,7 @@ public:
 	virtual ~Monster(void);
 
 public:
-	void    move(void);
+	virtual void    move(void);
 	void 	setMoveStyle(const moveStyle &);
 
 public:
