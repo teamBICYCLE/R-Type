@@ -85,8 +85,6 @@ void PatternManager::createMoveStyles(void)
 		float newPosy = std::sin(posx) + 200;
 		//Vector2D newPos(pos.x, std::sin(pos.x));
 		//Vector2D v(newPos - pos) / MONSTER_SPEED;
-		std::cout << "--> " << posx << " " << posy << std::endl;
-		std::cout << "sin : " << (Vector2D(newPosx / 800, newPosy / 800) - Vector2D(pos.x, pos.y)) << std::endl;
 		Vector2D ret;// = Vector2D(newPosx, newPosy) - Vector2D(posx, posy);
 		ret.x = -1;
 		ret.y = std::sin(pos.x * 20); 
