@@ -81,7 +81,7 @@ namespace network {
         {
             int fd;
             sockaddr_in addr;
-            unsigned int tmp;
+            unsigned int tmp = 0;
 
             errno = 0;
             fd = ::accept(_socket, reinterpret_cast<sockaddr*>(&addr), &tmp);
