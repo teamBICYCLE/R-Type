@@ -11,7 +11,7 @@ View::View(const std::string& texture, const sf::Vector2u& size, const sf::Vecto
   _texture.loadFromFile(texture);
   _background.setTexture(_texture);
   x = (_size.x / 2) - (listItemSize.x / 2);
-  y = (_size.y / MAX_ROW);
+  y = (_size.y / 2) - (MAX_ROW * listItemSize.y / 2);
   _listView = new ListView(sf::Vector2f(x,y), listItemSize);
   _refreshButton = new Button(sf::Vector2f(50.0,50.0));
   _refreshButton->setPosition(sf::Vector2f(0,0));
