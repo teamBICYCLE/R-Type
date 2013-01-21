@@ -6,7 +6,6 @@
 #include <typeinfo>
 #include <memory>
 #include "units/Unit.hh"
-#include "units/Player.hh"
 
 class UnitFactory
 {

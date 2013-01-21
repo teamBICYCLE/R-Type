@@ -4,12 +4,13 @@ PATTERN_DEFINITION :
 char,type,move
 a,defaultMonster,sin
 b,dumbMonster,linear
-c,defaultMonster,linear
 
 PATTERN_DRAWING :
 
-==============
-     a      c 
- a b b b a  b 
-     a      c 
-==============
+===============
+          a 
+    b       a 
+  b           a
+    b       a
+          a 
+===============
