@@ -13,6 +13,10 @@
 #include <chrono>
 #include <list>
 #include <algorithm>
+#include <functional>
+#ifdef _WIN32
+# include <WinSock2.h>
+#endif
 #include "ITcpSocket.hh"
 
 namespace TBSystem {

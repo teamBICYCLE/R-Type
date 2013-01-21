@@ -10,11 +10,17 @@ View::View(const std::string& texture, const sf::Vector2u& size, const sf::Vecto
 
   _texture.loadFromFile(texture);
   _background.setTexture(_texture);
+  _background.setPosition(size.x, size.y);
+  _background.setOrigin(1920 / 2, 1200 / 2);
+  _background.scale(1.8,1.8);
   x = (_size.x / 2) - (listItemSize.x / 2);
   y = (_size.y / 2) - (MAX_ROW * listItemSize.y / 2);
   _listView = new ListView(sf::Vector2f(x,y), listItemSize);
-  _refreshButton = new Button(sf::Vector2f(50.0,50.0));
-  _refreshButton->setPosition(sf::Vector2f(0,0));
+  _title.setCharacterSize(18);
+  _title.setStyle(0);
+  _title.setPosition(sf::Vector2f(x - 10, y - _title.getCharacterSize() * 2));
+  _refreshButton = new Button(sf::Vector2f(30,30));
+  _refreshButton->setPosition(sf::Vector2f(size.x - 30,0));
 }
 
 View::~View()
@@ -28,7 +34,9 @@ void	View::update(std::vector<void*> &list)
 
 void	View::draw(sf::RenderWindow& target)
 {
+  _background.rotate(0.015);
   target.draw(_background);
+  target.draw(_title);
   _listView->draw(target);
   if (_buttonOne)
     _buttonOne->draw(target);
@@ -102,4 +110,9 @@ void		View::setButtonTwo(const sf::Vector2f& dim, std::function<void()> f,
   _buttonTwo->setPosition(sf::Vector2f((_listView->getPosition().x + _listView->getSize().x - (2 * dim.x + 4) + 1),
 				       (_listView->getPosition().y + _listView->getSize().y + 4)));
   _buttonTwo->setCallback(f);
+}
+
+void		View::setTitle(const std::string& s)
+{
+  _title.setString(s);
 }

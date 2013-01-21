@@ -53,12 +53,12 @@ void PatternManager::checkShared(const std::string &file)
 	std::cout << "load shared " << file << std::endl;
 	DLoader loader(file);
 	std::shared_ptr<MonsterDefinition> def = std::shared_ptr<MonsterDefinition>(new MonsterDefinition());
-	std::function<const std::string (void)>n = loader.load<const std::string (void)>("getName");
+	std::function<const char*(void)>n = loader.load<const char*(void)>("getName");
 	std::function<unsigned int (void)>i = loader.load<unsigned int(void)>("getResourceId");
 	std::function<unsigned int (void)>p = loader.load<unsigned int(void)>("getPv");
 	std::function<unsigned int (void)>m = loader.load<unsigned int(void)>("getMunition");
-	std::function<const std::chrono::milliseconds (void)>r = loader.load<const std::chrono::milliseconds (void)>("timeToReload");
-	std::function<const std::chrono::milliseconds (void)>f = loader.load<const std::chrono::milliseconds (void)>("fireFrequence");
+	std::function<int (void)>r = loader.load<int (void)>("timeToReload");
+	std::function<int (void)>f = loader.load<int (void)>("fireFrequence");
 	def->name = n();
 	def->resourceId = i();
 	def->pv = p();
@@ -78,22 +78,15 @@ void PatternManager::createMoveStyles(void)
 	};
 
 	moveStyle sinfct = [](const Vector2D &pos) {
-
-		float posx = pos.x * 80;
-		float posy = pos.y * 800;
-		float newPosx = posx;
-		float newPosy = std::sin(posx) + 200;
-		//Vector2D newPos(pos.x, std::sin(pos.x));
-		//Vector2D v(newPos - pos) / MONSTER_SPEED;
-		Vector2D ret;// = Vector2D(newPosx, newPosy) - Vector2D(posx, posy);
-		ret.x = -1;
-		ret.y = std::sin(pos.x * 20); 
-		//ret.y = std::sin(millis / 100);
-		ret.normalize();
-		ret /= MONSTER_SPEED;
-		ret.y *= 2;
-		return (ret);
+    Vector2D ret;
+    ret.x = -1;
+    ret.y = std::sin(pos.x * 20); 
+    ret.normalize();
+    ret /= MONSTER_SPEED;
+    ret.y *= 1;
+    return (ret);
 	};
+
 
 	_moveStyles.insert(std::make_pair("linear", linearfct));
 	_moveStyles.insert(std::make_pair("sin", sinfct));
@@ -122,8 +115,8 @@ std::list<Unit *> PatternManager::get(void) const
 			monster->setResourceId(sharedDef->resourceId);
 			monster->setPv(sharedDef->pv);
 			monster->setMunition(sharedDef->munition);
-			monster->setTimeToReload(sharedDef->timeToReload);
-			monster->setFireFrequence(sharedDef->fireFrenquence);
+			monster->setTimeToReload(std::chrono::milliseconds(sharedDef->timeToReload));
+			monster->setFireFrequence(std::chrono::milliseconds(sharedDef->fireFrenquence));
 
 			// load pattern informations in monster
 			monster->setPos(Vector2D((*item)->posx, (*item)->posy));

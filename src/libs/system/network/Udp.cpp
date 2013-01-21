@@ -20,7 +20,6 @@
 #define recvfrom_size_param unsigned int
 #elif defined _WIN32
 #include <winsock2.h>
-#include <windows.h>
 #define recvfrom_size_param int
 #pragma comment( lib, "wsock32.lib" )
 #pragma comment (lib, "Ws2_32.lib")
@@ -65,13 +64,13 @@ int Udp::send(const uint8_t * packet, int packetSize, const IAddr & pair)
   int ret;
 
   if (pair.hasValidAddr()) {
-    ret = ::sendto(_socket, packet, packetSize, 0,
+    ret = ::sendto(_socket, reinterpret_cast<const char *>(packet), packetSize, 0,
                    static_cast<const sockaddr *>(pair.getValid()),
                    pair.validSize());
   }
   else {
     for (auto& hint : pair.infos()) {
-      if ((ret = ::sendto(_socket, packet, packetSize, 0,
+      if ((ret = ::sendto(_socket, reinterpret_cast<const char *>(packet), packetSize, 0,
                    static_cast<const sockaddr *>(hint->get()),
                    hint->size()))
           != -1) {
@@ -92,7 +91,7 @@ int Udp::recv(uint8_t * packet, int maxPacketSize, IAddr & pair)
 
   memset(&buf, 0, sizeof(buf));
   errno = 0;
-  ret = ::recvfrom(_socket, packet, maxPacketSize, 0,
+  ret = ::recvfrom(_socket, reinterpret_cast<char *>(packet), maxPacketSize, 0,
                    reinterpret_cast<sockaddr*>(&buf), &len);
   //if (errno != EWOULDBLOCK && ret == -1) throw std::runtime_error(strerror(errno));
   pair.setValid(static_cast<void *>(&buf));

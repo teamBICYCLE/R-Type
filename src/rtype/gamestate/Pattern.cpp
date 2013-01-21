@@ -47,7 +47,7 @@ void Pattern::loadFile(const std::string &path)
 
 void Pattern::loadCsv(const std::string &data)
 {
-    _definition = new csv::Parser(data, csv::DataType::PURE);
+    _definition = new csv::Parser(data, csv::DataType::ePURE);
 }
 
 void Pattern::loadDrawing(const std::string &data)

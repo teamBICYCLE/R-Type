@@ -75,7 +75,7 @@ private:
 
     mutable struct addrinfo*     _infosRes;
     mutable bool        _isValid;
-    mutable sockaddr_in _valid;
+    mutable struct sockaddr_in _valid;
 };
 }
 }

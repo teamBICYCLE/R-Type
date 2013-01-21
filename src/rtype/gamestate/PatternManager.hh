@@ -20,7 +20,7 @@
 # ifdef     __gnu_linux__
 	#define SHARED_EXT ".so"
 # elif      _WIN32
-	#define SHARED_EXT ".dll";
+	#define SHARED_EXT ".dll"
 # else
 #	error "Unsupported architecture."
 # endif
@@ -41,12 +41,12 @@ public:
 public:
 	typedef struct MonsterDefinition
 	{	
-		std::string name;
+		const char *name;
 		unsigned int resourceId;
 		unsigned int pv;
 		unsigned int munition;
-		std::chrono::milliseconds timeToReload;
-		std::chrono::milliseconds fireFrenquence;
+		int timeToReload;
+		int fireFrenquence;
 	} MonsterDefinition;
 
 private:

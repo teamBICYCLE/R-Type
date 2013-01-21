@@ -8,6 +8,9 @@ GUnit::GUnit(int id, const Vector2D& pos, const Vector2D& dir)
   , _circle(10.f)
 {
   setId(_id);
+  toto.addSourceFolder("resources/sprites");
+  _anim.reset(toto["resources/sprites/vaisseau.bmp"]->generateAnimInfo());
+
 }
 
 GUnit::GUnit(void)
@@ -45,13 +48,24 @@ void GUnit::draw(sf::RenderTarget &target, sf::RenderStates states) const
 {
 	sf::Vector2f pos = static_cast<sf::Vector2f>(_pos);
 
-	//tmp
+	// THIBAULT
+	// std::cout << "drawing " << _id << std::endl;
+	// if (_dir.y > 0)
+	// 	_anim->setAnimationName("top");
+	// else if (_dir.y < 0)
+	// 	_anim->setAnimationName("bot");
+	// else
+	// 	_anim->setAnimationName("mid");
+	
+	//_anim->getSprite();
+	// _anim->startAnimation();
+	
 	pos.x *= GameState::WINDOW_WIDTH;
 	pos.y *= GameState::WINDOW_HEIGHT;
 	target.draw(_circle, sf::Transform().translate(pos));
 }
 
-GUnit *GUnit::clone(void)
+Unit *GUnit::clone(void)
 {
   	return (new GUnit(*this));
 }
