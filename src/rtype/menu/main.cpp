@@ -34,6 +34,7 @@ int	main()
   test.push_back(new std::string("toto"));
   test.push_back(new std::string("toto"));
 
+  view.setTitle("Select your server:");
   view.setButtonOne(sf::Vector2f(100,100), std::bind(playCallback), "");
   view.setButtonTwo(sf::Vector2f(100,100), std::bind(quitCallback), "");
   view.setGlobalCallback(std::bind(listCallback));
