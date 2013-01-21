@@ -21,7 +21,7 @@ NetworkHandler::NetworkHandler()
 
   _socket.setBlocking(false);
   _socket.bind(pair);
-  _outAddr.push_back(network::Addr("127.0.0.1", "4244", "UDP"));
+  //_outAddr.push_back(network::Addr("127.0.0.1", "4244", "UDP"));
 }
 
 NetworkHandler::~NetworkHandler()
@@ -50,8 +50,9 @@ std::vector<communication::Packet> NetworkHandler::getIncomingPackets()
         {
           it->checkAnswer(clt, p);//if the received packet is an answer to them..
           if (it->allSent() == true)//and every client received their packet..
-            _reliablePackets.erase(it);//then discard it
-          ++it;
+            it = _reliablePackets.erase(it);//then discard it
+          else
+            ++it;
         }
       }
     //}
@@ -59,43 +60,55 @@ std::vector<communication::Packet> NetworkHandler::getIncomingPackets()
   return inputs;
 }
 
+void NetworkHandler::sendToAll(uint8_t *packet, int packetSize)
+{
+  for (auto& addr : _outAddr) {
+    _socket.send(packet, packetSize, addr);
+  }
+}
+
+void NetworkHandler::addReliablePacket(uint8_t *packet, int packetSize, Unit *deadUnit)
+{
+  Packet tmp(packet, packetSize);
+
+  _reliablePackets.emplace_back(_outAddr, tmp);//unit is dead, send this to everyone
+  //others are planned to be notified, no need to handle the dead unit anymore
+  deadUnit->setOthersNotifiedOfDeath(true);
+}
+
 void  NetworkHandler::broadcast(const ServerGameState& g)
 {
+  uint8_t  buf[communication::Packet::MAX_PACKET_SIZE];
+  int      packetSize;
+
+  //send player update to other players
   for (auto& p : g.getPlayers()) {
     if (p->isDead() == false ||
         p->wereOthersNotifiedOfDeath() == false)
     {
-      uint8_t  buf[communication::Packet::MAX_PACKET_SIZE];
-      int      packetSize;
-
       packetSize = p->pack(buf, sizeof(buf));
-      if (p->isDead() == false)
-      {
-        for (auto& addr : _outAddr) {//player is not dead so send its positions
-          _socket.send(buf, packetSize, addr);
-        }
+      if (p->isDead() == false) {//player is not dead so send its positions
+        sendToAll(buf, packetSize);
       }
-      else
-      {
-        Packet tmp(buf, packetSize);
-
-        std::cout << "RELIABLE" << std::endl;
-        _reliablePackets.emplace_back(_outAddr, tmp);//player is dead, send this to everyone
-        p->setOthersNotifiedOfDeath(true);//others are planned to be notified,
-                                          //no need to handle the dead player anymore
+      else {
+        addReliablePacket(buf, packetSize, p);
       }
     }
   }
-  //SHIT -v
+
+  //send monsters update
   for (auto& monster : g.getEnemies()) {
-    uint8_t  buf[communication::Packet::MAX_PACKET_SIZE];
-    int      packetSize;
-
     packetSize = monster->pack(buf, sizeof(buf));
-    for (auto& addr : _outAddr) {//player is not dead so send its positions
-      _socket.send(buf, packetSize, addr);
+    if (monster->isDead() == false) {//monster is not dead, send positions
+      sendToAll(buf, packetSize);
+    }
+    else if (monster->wereOthersNotifiedOfDeath() == false) {
+      //monster is dead, send secure packet
+      addReliablePacket(buf, packetSize, monster);
     }
   }
+
+  //retry sending every non-ack reliable packets
   for (auto& packet : _reliablePackets)
     packet.tryAgain(_socket);
 }

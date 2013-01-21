@@ -6,7 +6,7 @@
 
 class ServerGameState : public GameState {
 public:
-  ServerGameState(const std::vector<std::shared_ptr<Player>>& v);
+  ServerGameState(const std::vector<Player*>& v);
   virtual ~ServerGameState();
 
 public:
@@ -20,12 +20,12 @@ private:
   void  setPlayerDirection(uint32_t id, const Vector2D& dir);
 
 public:
-  const std::vector<std::shared_ptr<Player>>& getPlayers() const;
+  const std::vector<Player*>& getPlayers() const;
   const std::list<Unit*>&     getEnemies() const;
 
 private:
 	const PatternManager _pm;
-  std::vector<std::shared_ptr<Player>>  _players;
+  std::vector<Player*>  _players;
 	std::list<Unit*>	 _enemies;
 };
 

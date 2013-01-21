@@ -31,6 +31,10 @@ public:
    void setClients(const std::vector<TBSystem::network::Addr>& c);
 
 private:
+   void sendToAll(uint8_t *packet, int packetSize);
+   void addReliablePacket(uint8_t *packet, int packetSize, Unit *deadUnit);
+
+private:
    TBSystem::network::sockets::Udp      _socket;
    std::vector<TBSystem::network::Addr> _outAddr;
    std::list<ReliablePacket>            _reliablePackets;
