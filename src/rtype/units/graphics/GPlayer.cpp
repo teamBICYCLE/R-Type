@@ -5,7 +5,7 @@ GPlayer::GPlayer(unsigned int id, const Vector2D& pos, const Vector2D& dir)
     : Unit(id, pos, dir)
     , GUnit(id, pos, dir)
     , Player(id, pos, dir)
-    , _circle(10.f)    
+    , _circle(10.f)
 {
 	setId(id);
 }
@@ -45,7 +45,6 @@ void GPlayer::setId(const uint32_t id)
 
 const sf::Drawable *GPlayer::render(void) const
 {
-	return &_circle;
 }
 
 GPlayer *GPlayer::clone(void)

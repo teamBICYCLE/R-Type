@@ -101,6 +101,7 @@ AnimationInfos *Board::generateAnimInfo(void)
 
 bool Board::hasSpriteNamed(const std::string &name) const
 {
+	std::cout << &_animations << std::endl;
 	if (_animations.find(name) != _animations.end()) {
 		return (true);
 	}

@@ -3,6 +3,8 @@
 
 #include <SFML/Graphics.hpp>
 #include "units/Unit.hh"
+#include "sprites/AnimationInfos.hh"
+#include "sprites/AnimationManager.hh"
 
 class GUnit : public virtual Unit, public sf::Drawable
 {
@@ -20,6 +22,8 @@ public:
 
 private:
 	sf::CircleShape _circle;
+	std::shared_ptr<Sprite::AnimationInfos> _anim;
+	Sprite::AnimationManager toto;
 };
 
 #endif /*!_G_UNIT_HH_*/

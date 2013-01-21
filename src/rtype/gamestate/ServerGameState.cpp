@@ -66,7 +66,8 @@ void  ServerGameState::updateWorld(void)
   }
 
   for (auto& e : _enemies) {
-    (dynamic_cast<Monster *>(e))->move();
+    //(dynamic_cast<Monster *>(e))->move();
+    e->move();
   }
 }
 

@@ -85,6 +85,7 @@ int     main(int argc, char *argv[])
   clients.push_back("10.23.99.201");
   clients.push_back("10.23.99.200");
   clients.push_back("10.23.98.230");
+  clients.push_back("10.23.98.165");
   runServer(clients, "4244");
   return EXIT_SUCCESS;
 }
