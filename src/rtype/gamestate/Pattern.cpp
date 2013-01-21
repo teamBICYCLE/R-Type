@@ -29,7 +29,7 @@ void Pattern::loadFile(const std::string &path)
     	drapos != std::string::npos && defpos < drapos)
     {
     	defpos += std::strlen(DEFINITION_BLOCK);
-        
+
         try {
             Pattern::loadCsv(content.substr(defpos, drapos - defpos));
             drapos += std::strlen(DRAWING_BLOCK);
@@ -47,7 +47,7 @@ void Pattern::loadFile(const std::string &path)
 
 void Pattern::loadCsv(const std::string &data)
 {
-    _definition = new csv::Parser(data, csv::DataType::PURE);
+    _definition = new csv::Parser(data, csv::DataType::ePURE);
 }
 
 void Pattern::loadDrawing(const std::string &data)
@@ -56,7 +56,7 @@ void Pattern::loadDrawing(const std::string &data)
     std::string definedChar;
     std::string line;
     std::vector<std::string> rows;
-    
+
     // get defined Char
     for (int i = 0; i != _definition->rowCount(); ++i)
         definedChar.append((*_definition)[i]["char"]);
@@ -70,7 +70,7 @@ void Pattern::loadDrawing(const std::string &data)
     unsigned int y = 0;
     for (auto row : rows)
     {
-        unsigned int x = 0; 
+        unsigned int x = 0;
         for (auto e : row)
         {
             size_t charPos = definedChar.find(e);
