@@ -36,7 +36,7 @@ int main(int argc, char* argv[])
 #endif
 {
   network::sockets::Udp s;
-  network::Addr server("10.23.98.230", "4242", "UDP");
+  network::Addr server(argv[1], argv[2], "UDP");
   Input::Config cfg;
   cfg._top = sf::Keyboard::Up;
   cfg._bot = sf::Keyboard::Down;
@@ -53,7 +53,7 @@ int main(int argc, char* argv[])
   //player->setId(std::stoi(argv[3]));
   //player->setPos(Vector2D(0.1f, 0.1f));
   //player->setDir(Vector2D(0.f, 0.f));
-  GraphicGameState  g(std::shared_ptr<GPlayer>(new GPlayer(std::stoi("1"),
+  GraphicGameState  g(std::shared_ptr<GPlayer>(new GPlayer(std::stoi(argv[3]),
                                   Vector2D(0.1f, 0.1f), Vector2D(0.f, 0.f))));
 
   s.setBlocking(false);
@@ -86,7 +86,7 @@ int main(int argc, char* argv[])
       uint8_t buf[256];
 
       Input::Data i = cfg.getInput();
-      i.setId(std::stoi("1"));
+      i.setId(std::stoi(argv[3]));
       g.simulate(i);
       int ret = i.pack(buf, sizeof(buf));
 
