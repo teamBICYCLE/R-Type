@@ -6,7 +6,7 @@
 
 class ServerGameState : public GameState {
 public:
-  ServerGameState(const std::vector<Player*>& v);
+  ServerGameState(const std::shared_ptr<UnitPool> &, const std::vector<Player*>& v);
   virtual ~ServerGameState();
 
 public:

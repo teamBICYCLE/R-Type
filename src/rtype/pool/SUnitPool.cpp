@@ -1,6 +1,6 @@
 #include "SUnitPool.hh"
 
-static SUnitPool *	_instance = NULL;
+//static SUnitPool *	_instance = NULL;
 
 SUnitPool::SUnitPool(void) :
 	UnitPool()
@@ -18,18 +18,22 @@ SUnitPool::SUnitPool(void) :
 
 SUnitPool::~SUnitPool(void)
 {
+	for (auto it : _collection[typeid(Player).name()])
+		delete it;
 
+	for (auto it : _collection[typeid(Monster).name()])
+		delete it;
 }
 
-SUnitPool *SUnitPool::getInstance(void)
-{
-	if (!_instance)
-		_instance = new SUnitPool();
-	return _instance;
-}
+// SUnitPool *SUnitPool::getInstance(void)
+// {
+// 	if (!_instance)
+// 		_instance = new SUnitPool();
+// 	return _instance;
+// }
 
-void	SUnitPool::deleteInstance(void)
-{
-	delete _instance;
-	_instance = NULL;
-}
+// void	SUnitPool::deleteInstance(void)
+// {
+// 	delete _instance;
+// 	_instance = NULL;
+// }

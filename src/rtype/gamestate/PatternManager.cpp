@@ -5,7 +5,7 @@
 #include <ctime>
 #include <cstdlib> 
 #include <cmath>
-#include "pool/SUnitPool.hh"
+#include "pool/UnitPool.hh"
 #include "PatternManager.hh"
 
 PatternManager::PatternManager(void)
@@ -92,14 +92,14 @@ void PatternManager::createMoveStyles(void)
 	_moveStyles.insert(std::make_pair("sin", sinfct));
 }
 
-std::list<Unit *> PatternManager::get(void) const
+std::list<Unit *> PatternManager::get(const std::shared_ptr<UnitPool> &pool) const
 {
 	using namespace TBSystem;
 
 	int random = (std::rand() % _patterns.size());
 	std::list<std::shared_ptr<Pattern::Element>> elements;
 	elements = _patterns[random]->getPatternElements();
-	SUnitPool *pool = SUnitPool::getInstance();
+	//SUnitPool *pool = SUnitPool::getInstance();
 	std::list<Unit *> ret;
 
 	for (auto item  = elements.begin(); item != elements.end(); ++item)

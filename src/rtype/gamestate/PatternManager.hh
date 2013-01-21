@@ -9,6 +9,7 @@
 # include <map>
 # include "Pattern.hh"
 # include "units/Unit.hh"
+# include "pool/UnitPool.hh"
 # include "utilities/Vector2D.hh"
 
 # define RESOURCES_PATH	"resources/"
@@ -36,7 +37,7 @@ public:
 
 public:
 	// list peut etre constante ?
-	std::list<Unit *> get(void) const;
+	std::list<Unit *> get(const std::shared_ptr<UnitPool> &pool) const;
 
 public:
 	typedef struct MonsterDefinition

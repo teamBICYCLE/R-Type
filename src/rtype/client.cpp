@@ -53,7 +53,8 @@ int main(int argc, char* argv[])
   //player->setId(std::stoi(argv[3]));
   //player->setPos(Vector2D(0.1f, 0.1f));
   //player->setDir(Vector2D(0.f, 0.f));
-  GraphicGameState  g(std::shared_ptr<GPlayer>(new GPlayer(std::stoi(argv[3]),
+  std::shared_ptr<UnitPool> pool = std::shared_ptr<UnitPool>(new GUnitPool());
+  GraphicGameState  g(pool, std::shared_ptr<GPlayer>(new GPlayer(std::stoi(argv[3]),
                                   Vector2D(0.1f, 0.1f), Vector2D(0.f, 0.f))));
 
   s.setBlocking(false);

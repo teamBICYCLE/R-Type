@@ -13,8 +13,8 @@
 #include "pool/SUnitPool.hh"
 #include "ServerGameState.hh"
 
-ServerGameState::ServerGameState(const std::vector<Player*>& v)
-  : GameState()
+ServerGameState::ServerGameState(const std::shared_ptr<UnitPool> &p, const std::vector<Player*>& v)
+  : GameState(p)
   , _pm()
   , _players(v)
   , _lastIncrease(std::chrono::system_clock::now())
@@ -80,7 +80,7 @@ void  ServerGameState::updateWorld(void)
         //std::cout << "Killing it" << std::endl;
         Monster *deadUnit = dynamic_cast<Monster*>(*enemyIt);
         enemyIt = _enemies.erase(enemyIt);//..we remove it
-        SUnitPool::getInstance()->release<Monster>(deadUnit);
+        _pool->release<Monster>(deadUnit);
         //TO DO: le rendre a la pool
       }
     }
@@ -98,7 +98,7 @@ void  ServerGameState::requireMonsters(const Vector2D &left, const Vector2D &rig
 {
   //SHIT -v
   static int id = 5;
-  std::list<Unit *> monsters = _pm.get();
+  std::list<Unit *> monsters = _pm.get(_pool);
 
   float randx = left.x + ((float)rand()) / ((float)RAND_MAX / (right.x - left.x));
   float randy = left.y + ((float)rand()) / ((float)RAND_MAX / (right.y - left.y));
