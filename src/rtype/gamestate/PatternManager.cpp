@@ -78,13 +78,13 @@ void PatternManager::createMoveStyles(void)
 	};
 
 	moveStyle sinfct = [](const Vector2D &pos) {
-		Vector2D ret;
-		ret.x = -1;
-		ret.y = std::sin(pos.x * 20); 
-		ret.normalize();
-		ret /= MONSTER_SPEED;
-		ret.y *= 1;
-		return (ret);
+    Vector2D ret;
+    ret.x = -1;
+    ret.y = std::sin(pos.x * 20); 
+    ret.normalize();
+    ret /= MONSTER_SPEED;
+    ret.y *= 1;
+    return (ret);
 	};
 
 

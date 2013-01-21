@@ -12,7 +12,7 @@
 #include "units/Monster.hh"
 #include "ServerGameState.hh"
 
-ServerGameState::ServerGameState(const std::vector<std::shared_ptr<Player>>& v)
+ServerGameState::ServerGameState(const std::vector<Player*>& v)
   : GameState()
   , _pm()
   , _players(v)
@@ -33,7 +33,7 @@ void  ServerGameState::updateWithInput(const communication::Packet& packet)
 
   if (id <= _players.size()) {
     Input::Data d;
-    std::shared_ptr<Player>& player = _players[id];
+    Player *player = _players[id];
 
     if (player->isDead() == true)
       return;//if the player is dead, ignore his inputs
@@ -65,9 +65,17 @@ void  ServerGameState::updateWorld(void)
     first = false;
   }
 
-  for (auto& e : _enemies) {
-    //(dynamic_cast<Monster *>(e))->move();
-    e->move();
+  for (auto enemyIt = _enemies.begin(); enemyIt != _enemies.end(); ) {
+    if ((*enemyIt)->isDead() == true) {//if enemy is dead..
+      if ((*enemyIt)->wereOthersNotifiedOfDeath() == true) {//..and client were notified
+        enemyIt = _enemies.erase(enemyIt);//..we remove it
+        //TO DO: le rendre a la pool
+      }
+    }
+    else {//enemy alive
+      (*enemyIt)->move();
+      ++enemyIt;
+    }
   }
 }
 
@@ -96,8 +104,6 @@ void  ServerGameState::requireMonsters(const Vector2D &left, const Vector2D &rig
 
 void  ServerGameState::moveOne(Player& p)
 {
-  Vector2D  savedPos = p.getPos();
-
   p.move();
   for (auto& enemy : _enemies)
   {
@@ -125,7 +131,7 @@ void  ServerGameState::setPlayerDirection(uint32_t id, const Vector2D& dir)
   }
 }
 
-const std::vector<std::shared_ptr<Player>>& ServerGameState::getPlayers() const
+const std::vector<Player*>& ServerGameState::getPlayers() const
 {
   return _players;
 }

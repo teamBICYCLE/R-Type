@@ -29,7 +29,7 @@ void  runServer(const std::vector<std::string>& clientsAddr, const std::string& 
     clients.push_back(network::Addr(addr, port, "UDP"));
   }
 
-  std::vector<std::shared_ptr<Player>> players;
+  std::vector<Player*> players;
 
   for (int i = 0; i < 4; i++)
   {
@@ -37,7 +37,7 @@ void  runServer(const std::vector<std::string>& clientsAddr, const std::string& 
     player->setId(i);
     player->setPos(Vector2D(0.1f, 0.1f * (float)(i + 1)));
     player->setDir(Vector2D(0.f, 0.f));
-    players.push_back(std::shared_ptr<Player>(player));
+    players.push_back(player);
   }
 
   // START OF THE REAL LOOP
