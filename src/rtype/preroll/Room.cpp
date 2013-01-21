@@ -10,6 +10,7 @@
 #include "Room.hh"
 #include <system/log/Log.hh>
 #include "Lounge.hh"
+#include "server.h"
 
 using namespace TBSystem;
 
@@ -91,7 +92,7 @@ void* launchServer(void* players);
 
 void Room::launchGame(const Lounge& lounge)
 {
-  std::vector<network::Addr> playersAddr;
+  std::vector<std::string> *playersAddr = new std::vector<std::string>;
 
   for (int id : _playersIds) {
     auto it =
@@ -100,23 +101,16 @@ void Room::launchGame(const Lounge& lounge)
                    return c.getId() == id;
                    });
 
-    playersAddr.push_back(it->getAddr());
+    playersAddr->push_back(it->getAddr().getIpString());
   }
   log::debug << "start game LOL !" << log::endl;
-  t.start(&launchServer, &playersAddr);
-}
-
-void server(std::vector<network::Addr>& players)
-{
-  while (1) {
-    log::debug << "hello" << log::endl;
-  }
+  t.start(&launchServer, playersAddr);
 }
 
 void* launchServer(void* param) {
-  std::vector<network::Addr> *players = (std::vector<network::Addr>*) param;
+  std::vector<std::string> *players = (std::vector<std::string>*)param;
 
-  server(*players);
+  runServer(*players, "4242");
   return nullptr;
 }
 

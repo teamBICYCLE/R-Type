@@ -87,7 +87,7 @@ int main(int argc, char* argv[])
       uint8_t buf[256];
 
       Input::Data i = cfg.getInput();
-      i.setId(std::stoi("1"));
+      i.setId(std::stoi(argv[3]));
       g.simulate(i);
       int ret = i.pack(buf, sizeof(buf));
 

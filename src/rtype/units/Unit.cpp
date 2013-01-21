@@ -257,7 +257,7 @@ size_t  Unit::pack(uint8_t *out, size_t outSize) const
     packetContent.info.dx = to_short(_dir.x);
     packetContent.info.dy = to_short(_dir.y);
 
-    communication::Packet packet(communication::Packet::Type::POSITION, _id,
+    communication::Packet packet(communication::Packet::Type::POSITION, _id, _resourceId,
                                   packetContent.whole, sizeof(packetContent.whole));
 
     if (outSize < packet.getDataSize())

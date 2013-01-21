@@ -14,11 +14,11 @@ ReliablePacket::ReliablePacket(const std::vector<TBSystem::network::Addr>& addr,
   //Would be nice to be able to compare Addr..
   //Four packets for now to keep track of the different addr based on sequence
   _packets.emplace_back(_packet);
-  _packets.emplace_back(Packet(_packet.getType(), _packet.getId(),
+  _packets.emplace_back(Packet(_packet.getType(), _packet.getId(), _packet.getResourceId(),
                               _packet.getData(), _packet.getDataSize()));
-  _packets.emplace_back(Packet(_packet.getType(), _packet.getId(),
+  _packets.emplace_back(Packet(_packet.getType(), _packet.getId(), _packet.getResourceId(),
                               _packet.getData(), _packet.getDataSize()));
-  _packets.emplace_back(Packet(_packet.getType(), _packet.getId(),
+  _packets.emplace_back(Packet(_packet.getType(), _packet.getId(), _packet.getResourceId(),
                               _packet.getData(), _packet.getDataSize()));
 }
 

@@ -80,9 +80,12 @@ namespace network {
         std::shared_ptr<ITcpSocket> Tcp::accept(IAddr & pair)
         {
             int fd;
+            sockaddr_in addr;
+            unsigned int tmp;
 
             errno = 0;
-            fd = ::accept(_socket, nullptr, nullptr);
+            fd = ::accept(_socket, reinterpret_cast<sockaddr*>(&addr), &tmp);
+            pair.setValid(&addr);
             if (fd == -1) throw std::runtime_error(strerror(errno));
             return std::shared_ptr<ITcpSocket>(new Tcp(fd));
         }

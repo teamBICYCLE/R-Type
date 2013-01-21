@@ -15,13 +15,12 @@ using namespace TBSystem;
 
 namespace communication {
 
-NetworkHandler::NetworkHandler()
+NetworkHandler::NetworkHandler(const std::string& port)
 {
-  network::Addr pair(network::SI_ADDR_ANY, "4242", "UDP");
+  network::Addr pair(network::SI_ADDR_ANY, port, "UDP");
 
   _socket.setBlocking(false);
   _socket.bind(pair);
-  //_outAddr.push_back(network::Addr("127.0.0.1", "4244", "UDP"));
 }
 
 NetworkHandler::~NetworkHandler()

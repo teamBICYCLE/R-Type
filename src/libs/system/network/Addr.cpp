@@ -17,6 +17,7 @@
 # include <sys/types.h>
 # include <sys/socket.h>
 # include <netinet/ip.h>
+# include <arpa/inet.h>
 # include <netdb.h>
 #elif _WIN32
 
@@ -182,6 +183,12 @@ const void *  Addr::getValid() const {
 bool  Addr::operator==(const IAddr& other) const
 {
   return memcmp(&_valid, other.getValid(), sizeof(_valid)) == 0;
+}
+
+std::string Addr::getIpString() const
+{
+  if (!_isValid) throw std::runtime_error("unrecognized addr");
+  return inet_ntoa(_valid.sin_addr);
 }
 
 }

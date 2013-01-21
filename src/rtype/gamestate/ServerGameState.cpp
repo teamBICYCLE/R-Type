@@ -10,12 +10,17 @@
 #include <list>
 #include "input/Data.hh"
 #include "units/Monster.hh"
+#include "pool/SUnitPool.hh"
 #include "ServerGameState.hh"
 
 ServerGameState::ServerGameState(const std::shared_ptr<UnitPool> &p, const std::vector<Player*>& v)
   : GameState(p)
   , _pm()
   , _players(v)
+  , _lastIncrease(std::chrono::system_clock::now())
+  , _lastMonsterSpawn(std::chrono::system_clock::now())
+  , _levelIncreaseTick(10)
+  , _monsterSpawnRate(5000)
 {
    using namespace std::placeholders;
 
@@ -56,24 +61,34 @@ void  ServerGameState::updateWithInput(const communication::Packet& packet)
 
 void  ServerGameState::updateWorld(void)
 {
-  //SHIT -v
-  static bool first = true;
+  std::chrono::time_point<std::chrono::system_clock> now = std::chrono::system_clock::now();
 
-  if (first == true)
-  {
+  if (now - _lastIncrease >= _levelIncreaseTick) {
+    std::cout << "Speed up!" << std::endl;
+    _monsterSpawnRate = (_monsterSpawnRate * 9) / 10;//speed up by 10%
+    _lastIncrease = now;
+  }
+  if (now - _lastMonsterSpawn >= _monsterSpawnRate) {
+    std::cout << "MONSTAH" << std::endl;
     requireMonsters(Vector2D(0.1f, 0.1f), Vector2D(0.9f, 0.9f));
-    first = false;
+    _lastMonsterSpawn = now;
   }
 
   for (auto enemyIt = _enemies.begin(); enemyIt != _enemies.end(); ) {
     if ((*enemyIt)->isDead() == true) {//if enemy is dead..
       if ((*enemyIt)->wereOthersNotifiedOfDeath() == true) {//..and client were notified
+        std::cout << "Killing it" << std::endl;
+        Monster *deadUnit = dynamic_cast<Monster*>(*enemyIt);
         enemyIt = _enemies.erase(enemyIt);//..we remove it
+        _pool->release<Monster>(deadUnit);
         //TO DO: le rendre a la pool
       }
     }
     else {//enemy alive
       (*enemyIt)->move();
+      if ((*enemyIt)->getPos().x +
+          ((*enemyIt)->getHitboxRadius() / GameState::WINDOW_WIDTH) <= 0)
+        (*enemyIt)->setDead(true);
       ++enemyIt;
     }
   }
@@ -82,7 +97,7 @@ void  ServerGameState::updateWorld(void)
 void  ServerGameState::requireMonsters(const Vector2D &left, const Vector2D &right)
 {
   //SHIT -v
-  int id = 5;
+  static int id = 5;
   std::list<Unit *> monsters = _pm.get(_pool);
 
   float randx = left.x + ((float)rand()) / ((float)RAND_MAX / (right.x - left.x));
