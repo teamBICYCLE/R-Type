@@ -77,6 +77,7 @@ void    swap(Unit& lhs, Unit& rhs)
     std::swap(lhs._lastPacketSequence, rhs._lastPacketSequence);
     std::swap(lhs._pos, rhs._pos);
     std::swap(lhs._dir, rhs._dir);
+    std::swap(lhs._id, rhs._id);
     std::swap(lhs._hitboxCenter, rhs._hitboxCenter);
     std::swap(lhs._hitboxRadius, rhs._hitboxRadius);
     std::swap(lhs._isDead, rhs._isDead);
@@ -256,7 +257,7 @@ size_t  Unit::pack(uint8_t *out, size_t outSize) const
     packetContent.info.dx = to_short(_dir.x);
     packetContent.info.dy = to_short(_dir.y);
 
-    communication::Packet packet(communication::Packet::Type::POSITION, _id,
+    communication::Packet packet(communication::Packet::Type::POSITION, _id, _resourceId,
                                   packetContent.whole, sizeof(packetContent.whole));
 
     if (outSize < packet.getDataSize())

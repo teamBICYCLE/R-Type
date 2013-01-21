@@ -1,9 +1,3 @@
-#ifdef _WIN32
-#include <windows.h>
-#include <stdlib.h>
-#include <string.h>
-#include <tchar.h>
-#endif
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <SFML/Window/Keyboard.hpp>
@@ -15,11 +9,14 @@
 #include <system/network/Addr.hh>
 #include "RTypeConfig.h"
 #include "gamestate/GraphicGameState.hh"
-
 #include "pool/GUnitPool.hh"
 #include "units/Player.hh"
-
 #include <memory>
+#ifdef _WIN32
+#include <stdlib.h>
+#include <string.h>
+#include <tchar.h>
+#endif
 
 using namespace std;
 using namespace TBSystem;

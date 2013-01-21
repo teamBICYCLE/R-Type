@@ -10,8 +10,8 @@
 #include "GameState.hh"
 #include "input/Data.hh"
 
-const float GameState::WINDOW_WIDTH = 800.f;
-const float GameState::WINDOW_HEIGHT = 800.f;
+const int GameState::WINDOW_WIDTH = 800;
+const int GameState::WINDOW_HEIGHT = 800;
 
 GameState::GameState()
   : PLAYER_SPEED(200.f)

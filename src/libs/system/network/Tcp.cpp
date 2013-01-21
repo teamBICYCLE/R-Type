@@ -24,7 +24,6 @@
 #elif defined _WIN32
 # include <winsock2.h>
 # include <Ws2tcpip.h>
-# include <windows.h>
 # pragma comment( lib, "wsock32.lib" )
 #pragma comment (lib, "Ws2_32.lib")
 #endif
@@ -38,7 +37,7 @@ namespace network {
             errno = 0;
             _socket = socket(AF_INET, SOCK_STREAM, 0);
 #ifndef NDEBUG
-            int optval = 1;
+            char optval = 1;
             setsockopt(_socket, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof optval);
             log::debug << "Socket set to reusse addr" << log::endl;
 #endif
@@ -142,7 +141,7 @@ namespace network {
 
         bool Tcp::hasPendingDatagram() const
         {
-          int tmp;
+          u_long tmp;
 #ifdef _WIN32
 #define ioctl ioctlsocket
 #endif

@@ -17,19 +17,21 @@ static const std::chrono::milliseconds g_serverPacketRate(16);
 void  runServer(const std::vector<std::string>& clientsIps,
                 const std::string& port)
 {
-  std::vector<std::shared_ptr<Player>> players;
   std::vector<network::Addr> clients;
 
   for (auto& addr : clientsIps) {
     clients.push_back(network::Addr(addr, "4244", "UDP"));
   }
+
+  std::vector<Player*> players;
+
   for (int i = 0; i < 4; i++)
   {
     Player *player = SUnitPool::getInstance()->get<Player>();
     player->setId(i);
     player->setPos(Vector2D(0.1f, 0.1f * (float)(i + 1)));
     player->setDir(Vector2D(0.f, 0.f));
-    players.push_back(std::shared_ptr<Player>(player));
+    players.push_back(player);
   }
 
   // START OF THE REAL LOOP
@@ -77,6 +79,7 @@ void  runServer(const std::vector<std::string>& clientsIps,
   //clients.emplace_back("10.23.99.201");
   //clients.emplace_back("10.23.99.200");
   //clients.emplace_back("10.23.98.230");
+  //clients.push_back("10.23.98.165");
   //runServer(clients, "4242");
   //return EXIT_SUCCESS;
 //}

@@ -29,8 +29,8 @@ protected:
   Vector2D  convertToSpeed(const Vector2D& direction) const;
 
 public:
-  static const float WINDOW_WIDTH;
-  static const float WINDOW_HEIGHT;
+  static const int WINDOW_WIDTH;
+  static const int WINDOW_HEIGHT;
 
 protected:
   typedef std::function<void (const communication::Packet&)> UpdateFunction;

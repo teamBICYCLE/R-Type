@@ -105,7 +105,7 @@ void    Data::setFire(bool v)
 
 size_t Data::pack(uint8_t *out, size_t outSize) const
 {
-  communication::Packet packet(communication::Packet::Type::INPUT, _id,
+  communication::Packet packet(communication::Packet::Type::INPUT, _id, 0,
                                reinterpret_cast<const uint8_t*>(&_packet),
                                sizeof(_packet));
 

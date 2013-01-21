@@ -7,7 +7,7 @@ using namespace TBSystem;
 
 namespace communication {
 
-Packet::Packet(Type type, uint32_t id,
+Packet::Packet(Type type, uint32_t id, uint16_t resourceId,
                const uint8_t *content, size_t contentSize)
   : _dataSize(sizeof(_header) + contentSize)
 {
@@ -18,6 +18,7 @@ Packet::Packet(Type type, uint32_t id,
   packetSequence++;
   _header.type = type;
   _header.id = id;
+  _header.resourceId = resourceId;
   std::memcpy(_data, &_header, sizeof(_header));
   std::memcpy(_data + sizeof(_header), content, contentSize);
 }
@@ -77,6 +78,11 @@ Packet::Type    Packet::getType(void) const
 uint32_t    Packet::getId(void) const
 {
   return _header.id;
+}
+
+uint16_t    Packet::getResourceId(void) const
+{
+  return _header.resourceId;
 }
 
 const uint8_t *Packet::getContent(void) const

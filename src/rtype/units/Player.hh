@@ -23,7 +23,7 @@ public:
   virtual void  move(void);
 
 public:
-  Player *clone(void);
+  Unit *clone(void);
 };
 
 #endif /* !_PLAYER_H__ */

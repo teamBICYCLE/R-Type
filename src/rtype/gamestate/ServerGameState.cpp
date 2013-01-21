@@ -10,12 +10,17 @@
 #include <list>
 #include "input/Data.hh"
 #include "units/Monster.hh"
+#include "pool/SUnitPool.hh"
 #include "ServerGameState.hh"
 
-ServerGameState::ServerGameState(const std::vector<std::shared_ptr<Player>>& v)
+ServerGameState::ServerGameState(const std::vector<Player*>& v)
   : GameState()
   , _pm()
   , _players(v)
+  , _lastIncrease(std::chrono::system_clock::now())
+  , _lastMonsterSpawn(std::chrono::system_clock::now())
+  , _levelIncreaseTick(10)
+  , _monsterSpawnRate(5000)
 {
    using namespace std::placeholders;
 
@@ -33,7 +38,7 @@ void  ServerGameState::updateWithInput(const communication::Packet& packet)
 
   if (id <= _players.size()) {
     Input::Data d;
-    std::shared_ptr<Player>& player = _players[id];
+    Player *player = _players[id];
 
     if (player->isDead() == true)
       return;//if the player is dead, ignore his inputs
@@ -56,24 +61,43 @@ void  ServerGameState::updateWithInput(const communication::Packet& packet)
 
 void  ServerGameState::updateWorld(void)
 {
-  //SHIT -v
-  static bool first = true;
+  std::chrono::time_point<std::chrono::system_clock> now = std::chrono::system_clock::now();
 
-  if (first == true)
-  {
+  if (now - _lastIncrease >= _levelIncreaseTick) {
+    std::cout << "Speed up!" << std::endl;
+    _monsterSpawnRate = (_monsterSpawnRate * 9) / 10;//speed up by 10%
+    _lastIncrease = now;
+  }
+  if (now - _lastMonsterSpawn >= _monsterSpawnRate) {
+    std::cout << "MONSTAH" << std::endl;
     requireMonsters(Vector2D(0.1f, 0.1f), Vector2D(0.9f, 0.9f));
-    first = false;
+    _lastMonsterSpawn = now;
   }
 
-  for (auto& e : _enemies) {
-    (dynamic_cast<Monster *>(e))->move();
+  for (auto enemyIt = _enemies.begin(); enemyIt != _enemies.end(); ) {
+    if ((*enemyIt)->isDead() == true) {//if enemy is dead..
+      if ((*enemyIt)->wereOthersNotifiedOfDeath() == true) {//..and client were notified
+        std::cout << "Killing it" << std::endl;
+        Monster *deadUnit = dynamic_cast<Monster*>(*enemyIt);
+        enemyIt = _enemies.erase(enemyIt);//..we remove it
+        SUnitPool::getInstance()->release<Monster>(deadUnit);
+        //TO DO: le rendre a la pool
+      }
+    }
+    else {//enemy alive
+      (*enemyIt)->move();
+      if ((*enemyIt)->getPos().x +
+          ((*enemyIt)->getHitboxRadius() / GameState::WINDOW_WIDTH) <= 0)
+        (*enemyIt)->setDead(true);
+      ++enemyIt;
+    }
   }
 }
 
 void  ServerGameState::requireMonsters(const Vector2D &left, const Vector2D &right)
 {
   //SHIT -v
-  int id = 5;
+  static int id = 5;
   std::list<Unit *> monsters = _pm.get();
 
   float randx = left.x + ((float)rand()) / ((float)RAND_MAX / (right.x - left.x));
@@ -83,8 +107,8 @@ void  ServerGameState::requireMonsters(const Vector2D &left, const Vector2D &rig
   for (auto it : monsters)
   {
       Vector2D originalPos = it->getPos();
-      float newX = randx + (originalPos.x * 0.03);
-      float newY = randy + (originalPos.y * 0.05);
+      float newX = randx + (originalPos.x * 0.03f);
+      float newY = randy + (originalPos.y * 0.05f);
       it->setPos(Vector2D(newX, newY));
       //SHIT -v
       it->setId(id++);
@@ -95,8 +119,6 @@ void  ServerGameState::requireMonsters(const Vector2D &left, const Vector2D &rig
 
 void  ServerGameState::moveOne(Player& p)
 {
-  Vector2D  savedPos = p.getPos();
-
   p.move();
   for (auto& enemy : _enemies)
   {
@@ -124,7 +146,7 @@ void  ServerGameState::setPlayerDirection(uint32_t id, const Vector2D& dir)
   }
 }
 
-const std::vector<std::shared_ptr<Player>>& ServerGameState::getPlayers() const
+const std::vector<Player*>& ServerGameState::getPlayers() const
 {
   return _players;
 }

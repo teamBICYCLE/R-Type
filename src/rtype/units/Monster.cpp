@@ -28,12 +28,10 @@ Monster *Monster::clone(void)
 
 void	Monster::move(void)
 {
-  const float scaledHitboxDiameter = (_hitboxRadius / GameState::WINDOW_WIDTH) * 2;
-
+	const float scaledHitboxDiameter = (_hitboxRadius / GameState::WINDOW_WIDTH) * 2;
 	_dir = _movefct(_pos);
-	//std::cout << _dir << std::endl;
 	Unit::move();
-  if (_pos.y < 0) _pos.y = 0;
-  if (_pos.y + scaledHitboxDiameter > 1) _pos.y = 1 - scaledHitboxDiameter;
-  _hitboxCenter = _pos;
+	if (_pos.y < 0) _pos.y = 0;
+	if (_pos.y + scaledHitboxDiameter > 1) _pos.y = 1 - scaledHitboxDiameter;
+	_hitboxCenter = _pos;
 }
