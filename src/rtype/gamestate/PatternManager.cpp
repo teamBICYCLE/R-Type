@@ -79,13 +79,14 @@ void PatternManager::createMoveStyles(void)
 
 	moveStyle sinfct = [](const Vector2D &pos) {
 
-		// float posx = pos.x * 800;
-		// float posy = pos.y * 800;
-		// float newPosx = posx;
-		// float newPosy = std::sin(pos.x)
-		Vector2D newPos(pos.x, std::sin(pos.x));
+		float posx = pos.x * 800;
+		float posy = pos.y * 800;
+		float newPosx = posx;
+		float newPosy = std::sin(posx);
+		//Vector2D newPos(pos.x, std::sin(pos.x));
 		//Vector2D v(newPos - pos) / MONSTER_SPEED;
-		return (newPos - pos);
+		std::cout << (Vector2D(newPosx / 800, newPosy / 800) - Vector2D(pos.x, pos.y)) << std::endl;
+		return (Vector2D(newPosx / 800, newPosy / 800) - Vector2D(pos.x, pos.y));
 	};
 
 	_moveStyles.insert(std::make_pair("linear", linearfct));
