@@ -24,8 +24,8 @@ void	listCallback()
 
 int	main()
 {
-  sf::RenderWindow window(sf::VideoMode(800, 600), "SFML window");
-  View		view("../bg.jpg", window.getSize(), sf::Vector2f(500.0,50.0));
+  sf::RenderWindow window(sf::VideoMode(1200, 800), "SFML RType");
+  View		view("../resources/menu_background.jpg", window.getSize(), sf::Vector2f(500.0,50.0));
 
   std::vector<void*>	test;
 

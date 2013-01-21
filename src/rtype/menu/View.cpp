@@ -10,6 +10,9 @@ View::View(const std::string& texture, const sf::Vector2u& size, const sf::Vecto
 
   _texture.loadFromFile(texture);
   _background.setTexture(_texture);
+  _background.setPosition(size.x, size.y);
+  _background.setOrigin(1920 / 2, 1200 / 2);
+  _background.scale(1.8,1.8);
   x = (_size.x / 2) - (listItemSize.x / 2);
   y = (_size.y / 2) - (MAX_ROW * listItemSize.y / 2);
   _listView = new ListView(sf::Vector2f(x,y), listItemSize);
@@ -28,6 +31,7 @@ void	View::update(std::vector<void*> &list)
 
 void	View::draw(sf::RenderWindow& target)
 {
+  _background.rotate(0.015);
   target.draw(_background);
   _listView->draw(target);
   if (_buttonOne)
