@@ -15,6 +15,7 @@
 # define PATTERNS_PATH	RESOURCES_PATH "patterns"
 # define SHARED_PATH	RESOURCES_PATH "shared"
 # define SPRITE_PATH	RESOURCES_PATH "sprites/monster/"
+# define MONSTER_SPEED	200.f
 
 # ifdef     __gnu_linux__
 	#define SHARED_EXT ".so"

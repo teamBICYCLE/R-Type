@@ -42,7 +42,6 @@ void  Player::move(void)
   if (_pos.x + scaledHitboxDiameter > 1) _pos.x = 1 - scaledHitboxDiameter;
   if (_pos.y < 0) _pos.y = 0;
   if (_pos.y + scaledHitboxDiameter > 1) _pos.y = 1 - scaledHitboxDiameter;
-  //std::cout << "Player moved: " << _pos << std::endl;
   _hitboxCenter = _pos;
 }
 

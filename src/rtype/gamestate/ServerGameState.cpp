@@ -80,8 +80,6 @@ void  ServerGameState::requireMonsters(const Vector2D &left, const Vector2D &rig
   float randy = left.y + ((float)rand()) / ((float)RAND_MAX / (right.y - left.y));
 
   // pour l'instant on verifie rien
-  // a voir a l'utilisation
-  // mais peut etre que ca passe bien
   for (auto it : monsters)
   { 
       Vector2D originalPos = it->getPos();
