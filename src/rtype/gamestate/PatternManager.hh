@@ -41,12 +41,12 @@ public:
 public:
 	typedef struct MonsterDefinition
 	{	
-		std::string name;
+		const char *name;
 		unsigned int resourceId;
 		unsigned int pv;
 		unsigned int munition;
-		std::chrono::milliseconds timeToReload;
-		std::chrono::milliseconds fireFrenquence;
+		int timeToReload;
+		int fireFrenquence;
 	} MonsterDefinition;
 
 private:

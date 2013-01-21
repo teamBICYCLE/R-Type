@@ -53,12 +53,12 @@ void PatternManager::checkShared(const std::string &file)
 	std::cout << "load shared " << file << std::endl;
 	DLoader loader(file);
 	std::shared_ptr<MonsterDefinition> def = std::shared_ptr<MonsterDefinition>(new MonsterDefinition());
-	std::function<const std::string (void)>n = loader.load<const std::string (void)>("getName");
+	std::function<const char*(void)>n = loader.load<const char*(void)>("getName");
 	std::function<unsigned int (void)>i = loader.load<unsigned int(void)>("getResourceId");
 	std::function<unsigned int (void)>p = loader.load<unsigned int(void)>("getPv");
 	std::function<unsigned int (void)>m = loader.load<unsigned int(void)>("getMunition");
-	std::function<const std::chrono::milliseconds (void)>r = loader.load<const std::chrono::milliseconds (void)>("timeToReload");
-	std::function<const std::chrono::milliseconds (void)>f = loader.load<const std::chrono::milliseconds (void)>("fireFrequence");
+	std::function<int (void)>r = loader.load<int (void)>("timeToReload");
+	std::function<int (void)>f = loader.load<int (void)>("fireFrequence");
 	def->name = n();
 	def->resourceId = i();
 	def->pv = p();
@@ -115,8 +115,8 @@ std::list<Unit *> PatternManager::get(void) const
 			monster->setResourceId(sharedDef->resourceId);
 			monster->setPv(sharedDef->pv);
 			monster->setMunition(sharedDef->munition);
-			monster->setTimeToReload(sharedDef->timeToReload);
-			monster->setFireFrequence(sharedDef->fireFrenquence);
+			monster->setTimeToReload(std::chrono::milliseconds(sharedDef->timeToReload));
+			monster->setFireFrequence(std::chrono::milliseconds(sharedDef->fireFrenquence));
 
 			// load pattern informations in monster
 			monster->setPos(Vector2D((*item)->posx, (*item)->posy));

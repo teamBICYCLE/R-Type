@@ -84,8 +84,8 @@ void  ServerGameState::requireMonsters(const Vector2D &left, const Vector2D &rig
   for (auto it : monsters)
   {
       Vector2D originalPos = it->getPos();
-      float newX = randx + (originalPos.x * 0.03);
-      float newY = randy + (originalPos.y * 0.05);
+      float newX = randx + (originalPos.x * 0.03f);
+      float newY = randy + (originalPos.y * 0.05f);
       it->setPos(Vector2D(newX, newY));
       //SHIT -v
       it->setId(id++);
