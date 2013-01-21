@@ -7,6 +7,8 @@ ListView::ListView(const sf::Vector2f &pos, const sf::Vector2f &itemSize, unsign
   _background.setFillColor(sf::Color(0,0,0,128));
   _background.setOutlineColor(sf::Color::Black);
   _background.setOutlineThickness(1);
+  _background.setSize(sf::Vector2f(_itemSize.x,(_maxRow * _itemSize.y + ((_maxRow - 1) * VERTICAL_ITEM_SPACING))));
+  _background.setPosition(_position);
 }
 
 ListView::~ListView()
@@ -40,8 +42,6 @@ void	ListView::draw(sf::RenderTarget& target)
 {
   unsigned int	countRow = 0;
 
-  _background.setSize(sf::Vector2f(_itemSize.x,(_maxRow * _itemSize.y + ((_maxRow - 1) * VERTICAL_ITEM_SPACING))));
-  _background.setPosition(_position);
   target.draw(_background);
   for (auto it = _list.begin(); it != _list.end(); it++)
     {
@@ -67,6 +67,11 @@ const std::vector<ListItem*>&	ListView::getList() const
 const sf::Vector2f&		ListView::getPosition() const
 {
   return _position;
+}
+
+const sf::Vector2f&		ListView::getSize() const
+{
+  return _background.getSize();
 }
 
 const sf::Vector2f&		ListView::getItemSize() const
