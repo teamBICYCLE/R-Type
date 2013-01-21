@@ -13,7 +13,7 @@ public:
 
 public:
   void    setId(const uint32_t id);
-  GUnit	  *clone(void);
+  Unit	  *clone(void);
 
 public:
 	virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;

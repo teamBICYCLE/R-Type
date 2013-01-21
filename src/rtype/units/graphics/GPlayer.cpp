@@ -48,7 +48,12 @@ const sf::Drawable *GPlayer::render(void) const
 	return &_circle;
 }
 
-GPlayer *GPlayer::clone(void)
+Unit *GPlayer::clone(void)
 {
 	return (new GPlayer(*this));
+}
+
+void GPlayer::move(void)
+{
+	Player::move();
 }

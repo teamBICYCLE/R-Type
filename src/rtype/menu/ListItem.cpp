@@ -2,7 +2,8 @@
 
 ListItem::ListItem(const sf::Vector2f& dimension, const sf::Vector2f& position,
 		   const std::string& label, const std::string& texture)
-  : Button(dimension, position, texture), _label(label)
+  : Button(dimension, position, texture)
+  , _label(sf::String(label))
 {
   _label.setPosition(position);
   _label.setCharacterSize(14);

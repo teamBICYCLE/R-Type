@@ -1,10 +1,4 @@
 
-#ifdef _WIN32
-#include <windows.h>
-#include <stdlib.h>
-#include <string.h>
-#include <tchar.h>
-#endif
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <SFML/Window/Keyboard.hpp>
@@ -16,11 +10,14 @@
 #include <system/network/Addr.hh>
 #include "RTypeConfig.h"
 #include "gamestate/GraphicGameState.hh"
-
 #include "pool/GUnitPool.hh"
 #include "units/Player.hh"
-
 #include <memory>
+#ifdef _WIN32
+#include <stdlib.h>
+#include <string.h>
+#include <tchar.h>
+#endif
 
 using namespace std;
 using namespace TBSystem;
@@ -40,7 +37,7 @@ int main(int argc, char* argv[])
 #endif
 {
   network::sockets::Udp s;
-  network::Addr server(argv[1], argv[2], "UDP");
+  network::Addr server("10.23.98.230", "4242", "UDP");
   Input::Config cfg;
   cfg._top = sf::Keyboard::Up;
   cfg._bot = sf::Keyboard::Down;
@@ -57,7 +54,7 @@ int main(int argc, char* argv[])
   //player->setId(std::stoi(argv[3]));
   //player->setPos(Vector2D(0.1f, 0.1f));
   //player->setDir(Vector2D(0.f, 0.f));
-  GraphicGameState  g(std::shared_ptr<GPlayer>(new GPlayer(std::stoi(argv[3]),
+  GraphicGameState  g(std::shared_ptr<GPlayer>(new GPlayer(std::stoi("1"),
                                   Vector2D(0.1f, 0.1f), Vector2D(0.f, 0.f))));
 
   s.setBlocking(false);
@@ -90,7 +87,7 @@ int main(int argc, char* argv[])
       uint8_t buf[256];
 
       Input::Data i = cfg.getInput();
-      i.setId(std::stoi(argv[3]));
+      i.setId(std::stoi("1"));
       g.simulate(i);
       int ret = i.pack(buf, sizeof(buf));
 

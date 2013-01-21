@@ -3,7 +3,7 @@
 
 extern "C" 
 {
-	const std::string getName(void)
+	const char *getName(void)
 	{
 		return "defaultMonster";
 	}
@@ -23,13 +23,13 @@ extern "C"
 		return 10;
 	}
 
-	const std::chrono::milliseconds timeToReload(void)
+	int timeToReload(void)
 	{
-		return std::chrono::milliseconds(50);
+		return 50;
 	}
 
-	const std::chrono::milliseconds fireFrequence(void)
+	int fireFrequence(void)
 	{
-		return std::chrono::milliseconds(2);
+		return 2;
 	}
 }

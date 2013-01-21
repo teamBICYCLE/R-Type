@@ -46,7 +46,7 @@ void  Player::move(void)
   _hitboxCenter = _pos;
 }
 
-Player *Player::clone(void)
+Unit *Player::clone(void)
 {
 	return (new Player(*this));
 }

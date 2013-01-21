@@ -233,8 +233,8 @@ const std::chrono::milliseconds &Unit::getFireFrequence(void) const
   return _fireFrequence;
 }
 
-#define TO_SHORT(x) (x * ((uint16_t)-1))
-#define FROM_SHORT(x) (x / (float)((uint16_t)-1))
+#define TO_SHORT(x) ((uint16_t)(x * ((uint16_t)-1)))
+#define FROM_SHORT(x) ((uint16_t)(x / (float)((uint16_t)-1)))
 
 size_t  Unit::pack(uint8_t *out, size_t outSize) const
 {

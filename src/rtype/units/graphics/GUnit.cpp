@@ -51,7 +51,7 @@ void GUnit::draw(sf::RenderTarget &target, sf::RenderStates states) const
 	target.draw(_circle, sf::Transform().translate(pos));
 }
 
-GUnit *GUnit::clone(void)
+Unit *GUnit::clone(void)
 {
   	return (new GUnit(*this));
 }
