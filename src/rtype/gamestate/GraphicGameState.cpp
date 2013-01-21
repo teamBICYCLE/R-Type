@@ -71,6 +71,7 @@ void  GraphicGameState::updateWithPosition(const communication::Packet& packet)
     {
       GUnit *newEntity = GUnitPool::getInstance()->get<GUnit>();
       newEntity->setId(id);
+      newEntity->setResourceId(packet.getResourceId());
       _others.push_back(newEntity);
       _others.back()->unpack(packet.getSequence(), packet.getContent());
     }

@@ -19,7 +19,8 @@ public:
   };
 
 public:
-  Packet(Type type, uint32_t id, const uint8_t *rawData, size_t dataSize);
+  Packet(Type type, uint32_t id, uint16_t resourceId,
+         const uint8_t *rawData, size_t dataSize);
   Packet(const uint8_t *dataFromNetwork, size_t size);
   ~Packet();
 
@@ -34,6 +35,7 @@ public:
   uint32_t        getSequence(void) const;
   Type            getType(void) const;
   uint32_t        getId(void) const;
+  uint16_t        getResourceId(void) const;
   const uint8_t   *getContent(void) const;
   size_t          getContentSize(void) const;
   const uint8_t   *getData(void) const;
@@ -52,6 +54,7 @@ private:
     uint32_t  sequence;
     Type      type;
     uint32_t  id;
+    uint16_t  resourceId;
   } _header;
   uint8_t   _data[MAX_PACKET_SIZE];
   size_t    _dataSize;

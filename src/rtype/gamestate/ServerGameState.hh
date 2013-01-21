@@ -27,6 +27,10 @@ private:
 	const PatternManager _pm;
   std::vector<Player*>  _players;
 	std::list<Unit*>	 _enemies;
+  std::chrono::time_point<std::chrono::system_clock> _lastIncrease;
+  std::chrono::time_point<std::chrono::system_clock> _lastMonsterSpawn;
+  const std::chrono::seconds  _levelIncreaseTick;
+  std::chrono::milliseconds   _monsterSpawnRate;
 };
 
 #endif /* !_SERVERGAMESTATE_H__ */

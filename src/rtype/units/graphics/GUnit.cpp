@@ -8,8 +8,8 @@ GUnit::GUnit(int id, const Vector2D& pos, const Vector2D& dir)
   , _circle(10.f)
 {
   setId(_id);
-  toto.addSourceFolder("resources/sprites");
-  _anim.reset(toto["resources/sprites/vaisseau.bmp"]->generateAnimInfo());
+  //toto.addSourceFolder("resources/sprites");
+  //_anim.reset(toto["resources/sprites/vaisseau.bmp"]->generateAnimInfo());
 
 }
 
