@@ -62,7 +62,7 @@ bool  ReliablePacket::checkAnswer(const TBSystem::network::Addr& clientAddr,
     if (packet.getSequence() == packetIt->getSequence() &&
         packet.getType() == communication::Packet::Type::ACK)
     {
-      std::cout << "SAFE id=" << packet.getSequence() << std::endl;
+      //std::cout << "SAFE id=" << packet.getSequence() << std::endl;
       clientIt->second = true;//it arrived safely
       return true;
     }

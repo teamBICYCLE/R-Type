@@ -83,7 +83,7 @@ void  GraphicGameState::updateWithDeath(const communication::Packet& packet)
 {
   const uint32_t id = packet.getId();
 
-  std::cout << "DEATH" << std::endl;
+  //std::cout << "DEATH" << std::endl;
   if (id == _player->getId())//if it's me..
     _player->setDead(true);
   else//search for an enemy/ally/bullet
@@ -92,6 +92,7 @@ void  GraphicGameState::updateWithDeath(const communication::Packet& packet)
 
     //need someting like deleteLater, juste to animate the death
     if (entity != nullptr) {
+      std::cout << "Entity with id=" << entity->getId() << " died" << std::endl;
       _others.remove(entity);
       GUnitPool::getInstance()->release<GUnit>(entity);
     }
