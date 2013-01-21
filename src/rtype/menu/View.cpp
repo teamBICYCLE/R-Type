@@ -43,9 +43,9 @@ void	View::clickEvent(sf::Vector2i coord)
   if (_listView->checkClick(coord))
     return;
   else {
-    if (_buttonOne->isClicked(coord))
+    if (_buttonOne && _buttonOne->isClicked(coord))
       _buttonOne->onClick();
-    if (_buttonTwo->isClicked(coord))
+    if (_buttonOne && _buttonTwo->isClicked(coord))
       _buttonTwo->onClick();
   }
 }
