@@ -13,10 +13,10 @@
 
 typedef union {
     struct _content {
-        uint16_t    x;
-        uint16_t    y;
-        uint16_t    dx;
-        uint16_t    dy;
+        int16_t   x;
+        int16_t   y;
+        int16_t   dx;
+        int16_t   dy;
     } info;
     uint8_t         whole[sizeof(_content)];
 } UnitPacket_u;
@@ -52,6 +52,9 @@ class   Unit : public IPackable
 
     public:
         virtual void    move(void);
+        virtual bool    collideWith(Unit& other);
+
+    public:
         void    setId(const uint32_t);
         void    setDir(const Vector2D& dir);
         void    setLastPacketSequence(uint32_t newPacketSequence);

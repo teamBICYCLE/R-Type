@@ -25,14 +25,6 @@ Player::~Player()
 {
 }
 
-bool  Player::collideWith(const Player& other) const
-{
-  float dist = _hitboxCenter.distanceSquared(other.getHitboxCenter());
-
-  return dist <= (((_hitboxRadius + other.getHitboxRadius()) / GameState::WINDOW_WIDTH) *
-                 ((_hitboxRadius + other.getHitboxRadius()) / GameState::WINDOW_WIDTH));
-}
-
 void  Player::move(void)
 {
   const float scaledHitboxDiameter = (_hitboxRadius / GameState::WINDOW_WIDTH) * 2;
