@@ -1,7 +1,8 @@
 #include <cstring>
 #include <stdexcept>
-#include "Unit.hh"
 #include <system/log/Log.hh>
+#include "Unit.hh"
+#include "gamestate/GameState.hh"
 
 using namespace TBSystem;
 
@@ -138,6 +139,14 @@ void  Unit::move(void)
     _hitboxCenter = _pos;
 }
 
+bool  Unit::collideWith(Unit& other)
+{
+  float dist = _hitboxCenter.distanceSquared(other.getHitboxCenter());
+
+  return dist <= (((_hitboxRadius + other.getHitboxRadius()) / GameState::WINDOW_WIDTH) *
+                 ((_hitboxRadius + other.getHitboxRadius()) / GameState::WINDOW_WIDTH));
+}
+
 void  Unit::setId(const uint32_t id)
 {
     _id = id;
@@ -177,11 +186,6 @@ void    Unit::setOthersNotifiedOfDeath(bool b)
 {
   _othersNotifiedOfDeath = b;
 }
-  
-// void    Unit::setSpritePath(const std::string &p)
-// {
-//   _spritePath = p;
-// }
 
 void  Unit::setResourceId(const unsigned int v)
 {
@@ -233,8 +237,8 @@ const std::chrono::milliseconds &Unit::getFireFrequence(void) const
   return _fireFrequence;
 }
 
-#define TO_SHORT(x) (x * ((uint16_t)-1))
-#define FROM_SHORT(x) (x / (float)((uint16_t)-1))
+#define TO_SHORT(x) (x * 10000)
+#define FROM_SHORT(x) (x / 10000.f)
 
 size_t  Unit::pack(uint8_t *out, size_t outSize) const
 {
