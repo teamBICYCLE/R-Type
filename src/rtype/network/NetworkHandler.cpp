@@ -68,7 +68,6 @@ void  NetworkHandler::broadcast(const ServerGameState& g)
       uint8_t  buf[communication::Packet::MAX_PACKET_SIZE];
       int      packetSize;
 
-      std::cout << "=================> " << p->getPos() << std::endl;
       packetSize = p->pack(buf, sizeof(buf));
       if (p->isDead() == false)
       {
