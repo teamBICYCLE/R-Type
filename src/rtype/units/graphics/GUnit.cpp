@@ -48,13 +48,14 @@ void GUnit::draw(sf::RenderTarget &target, sf::RenderStates states) const
 {
 	sf::Vector2f pos = static_cast<sf::Vector2f>(_pos);
 
-	std::cout << "drawing " << _id << std::endl;
-	if (_dir.y > 0)
-		_anim->setAnimationName("top");
-	else if (_dir.y < 0)
-		_anim->setAnimationName("bot");
-	else
-		_anim->setAnimationName("mid");
+	// THIBAULT
+	// std::cout << "drawing " << _id << std::endl;
+	// if (_dir.y > 0)
+	// 	_anim->setAnimationName("top");
+	// else if (_dir.y < 0)
+	// 	_anim->setAnimationName("bot");
+	// else
+	// 	_anim->setAnimationName("mid");
 	
 	//_anim->getSprite();
 	// _anim->startAnimation();
