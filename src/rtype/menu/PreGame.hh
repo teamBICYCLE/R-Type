@@ -53,6 +53,12 @@ private:
   void roomlistEnd();
 
 private:
+  void roomdetailsDispatch(const std::string& command);
+  void roomdetailsStart(void);
+  void roomdetailsAppend(const std::string& player);
+  void roomdetailsEnd(void);
+
+private:
 	TBSystem::network::Listener _listener;
 	std::shared_ptr<TBSystem::network::sockets::ITcpSocket> _socket;
   std::string _commandLine;
@@ -67,6 +73,7 @@ private:
 	std::map<std::string, std::function<void (const std::string &)>> _cmdType;
 	std::map<std::string, std::function<void (const std::string &)>> _responseMap;
 	std::map<std::string, std::function<void (const std::string &)>> _roomlistMap;
+	std::map<std::string, std::function<void (const std::string &)>> _roomdetailsMap;
 
 private:
   sf::RenderWindow _window;

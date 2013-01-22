@@ -14,17 +14,23 @@ PreGame::PreGame(const std::string &ip, const std::string &port)
   using namespace std::placeholders;
 
 
-	_cmdType["notif"] = std::bind(&PreGame::handleNotif, this, std::placeholders::_1);
-	_cmdType["hi"] = std::bind(&PreGame::handleWelcome, this, std::placeholders::_1);
-	_cmdType["err"] = std::bind(&PreGame::handleError, this, std::placeholders::_1);
-	_cmdType["rep"] = std::bind(&PreGame::handleResponse, this, std::placeholders::_1);
+	_cmdType["notif"] = std::bind(&PreGame::handleNotif, this, _1);
+	_cmdType["hi"] = std::bind(&PreGame::handleWelcome, this, _1);
+	_cmdType["err"] = std::bind(&PreGame::handleError, this, _1);
+	_cmdType["rep"] = std::bind(&PreGame::handleResponse, this, _1);
 
   _responseMap["roomlist"] = std::bind(&PreGame::roomlistDispatch, this, _1);
+  _responseMap["room_details"] = std::bind(&PreGame::roomdetailsDispatch, this, _1);
   _responseMap["join"] = std::bind(&PreGame::joinRoom, this, _1);
+  _responseMap["leave"] = std::bind(&PreGame::requestRoomlist, this);
 
   _roomlistMap["start"] = std::bind(&PreGame::roomlistStart, this);
   _roomlistMap["room"] = std::bind(&PreGame::roomlistAppend, this, _1);
   _roomlistMap["end"] = std::bind(&PreGame::roomlistEnd, this);
+
+  _roomdetailsMap["start"] = std::bind(&PreGame::roomdetailsStart, this);
+  _roomdetailsMap["player"] = std::bind(&PreGame::roomdetailsAppend, this, _1);
+  _roomdetailsMap["end"] = std::bind(&PreGame::roomdetailsEnd, this);
 
   	try {
   		_socket.reset(new TBSystem::network::sockets::Tcp);
@@ -185,6 +191,41 @@ void PreGame::roomlistEnd()
 {
   TBSystem::log::info << "In roomlist end" << TBSystem::log::endl;
   updateHallway();
+}
+
+void PreGame::roomdetailsDispatch(const std::string& command)
+{
+  std::stringstream ss(command);
+  std::string type;
+  int roomId;
+
+  TBSystem::log::info << "In dispatch with `" << command << "`" << TBSystem::log::endl;
+  ss >> roomId;
+  ss >> type;
+  if (roomId != _currentRoom) return;
+  auto it = _roomdetailsMap.find(type);
+  if (it != _roomdetailsMap.end()) {
+    std::istreambuf_iterator<char> eos;
+    std::string s(std::istreambuf_iterator<char>(ss), eos);
+
+    it->second(s);
+  }
+}
+
+void PreGame::roomdetailsStart(void)
+{
+  TBSystem::log::debug << "in start roomdetails ======" << TBSystem::log::endl;
+  _players.clear();
+}
+
+void PreGame::roomdetailsAppend(const std::string& player)
+{
+  _players.emplace_back(player);
+}
+
+void PreGame::roomdetailsEnd(void)
+{
+  updateRoom();
 }
 
 void PreGame::createRoom(void)
