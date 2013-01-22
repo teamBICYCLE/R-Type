@@ -79,7 +79,7 @@ void  ServerGameState::updateEntities(std::list<UnitType*>& entities,
       (*entityIt)->move();
       if ((*entityIt)->isOffScreen(GameState::WINDOW_WIDTH) == true ||
           collideFun(*entityIt) == true) {
-        std::cout << "Seting dead" << std::endl;
+        //std::cout << "Seting dead" << std::endl;
         (*entityIt)->setDead(true);
       }
       ++entityIt;
@@ -96,11 +96,11 @@ void  ServerGameState::updateWorld(void)
     _lastIncrease = now;
   }
   if (now - _lastMonsterSpawn >= _monsterSpawnRate) {
-    std::cout << _enemies.size() << std::endl;
+    //std::cout << _enemies.size() << std::endl;
     if (_enemies.size() <= 60)
       requireMonsters();
-    else
-      std::cout << "tempo" << std::endl;
+    //else
+      //std::cout << "tempo" << std::endl;
     _lastMonsterSpawn = now;
   }
 
@@ -217,7 +217,7 @@ void  ServerGameState::requireMonsters(void)
       float newX = randx + (originalPos.x * 0.03f); // TMP
       float newY = randy + (originalPos.y * 0.05f); // TMP
       it->setPos(Vector2D(newX, newY));
-      std::cout << "Monster id=" << it->getId() << std::endl;
+      //std::cout << "Monster id=" << it->getId() << std::endl;
   }
   _enemies.insert(_enemies.end(), monsters.begin(), monsters.end());
 }

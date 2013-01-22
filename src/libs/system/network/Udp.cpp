@@ -79,7 +79,7 @@ int Udp::send(const uint8_t * packet, int packetSize, const IAddr & pair)
       }
     }
   }
-  if (ret == -1) throw std::runtime_error(strerror(errno));
+  //if (ret == -1) throw std::runtime_error(strerror(errno));
   return ret;
 }
 
