@@ -11,7 +11,7 @@ private:
   sf::Text		_status;
 
 public:
-  PlayerListItem(const sf::Vector2f& dimension, const std::string& label,
+  PlayerListItem(const sf::Vector2f& dimension, const std::string& id,
 		 const std::string& status = "EMPTY", const std::string& texture = DEFAULT_LISTITEM_TEXTURE);
   virtual ~PlayerListItem();
 

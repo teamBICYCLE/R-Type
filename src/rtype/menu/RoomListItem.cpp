@@ -1,9 +1,9 @@
 #include "RoomListItem.hh"
 
-RoomListItem::RoomListItem(const sf::Vector2f& dimension, const std::string& label,
+RoomListItem::RoomListItem(const sf::Vector2f& dimension, const std::string& id,
 			   const std::string& minPlayer, const std::string& maxPlayer,
 			   const std::string& texture)
-  : ListItem(dimension, "#"+label, texture), _minPlayerLabel(minPlayer), _maxPlayerLabel("/" + maxPlayer)
+  : ListItem(dimension, "#"+id, texture), _minPlayerLabel(minPlayer), _maxPlayerLabel("/" + maxPlayer)
 {
   _minPlayerLabel.setPosition(sf::Vector2f(0,0));
   _maxPlayerLabel.setPosition(sf::Vector2f(0,0));
