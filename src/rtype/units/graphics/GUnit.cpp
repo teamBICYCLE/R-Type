@@ -28,7 +28,7 @@ void GUnit::setAnimationManager(const AnimationM &m)
 		path = std::to_string(_resourceId);
 
 	// nom = _resourceId;
-	_anim.reset((*(m.get()))["resources/sprites/vaisseau.bmp"]->generateAnimInfo());
+	_anim.reset((*(m.get()))["resources/sprites/" + path + ".bmp"]->generateAnimInfo());
 	// throw ---^
 	//_currentResourceId = _resourceId;
   	//_anim.reset((*(a.get()))["resources/sprites/vaisseau.bmp"]->generateAnimInfo());
@@ -37,7 +37,6 @@ void GUnit::setAnimationManager(const AnimationM &m)
 void GUnit::setId(const uint32_t id)
 {
 	_id = id;
-
 }
 
 void GUnit::draw(sf::RenderTarget &target, sf::RenderStates states) const
