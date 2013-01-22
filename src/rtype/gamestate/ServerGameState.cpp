@@ -96,8 +96,6 @@ void  ServerGameState::updateWorld(void)
 
 void  ServerGameState::requireMonsters(void)
 {
-  //SHIT -v
-  static int id = 5;
   std::list<Monster*> monsters = _pm.get(_pool);
   Vector2D left(1.0f, 0.1f);
   Vector2D right(1.2f, 0.5f);
@@ -133,8 +131,6 @@ void  ServerGameState::requireMonsters(void)
       float newX = randx + (originalPos.x * 0.03f); // TMP
       float newY = randy + (originalPos.y * 0.05f); // TMP
       it->setPos(Vector2D(newX, newY));
-      //SHIT -v
-      it->setId(id++);
       std::cout << "Monster id=" << it->getId() << std::endl;
   }
   _enemies.insert(_enemies.end(), monsters.begin(), monsters.end());
