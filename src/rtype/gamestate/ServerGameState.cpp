@@ -64,12 +64,11 @@ void  ServerGameState::updateWorld(void)
   std::chrono::time_point<std::chrono::system_clock> now = std::chrono::system_clock::now();
 
   if (now - _lastIncrease >= _levelIncreaseTick) {
-    std::cout << "Speed up!" << std::endl;
+    //std::cout << "Speed up!" << std::endl;
     _monsterSpawnRate = (_monsterSpawnRate * 9) / 10;//speed up by 10%
     _lastIncrease = now;
   }
   if (now - _lastMonsterSpawn >= _monsterSpawnRate) {
-    //std::cout << "MONSTAH" << std::endl;
     std::cout << _enemies.size() << std::endl;
     if (_enemies.size() <= 60)
       requireMonsters(Vector2D(1.0f, 0.f), Vector2D(1.2f, 0.5f));
@@ -81,7 +80,7 @@ void  ServerGameState::updateWorld(void)
   for (auto enemyIt = _enemies.begin(); enemyIt != _enemies.end(); ) {
     if ((*enemyIt)->isDead() == true) {//if enemy is dead..
       if ((*enemyIt)->wereOthersNotifiedOfDeath() == true) {//..and client were notified
-        std::cout << "Killing it" << std::endl;
+        //std::cout << "Killing it" << std::endl;
         Monster *deadUnit = dynamic_cast<Monster*>(*enemyIt);
         enemyIt = _enemies.erase(enemyIt);//..we remove it
         _pool->release<Monster>(deadUnit);
@@ -117,6 +116,10 @@ void  ServerGameState::requireMonsters(const Vector2D &left, const Vector2D &rig
       it->setPos(Vector2D(newX, newY));
       //SHIT -v
       it->setId(id++);
+<<<<<<< HEAD
+=======
+      std::cout << "Monster id=" << it->getId() << std::endl;
+>>>>>>> fd89606b7e2011d0409a7244471dc1072681c6c7
       //std::cout << it->getResourceId() << std::endl;
   }
   _enemies.insert(_enemies.end(), monsters.begin(), monsters.end());

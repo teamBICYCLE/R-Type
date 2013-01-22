@@ -77,15 +77,16 @@ void NetworkHandler::addReliablePacket(uint8_t *packet, int packetSize, Unit *de
 
 void  NetworkHandler::broadcast(const ServerGameState& g)
 {
-  uint8_t  buf[communication::Packet::MAX_PACKET_SIZE];
-  int      packetSize;
+  uint8_t  *buf = new uint8_t[communication::Packet::MAX_PACKET_SIZE];
+  int       bufSize = communication::Packet::MAX_PACKET_SIZE;
+  int       packetSize;
 
   //send player update to other players
   for (auto& p : g.getPlayers()) {
     if (p->isDead() == false ||
         p->wereOthersNotifiedOfDeath() == false)
     {
-      packetSize = p->pack(buf, sizeof(buf));
+      packetSize = p->pack(buf, bufSize);
       if (p->isDead() == false) {//player is not dead so send its positions
         sendToAll(buf, packetSize);
       }
@@ -97,7 +98,7 @@ void  NetworkHandler::broadcast(const ServerGameState& g)
 
   //send monsters update
   for (auto& monster : g.getEnemies()) {
-    packetSize = monster->pack(buf, sizeof(buf));
+    packetSize = monster->pack(buf, bufSize);
     if (monster->isDead() == false) {//monster is not dead, send positions
       sendToAll(buf, packetSize);
     }
@@ -110,6 +111,7 @@ void  NetworkHandler::broadcast(const ServerGameState& g)
   //retry sending every non-ack reliable packets
   for (auto& packet : _reliablePackets)
     packet.tryAgain(_socket);
+  delete [] buf;
 }
 
 void NetworkHandler::setClients(const std::vector<network::Addr>& c)
