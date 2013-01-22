@@ -5,6 +5,7 @@
 
 PreGame::PreGame(const std::string &ip, const std::string &port)
  : _gameIsLaunched(false)
+ , _state(eHALLWAY)
  , _window(sf::VideoMode(1200, 800), "SFML RType")
  , _menu("../resources/menu_background.jpg", _window.getSize(),
        sf::Vector2f(500.0,50.0))
@@ -170,5 +171,22 @@ void PreGame::roomlistAppend(const std::string& roomdetails)
 void PreGame::roomlistEnd()
 {
   TBSystem::log::info << "In roomlist end" << TBSystem::log::endl;
-  _menu.update(_rooms);
+  updateHallway();
+}
+
+void PreGame::createRoom(void)
+{
+  std::string cmd("create\r\n");
+
+  _socket->send(cmd.c_str(), cmd.size());
+}
+
+void PreGame::updateHallway(void)
+{
+  if (_state == eHALLWAY) {
+    _menu.setButtonOne(sf::Vector2f(100.0f, 50.0f),
+                       std::bind(&PreGame::createRoom, this),
+                       "");
+    _menu.update(_rooms);
+  }
 }
