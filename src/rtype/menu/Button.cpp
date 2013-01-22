@@ -3,7 +3,7 @@
 Button::Button(const sf::Vector2f& dimension, const sf::Vector2f& position, const std::string &texture)
   : _param(NULL)
 {
-  _texture.loadFromFile(texture, sf::IntRect(position.x, position.y, dimension.x, dimension.y)); //throw error if false
+  _texture.loadFromFile(texture, sf::IntRect(position.x, position.y, dimension.x, dimension.y));
   _sprite.setTexture(_texture);
   _sprite.setPosition(position);
   _dimension = dimension;

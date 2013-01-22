@@ -8,6 +8,7 @@ SUnitFactory::SUnitFactory() :
 {
 	_collection.push_back(std::make_pair(typeid(Player).name(), new Player()));
 	_collection.push_back(std::make_pair(typeid(Monster).name(), new Monster()));
+	_collection.push_back(std::make_pair(typeid(Missile).name(), new Missile()));
 }
 
 SUnitFactory::~SUnitFactory()

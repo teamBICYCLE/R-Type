@@ -27,8 +27,15 @@ View::~View()
 {
 }
 
-void	View::update(std::vector<void*> &list)
+void	View::update(const std::list<Room> &list)
 {
+  this->setTitle("Select a room:");
+  _listView->update(list);
+}
+
+void	View::update(const std::list<Player> &list)
+{
+  this->setTitle("");
   _listView->update(list);
 }
 
@@ -53,7 +60,7 @@ void	View::clickEvent(sf::Vector2i coord)
   else {
     if (_buttonOne && _buttonOne->isClicked(coord))
       _buttonOne->onClick();
-    if (_buttonOne && _buttonTwo->isClicked(coord))
+    if (_buttonTwo && _buttonTwo->isClicked(coord))
       _buttonTwo->onClick();
   }
 }
@@ -83,6 +90,11 @@ void		View::setGlobalCallback(std::function<void()> f)
   _listView->setGlobalCallback(f);
 }
 
+void		View::setRefreshCallback(std::function<void()> f)
+{
+  _refreshButton->setCallback(f);
+}
+
 void		View::setButtonOne(const sf::Vector2f& dim, std::function<void()> f,
 				   const std::string& texture)
 {
@@ -104,12 +116,24 @@ void		View::setButtonTwo(const sf::Vector2f& dim, std::function<void()> f,
   if (_buttonTwo)
     delete _buttonTwo;
   if (texture.empty())
-    _buttonTwo = new Button(dim, sf::Vector2f(0,0));    
+    _buttonTwo = new Button(dim, sf::Vector2f(0,0));
   else
     _buttonTwo = new Button(dim, sf::Vector2f(0,0), texture);
   _buttonTwo->setPosition(sf::Vector2f((_listView->getPosition().x + _listView->getSize().x - (2 * dim.x + 4) + 1),
 				       (_listView->getPosition().y + _listView->getSize().y + 4)));
   _buttonTwo->setCallback(f);
+}
+
+void		View::unsetButtonOne()
+{
+  if (_buttonOne)
+    delete _buttonOne; _buttonOne = nullptr;
+}
+
+void		View::unsetButtonTwo()
+{
+  if (_buttonTwo)
+    delete _buttonTwo; _buttonTwo = nullptr;
 }
 
 void		View::setTitle(const std::string& s)
