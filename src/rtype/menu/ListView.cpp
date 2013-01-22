@@ -20,7 +20,7 @@ void	ListView::update(std::vector<void*> &list)
   _list.clear();
   for (auto it = list.begin(); it != list.end(); it++)
     {
-      ListItem		*item = new ListItem(_itemSize, sf::Vector2f(0,0), "127.0.0.1:4242");
+      ListItem		*item = new ListItem(_itemSize, "127.0.0.1:4242");
       item->setCallback(_globalCallback);
       this->addItemToList(item);
     }
