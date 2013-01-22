@@ -53,7 +53,7 @@ void PreGame::run(void)
         _menu.clickEvent(sf::Mouse::getPosition(_window));
       }
     }
-		_listener.waitEvent(std::chrono::seconds(1));
+		_listener.waitEvent(std::chrono::milliseconds(10));
 		_listener.execute();
     _window.clear();
     _menu.draw(_window);
@@ -148,7 +148,10 @@ void PreGame::roomlistDispatch(const std::string& command)
   ss >> type;
   auto it = _roomlistMap.find(type);
   if (it != _roomlistMap.end()) {
-    it->second(type);
+    std::istreambuf_iterator<char> eos;
+    std::string s(std::istreambuf_iterator<char>(ss), eos);
+
+    it->second(s);
   }
 }
 
