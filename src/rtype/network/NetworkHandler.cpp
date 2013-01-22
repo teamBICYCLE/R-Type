@@ -77,40 +77,50 @@ void NetworkHandler::addReliablePacket(uint8_t *packet, int packetSize, Unit *de
 
 void  NetworkHandler::broadcast(const ServerGameState& g)
 {
-  uint8_t  *buf = new uint8_t[communication::Packet::MAX_PACKET_SIZE];
-  int       bufSize = communication::Packet::MAX_PACKET_SIZE;
-  int       packetSize;
-
   //send player update to other players
   for (auto& p : g.getPlayers()) {
-    if (p->isDead() == false ||
-        p->wereOthersNotifiedOfDeath() == false)
-    {
-      packetSize = p->pack(buf, bufSize);
-      if (p->isDead() == false) {//player is not dead so send its positions
-        sendToAll(buf, packetSize);
-      }
-      else {
-        addReliablePacket(buf, packetSize, p);
-      }
-    }
+    sendEntity(p);
   }
 
   //send monsters update
   for (auto& monster : g.getEnemies()) {
-    packetSize = monster->pack(buf, bufSize);
-    if (monster->isDead() == false) {//monster is not dead, send positions
-      sendToAll(buf, packetSize);
-    }
-    else if (monster->wereOthersNotifiedOfDeath() == false) {
-      //monster is dead, send secure packet
-      addReliablePacket(buf, packetSize, monster);
-    }
+    sendEntity(monster);
+  }
+
+  //send monster missiles update
+  for (auto& monsterMissile : g.getMonsterMissiles()) {
+    sendEntity(monsterMissile);
+  }
+
+  //send player missiles update
+  for (auto& playerMissile : g.getPlayerMissiles()) {
+    sendEntity(playerMissile);
   }
 
   //retry sending every non-ack reliable packets
   for (auto& packet : _reliablePackets)
     packet.tryAgain(_socket);
+}
+
+void  NetworkHandler::sendEntity(Unit *entity)
+{
+  uint8_t  *buf = new uint8_t[communication::Packet::MAX_PACKET_SIZE];
+  int       bufSize = communication::Packet::MAX_PACKET_SIZE;
+  int       packetSize;
+
+  if (entity->isDead() == false ||
+      entity->wereOthersNotifiedOfDeath() == false)
+  {
+    packetSize = entity->pack(buf, bufSize);
+    if (entity->isDead() == false) {
+      //entity is not dead, send position
+      sendToAll(buf, packetSize);
+    }
+    else {
+      //entity is dead, notify others
+      addReliablePacket(buf, packetSize, entity);
+    }
+  }
   delete [] buf;
 }
 

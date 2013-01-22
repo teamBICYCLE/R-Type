@@ -20,7 +20,7 @@ protected:
   sf::Vector2f			_itemSize;
   sf::RectangleShape		_background;
   unsigned int			_maxRow;
-  std::function<void()>		_globalCallback;
+  std::function<void(int)>	_globalCallback;
 
 public:
   ListView(const sf::Vector2f &pos, const sf::Vector2f &itemSize, unsigned int maxRow = MAX_ROW);
@@ -38,7 +38,7 @@ public:
   const sf::Vector2f&		getSize() const;
   const sf::Vector2f&		getItemSize() const;
 
-  void		setGlobalCallback(std::function<void()>);
+  void		setGlobalCallback(std::function<void(int)>);
 };
 
 #endif // !__LISTVIEW_HH__

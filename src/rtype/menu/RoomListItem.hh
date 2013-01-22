@@ -12,7 +12,7 @@ private:
   sf::Text		_maxPlayerLabel;
 
 public:
-  RoomListItem(const sf::Vector2f& dimension, const std::string& label,
+  RoomListItem(const sf::Vector2f& dimension, const std::string& id,
 	       const std::string& minPlayer, const std::string& maxPlayer,
 	       const std::string& texture = DEFAULT_LISTITEM_TEXTURE);
   virtual ~RoomListItem();

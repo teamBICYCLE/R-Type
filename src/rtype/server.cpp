@@ -37,6 +37,7 @@ void  runServer(const std::vector<std::string>& clientsIps,
     player->setId(i);
     player->setPos(Vector2D(0.1f, 0.1f * (float)(i + 1)));
     player->setDir(Vector2D(0.f, 0.f));
+    player->setFireFrequence(std::chrono::milliseconds(200));
     players.push_back(player);
   }
 

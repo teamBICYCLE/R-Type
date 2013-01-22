@@ -24,7 +24,8 @@ public:
    ~NetworkHandler();
 
 public:
-   void  broadcast(const ServerGameState& g);
+   void   broadcast(const ServerGameState& g);
+   void   sendEntity(Unit* entity);
    std::vector<communication::Packet> getIncomingPackets();
 
 public:

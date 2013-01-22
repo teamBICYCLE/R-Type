@@ -19,6 +19,7 @@ public:
 	void 	setMoveStyle(const moveStyle &);
 	bool 	isBoss(void);
 	void    setBoss(bool v);
+  	virtual bool  isOffScreen(const float screenWidth) const;
 
 public:
 	Monster *clone(void);

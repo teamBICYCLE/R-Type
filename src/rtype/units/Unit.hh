@@ -11,6 +11,10 @@
 
 # define    UNLIMITED   (-1)
 
+//Forward declaration
+class UnitPool;
+class Missile;
+
 typedef union {
     struct _content {
         int16_t   x;
@@ -52,7 +56,8 @@ class   Unit : public IPackable
 
     public:
         virtual void    move(void);
-        virtual bool    collideWith(Unit& other);
+        virtual bool    collideWith(const Unit& other) const;
+        virtual Missile *fire(UnitPool *pool);
 
     public:
         virtual void    setId(const uint32_t);
@@ -98,6 +103,7 @@ class   Unit : public IPackable
         int _munition;
         std::chrono::milliseconds _timeToReload;
         std::chrono::milliseconds _fireFrequence;
+        std::chrono::time_point<std::chrono::system_clock>  _lastFire;
 };
 
 #endif /* !__UNIT_HH__ */

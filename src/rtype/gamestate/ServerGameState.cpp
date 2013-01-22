@@ -49,14 +49,42 @@ void  ServerGameState::updateWithInput(const communication::Packet& packet)
     {
       player->setLastPacketSequence(packet.getSequence());
       setPlayerDirection(id, d.getVector());
-      if (d.isFiring() == true)
-      {}
+      if (d.isFiring() == true) {
+        Missile *newMissile = player->fire(_pool.get());
+        if (newMissile != nullptr) {
+          _playerMissiles.push_back(newMissile);
+        }
+      }
     }
     else
     {
       std::cout << "==============================================Dropped. Last: " <<
       player->getLastPacketSequence() << ". New: " << packet.getSequence() << std::endl;
       player->setLastPacketSequence(0);//So that the client can reconnect and his packets be treated, and not dropped
+    }
+  }
+}
+
+template<typename UnitType>
+void  ServerGameState::updateEntities(std::list<UnitType*>& entities,
+                                      std::function<bool(const Unit *unit)> collideFun)
+{
+  for (auto entityIt = entities.begin(); entityIt != entities.end(); ) {
+    if ((*entityIt)->isDead() == true) {//if entity is dead..
+      if ((*entityIt)->wereOthersNotifiedOfDeath() == true) {//..and client were notified
+        UnitType *deadUnit = *entityIt;
+        entityIt = entities.erase(entityIt);//..we remove it
+        _pool->release<UnitType>(deadUnit);
+      }
+    }
+    else {//entity alive
+      (*entityIt)->move();
+      if ((*entityIt)->isOffScreen(GameState::WINDOW_WIDTH) == true ||
+          collideFun(*entityIt) == true) {
+        //std::cout << "Seting dead" << std::endl;
+        (*entityIt)->setDead(true);
+      }
+      ++entityIt;
     }
   }
 }
@@ -84,14 +112,15 @@ void  ServerGameState::updateWorld(void)
     _lastMonsterSpawn = now;
   }
 
-  for (auto enemyIt = _enemies.begin(); enemyIt != _enemies.end(); ) {
-    if ((*enemyIt)->isDead() == true) {//if enemy is dead..
-      if ((*enemyIt)->wereOthersNotifiedOfDeath() == true) {//..and client were notified
-        Monster *deadUnit = *enemyIt;
-        enemyIt = _enemies.erase(enemyIt);//..we remove it
-        _pool->release<Monster>(deadUnit);
+  std::function<bool(const Unit*)> monsterCollision = [this] (const Unit *monster) -> bool {
+    for (auto& playerMissile : _playerMissiles) {
+      //check monster against player missiles
+      if (playerMissile->collideWith(*monster) == true) {
+        playerMissile->setDead(true);
+        return true;
       }
     }
+<<<<<<< HEAD
     else { //enemy alive
       (*enemyIt)->move();
       if ((*enemyIt)->getPos().x +
@@ -102,6 +131,69 @@ void  ServerGameState::updateWorld(void)
   }
   std::cout << _turn << std::endl;
   ++_turn;
+=======
+    for (auto& player : _players) {
+      //check monster against players. Monsters do not die upon collision
+      if (player->isDead() == false &&
+          player->collideWith(*monster) == true) {
+        player->setDead(true);
+      }
+    }
+    return false;
+  };
+
+  std::function<bool(const Unit*)> monsterMissileCollision = [this] (const Unit *monsterMissile) -> bool {
+    for (auto& player : _players) {
+      //check monster missiles against players
+      if (player->isDead() == false &&
+          player->collideWith(*monsterMissile) == true) {
+        player->setDead(true);
+        return true;
+      }
+    }
+    return false;
+  };
+
+  updateEntities<Missile>(_monsterMissiles, monsterMissileCollision);
+  updateEntities<Missile>(_playerMissiles, [] (const Unit*) -> bool {return false;});
+  updateEntities<Monster>(_enemies, monsterCollision);
+
+  //for (auto enemyIt = _enemies.begin(); enemyIt != _enemies.end(); ) {
+  //  if ((*enemyIt)->isDead() == true) {//if enemy is dead..
+  //    if ((*enemyIt)->wereOthersNotifiedOfDeath() == true) {//..and client were notified
+  //      Monster *deadUnit = *enemyIt;
+  //      enemyIt = _enemies.erase(enemyIt);//..we remove it
+  //      _pool->release<Monster>(deadUnit);
+  //    }
+  //  }
+  //  else {//enemy alive
+  //    (*enemyIt)->move();
+  //    if ((*enemyIt)->isOffScreen(GameState::WINDOW_WIDTH) == true)
+  //      (*enemyIt)->setDead(true);
+  //    ++enemyIt;
+  //  }
+  //}
+
+  //for (auto monsterMissileIt = _monsterMissiles.begin();
+  //     monsterMissileIt != _monsterMissiles.end(); ) {
+  //  (*monsterMissileIt)->move();
+  //  if ((*monsterMissileIt)->isOffScreen(GameState::WINDOW_WIDTH) == true)
+  //    (*monsterMissileIt)->setDead(true);
+  //  ++monsterMissileIt;
+  //}
+
+  //for (auto playerMissileIt = _playerMissiles.begin();
+  //     playerMissileIt != _playerMissiles.end(); ) {
+  //  std::cout << "moving missile" << std::endl;
+  //  std::cout << "prev pos: " << (*playerMissileIt)->getPos() << std::endl;
+  //  (*playerMissileIt)->move();
+  //  std::cout << "post pos: " << (*playerMissileIt)->getPos() << std::endl;
+  //  if ((*playerMissileIt)->isOffScreen(GameState::WINDOW_WIDTH) == true)
+  //    (*playerMissileIt)->setDead(true);
+  //  ++playerMissileIt;
+  //}
+  //std::cout << "---------" << std::endl;
+>>>>>>> d6e69ec56e0083d819275150584e3a037144bbba
 }
 
 void ServerGameState::requireBoss(void)
@@ -161,7 +253,7 @@ void  ServerGameState::requireMonsters(void)
       float newX = randx + (originalPos.x * 0.03f); // TMP
       float newY = randy + (originalPos.y * 0.05f); // TMP
       it->setPos(Vector2D(newX, newY));
-      std::cout << "Monster id=" << it->getId() << std::endl;
+      //std::cout << "Monster id=" << it->getId() << std::endl;
   }
   _enemies.insert(_enemies.end(), monsters.begin(), monsters.end());
 }
@@ -169,15 +261,15 @@ void  ServerGameState::requireMonsters(void)
 void  ServerGameState::moveOne(Player& p)
 {
   p.move();
-  for (auto& enemy : _enemies)
-  {
-    if (p.collideWith(*enemy) == true)
-    {
-      p.setDead(true);
-      std::cout << "COLLIDED" << std::endl;
-      break;
-    }
-  }
+  //for (auto& enemy : _enemies)
+  //{
+  //  if (p.collideWith(*enemy) == true)
+  //  {
+  //    p.setDead(true);
+  //    std::cout << "COLLIDED" << std::endl;
+  //    break;
+  //  }
+  //}
 }
 
 void  ServerGameState::moveAll(void)
@@ -203,4 +295,14 @@ const std::vector<Player*>& ServerGameState::getPlayers() const
 const std::list<Monster*>&   ServerGameState::getEnemies() const
 {
   return _enemies;
+}
+
+const std::list<Missile*>&  ServerGameState::getMonsterMissiles() const
+{
+  return _monsterMissiles;
+}
+
+const std::list<Missile*>&  ServerGameState::getPlayerMissiles() const
+{
+  return _playerMissiles;
 }

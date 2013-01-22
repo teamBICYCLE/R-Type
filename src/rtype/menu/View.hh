@@ -35,10 +35,10 @@ public:
   Button*	getButtonTwo() const;
   Button*	getRefreshButton() const;
   ListView*	getListView() const;
-  void		setGlobalCallback(std::function<void()>);
-  void		setRefreshCallback(std::function<void()>);
-  void		setButtonOne(const sf::Vector2f& dim, std::function<void()> f, const std::string&);
-  void		setButtonTwo(const sf::Vector2f& dim, std::function<void()> f, const std::string&);
+  void		setGlobalCallback(std::function<void(int)>);
+  void		setRefreshCallback(std::function<void(int)>);
+  void		setButtonOne(const sf::Vector2f& dim, std::function<void(int)> f, const std::string&);
+  void		setButtonTwo(const sf::Vector2f& dim, std::function<void(int)> f, const std::string&);
   void		unsetButtonOne();
   void		unsetButtonTwo();
   void		setTitle(const std::string& s);

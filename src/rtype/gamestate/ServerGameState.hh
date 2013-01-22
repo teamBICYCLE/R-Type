@@ -19,17 +19,27 @@ public:
   void  moveOne(Player& p);
   void  moveAll(void);
 
+public:
+  template<typename UnitType>
+  void  updateEntities(std::list<UnitType*>& entities,
+                       std::function<bool(const Unit *unit)> collideFun/* =
+                       [](const Unit*) -> bool {return false;}*/);
+
 private:
   void  setPlayerDirection(uint32_t id, const Vector2D& dir);
 
 public:
   const std::vector<Player*>& getPlayers() const;
-  const std::list<Monster*>&     getEnemies() const;
+  const std::list<Monster*>&  getEnemies() const;
+  const std::list<Missile*>&  getMonsterMissiles() const;
+  const std::list<Missile*>&  getPlayerMissiles() const;
 
 private:
 	const PatternManager  _pm;
   std::vector<Player*>  _players;
 	std::list<Monster*>	  _enemies;
+	std::list<Missile*>	  _monsterMissiles;
+	std::list<Missile*>	  _playerMissiles;
   std::chrono::time_point<std::chrono::system_clock> _lastIncrease;
   std::chrono::time_point<std::chrono::system_clock> _lastMonsterSpawn;
   const std::chrono::seconds  _levelIncreaseTick;
