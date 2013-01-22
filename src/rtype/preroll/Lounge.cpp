@@ -55,6 +55,7 @@ bool  Lounge::acceptClient(std::shared_ptr<
     clientSock(socket->accept(clientAddr));
 
   // add him to the _client container, and get a reference to the object
+  log::debug << "Client from  " << clientAddr.getIpString() << " accepted" << log::endl;
   _clients.emplace_back(clientSock, clientAddr);
   Client& client = _clients.back();
 
