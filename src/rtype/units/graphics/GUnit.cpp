@@ -23,7 +23,7 @@ GUnit::~GUnit(void)
 void GUnit::setAnimationManager(const AnimationM &m)
 {
 	// player
-	std::string path = "vaisseau";
+	std::string path = "player";
 	if (_resourceId > 3)
 		path = std::to_string(_resourceId);
 

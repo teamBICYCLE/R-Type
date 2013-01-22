@@ -120,18 +120,6 @@ void  ServerGameState::updateWorld(void)
         return true;
       }
     }
-<<<<<<< HEAD
-    else { //enemy alive
-      (*enemyIt)->move();
-      if ((*enemyIt)->getPos().x +
-          ((*enemyIt)->getHitboxRadius() / GameState::WINDOW_WIDTH) <= 0)
-        (*enemyIt)->setDead(true);
-      ++enemyIt;
-    }
-  }
-  std::cout << _turn << std::endl;
-  ++_turn;
-=======
     for (auto& player : _players) {
       //check monster against players. Monsters do not die upon collision
       if (player->isDead() == false &&
@@ -157,7 +145,7 @@ void  ServerGameState::updateWorld(void)
   updateEntities<Missile>(_monsterMissiles, monsterMissileCollision);
   updateEntities<Missile>(_playerMissiles, [] (const Unit*) -> bool {return false;});
   updateEntities<Monster>(_enemies, monsterCollision);
-
+  ++_turn;
   //for (auto enemyIt = _enemies.begin(); enemyIt != _enemies.end(); ) {
   //  if ((*enemyIt)->isDead() == true) {//if enemy is dead..
   //    if ((*enemyIt)->wereOthersNotifiedOfDeath() == true) {//..and client were notified
@@ -193,7 +181,6 @@ void  ServerGameState::updateWorld(void)
   //  ++playerMissileIt;
   //}
   //std::cout << "---------" << std::endl;
->>>>>>> d6e69ec56e0083d819275150584e3a037144bbba
 }
 
 void ServerGameState::requireBoss(void)
