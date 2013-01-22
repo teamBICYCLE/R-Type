@@ -20,6 +20,7 @@ void  runServer(const std::vector<std::string>& clientsIps,
   std::vector<network::Addr> clients;
 
   for (auto& addr : clientsIps) {
+    log::debug  << "add client with addr " << addr << log::endl;
     clients.push_back(network::Addr(addr, "4244", "UDP"));
   }
 
@@ -81,10 +82,11 @@ int     main(int argc, char *argv[])
 {
   std::vector<std::string>  clients;
 
-  clients.push_back("10.23.99.201");
-  clients.push_back("10.23.99.200");
+  clients.push_back("192.168.1.32");
   clients.push_back("10.23.98.230");
-  //clients.push_back("192.168.1.32");
+  clients.emplace_back("10.23.99.201");
+  clients.emplace_back("10.23.99.200");
+  clients.emplace_back("10.23.98.230");
   clients.push_back("10.23.98.165");
   runServer(clients, "4242");
   return EXIT_SUCCESS;

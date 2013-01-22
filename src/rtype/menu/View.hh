@@ -3,6 +3,10 @@
 
 # include "ListView.hh"
 # include "ListItem.hh"
+# include "Room.hh"
+# include "RoomListItem.hh"
+# include "Player.hh"
+# include "PlayerListItem.hh"
 # include "Button.hh"
 # include <SFML/Graphics.hpp>
 # include <functional>
@@ -22,7 +26,8 @@ public:
   View(const std::string& texture, const sf::Vector2u& size, const sf::Vector2f& listItemSize);
   virtual ~View();
 
-  void		update(std::vector<void*>&);
+  void		update(const std::list<Room>&);
+  void		update(const std::list<Player>&);
   void		draw(sf::RenderWindow&);
   void		clickEvent(sf::Vector2i coord);
 
@@ -31,8 +36,11 @@ public:
   Button*	getRefreshButton() const;
   ListView*	getListView() const;
   void		setGlobalCallback(std::function<void()>);
+  void		setRefreshCallback(std::function<void()>);
   void		setButtonOne(const sf::Vector2f& dim, std::function<void()> f, const std::string&);
   void		setButtonTwo(const sf::Vector2f& dim, std::function<void()> f, const std::string&);
+  void		unsetButtonOne();
+  void		unsetButtonTwo();
   void		setTitle(const std::string& s);
 };
 

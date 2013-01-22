@@ -2,7 +2,11 @@
 # define __LISTVIEW_HH__
 
 # include "ListItem.hh"
-# include <vector>
+# include "Room.hh"
+# include "RoomListItem.hh"
+# include "Player.hh"
+# include "PlayerListItem.hh"
+# include <list>
 # include <SFML/Graphics.hpp>
 # include <functional>
 
@@ -22,7 +26,8 @@ public:
   ListView(const sf::Vector2f &pos, const sf::Vector2f &itemSize, unsigned int maxRow = MAX_ROW);
   virtual ~ListView();
 
-  void		update(std::vector<void*>&);
+  void		update(const std::list<Room>&);
+  void		update(const std::list<Player>&);
   bool		checkClick(sf::Vector2i coord) const;
   void		draw(sf::RenderTarget& target);
 

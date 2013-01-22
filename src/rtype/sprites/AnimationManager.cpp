@@ -81,10 +81,10 @@ bool AnimationManager::findAssociatedFile(std::vector<std::string> &files)
 				success = false;
 			}
 		}
-		if (imgFile != files.end())
-			files.erase(imgFile);
 		if (cfgFile != files.end())
 			files.erase(cfgFile);
+
+
 	}
 	return success;
 }

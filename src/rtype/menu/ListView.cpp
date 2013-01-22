@@ -15,14 +15,33 @@ ListView::~ListView()
 {
 }
 
-void	ListView::update(std::vector<void*> &list)
+void	ListView::update(const std::list<Room>& list)
 {
   _list.clear();
   for (auto it = list.begin(); it != list.end(); it++)
     {
-      ListItem		*item = new ListItem(_itemSize, sf::Vector2f(0,0), "127.0.0.1:4242");
+      RoomListItem	*item = new RoomListItem(_itemSize, std::to_string((*it).getId()),
+						 std::to_string((*it).getPlayers()),
+						 std::to_string((*it).getMaxPlayers()));
       item->setCallback(_globalCallback);
       this->addItemToList(item);
+    }
+}
+
+void	ListView::update(const std::list<Player>& list)
+{
+  _list.clear();
+  for (auto it = list.begin(); it != list.end(); it++)
+    {
+      PlayerListItem	*item = new PlayerListItem(_itemSize, std::to_string((*it).getId()), "READY");
+      this->addItemToList(item);
+    }
+  if (list.size() != 4)
+    {
+      for (int i = list.size(); i < 4; ++i) {
+	PlayerListItem	*item = new PlayerListItem(_itemSize, "", "EMPTY");
+	this->addItemToList(item);
+      }
     }
 }
 
