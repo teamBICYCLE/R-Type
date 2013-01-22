@@ -71,7 +71,7 @@ void  ServerGameState::updateWorld(void)
   if (now - _lastMonsterSpawn >= _monsterSpawnRate) {
     std::cout << _enemies.size() << std::endl;
     if (_enemies.size() <= 60)
-      requireMonsters(Vector2D(1.0f, 0.f), Vector2D(1.2f, 0.5f));
+      requireMonsters();
     else
       std::cout << "tempo" << std::endl;
     _lastMonsterSpawn = now;
@@ -97,27 +97,48 @@ void  ServerGameState::updateWorld(void)
   }
 }
 
-void  ServerGameState::requireMonsters(const Vector2D &left, const Vector2D &right)
+void  ServerGameState::requireMonsters(void)
 {
   //SHIT -v
   static int id = 5;
   std::list<Unit *> monsters = _pm.get(_pool);
+  Vector2D left(1.0f, 0.1f);
+  Vector2D right(1.2f, 0.5f);
 
   float randx = left.x + ((float)rand()) / ((float)RAND_MAX / (right.x - left.x));
-  float randy = left.y + ((float)rand()) / ((float)RAND_MAX / (right.y - left.y));
-  std::cout << "x -> " << randx << " y -> " << randy << std::endl;
+  
+  float randy = 0.f;
+  int alive = std::count_if(_players.begin(), _players.end(),
+                                [](const Player *p) -> bool {
+                                  return !(p->isDead());
+                                });
 
-  // pour l'instant on verifie rien
+  if (alive == 0)
+    randy = left.y + ((float)rand()) / ((float)RAND_MAX / (right.y - left.y));
+  else
+  {
+    //std::cout << "calc" << std::endl;
+    for (auto player : _players)
+        if (!player->isDead())
+          randy += player->getPos().y;
+
+      randy /= alive;
+      if (!monsters.empty())
+      {
+        float offset = ((monsters.back()->getPos().y / 2) * 0.05f);
+        randy = (((randy - offset) < 0) ? (0) : (randy - offset));
+      }
+  }
+
   for (auto it : monsters)
   {
       Vector2D originalPos = it->getPos();
-      float newX = randx + (originalPos.x * 0.03f);
-      float newY = randy + (originalPos.y * 0.05f);
+      float newX = randx + (originalPos.x * 0.03f); // TMP
+      float newY = randy + (originalPos.y * 0.05f); // TMP
       it->setPos(Vector2D(newX, newY));
       //SHIT -v
       it->setId(id++);
       std::cout << "Monster id=" << it->getId() << std::endl;
-      //std::cout << it->getResourceId() << std::endl;
   }
   _enemies.insert(_enemies.end(), monsters.begin(), monsters.end());
 }
