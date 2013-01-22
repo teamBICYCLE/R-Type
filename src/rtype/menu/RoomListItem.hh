@@ -26,4 +26,4 @@ public:
   virtual void		setPosition(const sf::Vector2f& pos);
 };
 
-#endif // !_LISTITEM_HH__
+#endif // !__ROOMLISTITEM_HH__

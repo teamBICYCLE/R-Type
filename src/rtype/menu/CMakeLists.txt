@@ -22,6 +22,8 @@ add_executable(preroll_client
   View.hh
   RoomListItem.cpp
   RoomListItem.hh
+  Room.cpp
+  Room.hh
 )
 
 target_link_libraries(preroll_client
