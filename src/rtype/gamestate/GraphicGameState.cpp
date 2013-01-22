@@ -115,7 +115,7 @@ void  GraphicGameState::simulate(const Input::Data& input)
 void  GraphicGameState::animationUpdate(void)
 {
   sf::Vector2f pos;
-  
+
   _backgroundPos += (_backgroundDirection / GraphicGameState::BACKGROUND_SPEED);
   pos = static_cast<sf::Vector2f>(_backgroundPos);
 	pos.x *= GameState::WINDOW_WIDTH;
