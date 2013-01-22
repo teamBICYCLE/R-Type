@@ -20,6 +20,10 @@ add_executable(preroll_client
   main.cpp
   View.cpp
   View.hh
+  PreGame.cpp
+  PreGame.hh
+  Room.cpp
+  Room.hh
   RoomListItem.cpp
   RoomListItem.hh
   Room.cpp

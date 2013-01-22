@@ -24,7 +24,7 @@ public:
   View(const std::string& texture, const sf::Vector2u& size, const sf::Vector2f& listItemSize);
   virtual ~View();
 
-  void		update(std::vector<Room>&);
+  void		update(const std::list<Room>&);
   void		draw(sf::RenderWindow&);
   void		clickEvent(sf::Vector2i coord);
 
