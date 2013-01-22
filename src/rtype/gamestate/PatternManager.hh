@@ -37,7 +37,7 @@ public:
 
 public:
 	// list peut etre constante ?
-	std::list<Unit *> get(const std::shared_ptr<UnitPool> &pool) const;
+	std::list<Monster*> get(const std::shared_ptr<UnitPool> &pool) const;
 
 public:
 	typedef struct MonsterDefinition

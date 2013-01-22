@@ -18,7 +18,7 @@
 
 class GraphicGameState : public GameState, public sf::Drawable {
 public:
-  GraphicGameState(const std::shared_ptr<UnitPool> &, std::shared_ptr<GPlayer> player);
+  GraphicGameState(const std::shared_ptr<UnitPool> &, const std::shared_ptr<Sprite::AnimationManager> &, std::shared_ptr<GPlayer> player);
   virtual ~GraphicGameState();
 
 private:
@@ -48,6 +48,7 @@ private:
   Vector2D    _backgroundDirection;
   std::shared_ptr<GPlayer>  _player;
   std::list<GUnit*>         _others;
+  std::shared_ptr<Sprite::AnimationManager>  _animationManager;
 };
 
 #endif /* !_GRAPHICGAMESTATE_H__ */

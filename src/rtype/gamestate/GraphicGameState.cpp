@@ -14,7 +14,9 @@
 
 using namespace TBSystem;
 
-GraphicGameState::GraphicGameState(const std::shared_ptr<UnitPool> &p, std::shared_ptr<GPlayer> player)
+GraphicGameState::GraphicGameState(const std::shared_ptr<UnitPool> &p,
+                                   const std::shared_ptr<Sprite::AnimationManager> &a,
+                                   std::shared_ptr<GPlayer> player)
   : GameState(p)
   , BACKGROUND_SPEED(800.f)
   , _backgroundTexture(new sf::Texture)
@@ -23,6 +25,7 @@ GraphicGameState::GraphicGameState(const std::shared_ptr<UnitPool> &p, std::shar
   , _backgroundPos()
   , _backgroundDirection(-1.f, 0.f)
   , _player(player)
+  , _animationManager(a)
 {
   using namespace std::placeholders;
 
@@ -70,9 +73,10 @@ void  GraphicGameState::updateWithPosition(const communication::Packet& packet)
     else
     {
       GUnit *newEntity = _pool->get<GUnit>();
-      std::cout << "Setting id of newEntity from " << newEntity->getId() << " to " << id << std::endl;
+      //std::cout << "Setting id of newEntity from " << newEntity->getId() << " to " << id << std::endl;
       newEntity->setId(id);
       newEntity->setResourceId(packet.getResourceId());
+      newEntity->setAnimationManager(_animationManager);
       _others.push_back(newEntity);
       _others.back()->unpack(packet.getSequence(), packet.getContent());
     }
@@ -115,7 +119,7 @@ void  GraphicGameState::simulate(const Input::Data& input)
 void  GraphicGameState::animationUpdate(void)
 {
   sf::Vector2f pos;
-  
+
   _backgroundPos += (_backgroundDirection / GraphicGameState::BACKGROUND_SPEED);
   pos = static_cast<sf::Vector2f>(_backgroundPos);
 	pos.x *= GameState::WINDOW_WIDTH;

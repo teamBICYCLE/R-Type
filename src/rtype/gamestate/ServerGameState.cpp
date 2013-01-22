@@ -64,7 +64,6 @@ void  ServerGameState::updateWorld(void)
   std::chrono::time_point<std::chrono::system_clock> now = std::chrono::system_clock::now();
 
   if (now - _lastIncrease >= _levelIncreaseTick) {
-    //std::cout << "Speed up!" << std::endl;
     _monsterSpawnRate = (_monsterSpawnRate * 9) / 10;//speed up by 10%
     _lastIncrease = now;
   }
@@ -80,11 +79,9 @@ void  ServerGameState::updateWorld(void)
   for (auto enemyIt = _enemies.begin(); enemyIt != _enemies.end(); ) {
     if ((*enemyIt)->isDead() == true) {//if enemy is dead..
       if ((*enemyIt)->wereOthersNotifiedOfDeath() == true) {//..and client were notified
-        //std::cout << "Killing it" << std::endl;
-        Monster *deadUnit = dynamic_cast<Monster*>(*enemyIt);
+        Monster *deadUnit = *enemyIt;
         enemyIt = _enemies.erase(enemyIt);//..we remove it
         _pool->release<Monster>(deadUnit);
-        //TO DO: le rendre a la pool
       }
     }
     else {//enemy alive
@@ -97,16 +94,19 @@ void  ServerGameState::updateWorld(void)
   }
 }
 
+void ServerGameState::requireBoss(void)
+{
+
+}
+
 void  ServerGameState::requireMonsters(void)
 {
-  //SHIT -v
-  static int id = 5;
-  std::list<Unit *> monsters = _pm.get(_pool);
+  std::list<Monster*> monsters = _pm.get(_pool);
   Vector2D left(1.0f, 0.1f);
   Vector2D right(1.2f, 0.5f);
 
   float randx = left.x + ((float)rand()) / ((float)RAND_MAX / (right.x - left.x));
-  
+
   float randy = 0.f;
   int alive = std::count_if(_players.begin(), _players.end(),
                                 [](const Player *p) -> bool {
@@ -136,8 +136,6 @@ void  ServerGameState::requireMonsters(void)
       float newX = randx + (originalPos.x * 0.03f); // TMP
       float newY = randy + (originalPos.y * 0.05f); // TMP
       it->setPos(Vector2D(newX, newY));
-      //SHIT -v
-      it->setId(id++);
       std::cout << "Monster id=" << it->getId() << std::endl;
   }
   _enemies.insert(_enemies.end(), monsters.begin(), monsters.end());
@@ -177,7 +175,7 @@ const std::vector<Player*>& ServerGameState::getPlayers() const
   return _players;
 }
 
-const std::list<Unit*>&   ServerGameState::getEnemies() const
+const std::list<Monster*>&   ServerGameState::getEnemies() const
 {
   return _enemies;
 }
