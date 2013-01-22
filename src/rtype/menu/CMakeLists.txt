@@ -28,6 +28,10 @@ add_executable(preroll_client
   RoomListItem.hh
   Room.cpp
   Room.hh
+  PlayerListItem.cpp
+  PlayerListItem.hh
+  Player.cpp
+  Player.hh
 )
 
 target_link_libraries(preroll_client

@@ -32,6 +32,11 @@ void	View::update(const std::list<Room> &list)
   _listView->update(list);
 }
 
+void	View::update(const std::list<Player> &list)
+{
+  _listView->update(list);
+}
+
 void	View::draw(sf::RenderWindow& target)
 {
   _background.rotate(0.015);

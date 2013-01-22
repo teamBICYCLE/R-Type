@@ -4,6 +4,8 @@
 # include "ListItem.hh"
 # include "Room.hh"
 # include "RoomListItem.hh"
+# include "Player.hh"
+# include "PlayerListItem.hh"
 # include <list>
 # include <SFML/Graphics.hpp>
 # include <functional>
@@ -25,6 +27,7 @@ public:
   virtual ~ListView();
 
   void		update(const std::list<Room>&);
+  void		update(const std::list<Player>&);
   bool		checkClick(sf::Vector2i coord) const;
   void		draw(sf::RenderTarget& target);
 

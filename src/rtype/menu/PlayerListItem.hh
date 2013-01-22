@@ -12,7 +12,7 @@ private:
 
 public:
   PlayerListItem(const sf::Vector2f& dimension, const std::string& label,
-		 const std::string& status = "Empty")
+		 const std::string& status = "EMPTY", const std::string& texture = DEFAULT_LISTITEM_TEXTURE);
   virtual ~PlayerListItem();
 
   virtual void		draw(sf::RenderTarget& target);

@@ -20,9 +20,28 @@ void	ListView::update(const std::list<Room>& list)
   _list.clear();
   for (auto it = list.begin(); it != list.end(); it++)
     {
-      RoomListItem	*item = new RoomListItem(_itemSize, "0", "0", "0");
+      RoomListItem	*item = new RoomListItem(_itemSize, std::to_string((*it).getId()),
+						 std::to_string((*it).getPlayers()),
+						 std::to_string((*it).getMaxPlayers()));
       item->setCallback(_globalCallback);
       this->addItemToList(item);
+    }
+}
+
+void	ListView::update(const std::list<Player>& list)
+{
+  _list.clear();
+  for (auto it = list.begin(); it != list.end(); it++)
+    {
+      PlayerListItem	*item = new PlayerListItem(_itemSize, std::to_string((*it).getId()), "READY");
+      this->addItemToList(item);
+      if (list.size() != 4)
+	{
+	  for (int i = list.size(); i < 5; ++i) {
+	    PlayerListItem	*item = new PlayerListItem(_itemSize, "", "EMPTY");
+	    this->addItemToList(item);
+	  }
+	}
     }
 }
 
