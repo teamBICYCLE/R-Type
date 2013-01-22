@@ -4,8 +4,12 @@
 #include "View.hh"
 #include <functional>
 #include <SFML/Graphics.hpp>
-
+#include <system/log/Log.hh>
+#include <system/network/Listener.hh>
+#include <system/network/Tcp.hh>
+#include <system/network/Addr.hh>
 #include <iostream>
+#include "PreGame.hh"
 
 void	playCallback()
 {
@@ -22,11 +26,18 @@ void	listCallback()
   std::cout << "==LISTITEM CLICKED==" << std::endl;
 }
 
-int	main()
+int	main(int argc, char *argv[])
 {
-  sf::RenderWindow window(sf::VideoMode(1200, 800), "SFML RType");
-  View		view("../resources/menu_background.jpg", window.getSize(), sf::Vector2f(500.0,50.0));
+  using namespace TBSystem;
+  using namespace TBSystem::network;
+  using namespace TBSystem::network::sockets;
 
+  PreGame  pregame(argv[1], argv[2]);
+  sf::RenderWindow window(sf::VideoMode(1200, 800), "SFML RType");
+  View		view("../resources/menu_background.jpg", window.getSize(),
+               sf::Vector2f(500.0,50.0));
+
+  pregame.run();
   std::vector<void*>	test;
 
   test.push_back(new std::string("toto"));
@@ -34,7 +45,7 @@ int	main()
   test.push_back(new std::string("toto"));
   test.push_back(new std::string("toto"));
 
-  view.setTitle("Select your server:");
+  view.setTitle("Select a Room");
   view.setButtonOne(sf::Vector2f(100,100), std::bind(playCallback), "");
   view.setButtonTwo(sf::Vector2f(100,100), std::bind(quitCallback), "");
   view.setGlobalCallback(std::bind(listCallback));
@@ -53,6 +64,6 @@ int	main()
       view.draw(window);
       window.display();
     }
- 
+
   return EXIT_SUCCESS;
 }
