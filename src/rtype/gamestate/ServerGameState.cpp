@@ -97,6 +97,11 @@ void  ServerGameState::updateWorld(void)
   }
 }
 
+void ServerGameState::requireBoss(void)
+{
+
+}
+
 void  ServerGameState::requireMonsters(void)
 {
   //SHIT -v

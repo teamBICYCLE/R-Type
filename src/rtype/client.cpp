@@ -11,6 +11,7 @@
 #include "gamestate/GraphicGameState.hh"
 #include "pool/GUnitPool.hh"
 #include "units/Player.hh"
+#include "sprites/AnimationManager.hh"
 #include <memory>
 #ifdef _WIN32
 #include <stdlib.h>
@@ -54,10 +55,12 @@ int main(int argc, char* argv[])
   //player->setPos(Vector2D(0.1f, 0.1f));
   //player->setDir(Vector2D(0.f, 0.f));
   std::shared_ptr<UnitPool> pool = std::shared_ptr<UnitPool>(new GUnitPool());
-  GUnit * e = pool->get<GUnit>();
-  pool->release<GUnit>(e);
-  GraphicGameState  g(pool, std::shared_ptr<GPlayer>(new GPlayer(std::stoi(argv[3]),
-                                  Vector2D(0.1f, 0.1f), Vector2D(0.f, 0.f))));
+  std::shared_ptr<Sprite::AnimationManager> animationM = std::shared_ptr<Sprite::AnimationManager>(new Sprite::AnimationManager());
+  animationM->addSourceFolder("resources/sprites");
+
+  GPlayer *player = new GPlayer(std::stoi(argv[3]), Vector2D(0.1f, 0.1f), Vector2D(0.f, 0.f));
+  player->setAnimationManager(animationM);
+  GraphicGameState  g(pool, animationM, std::shared_ptr<GPlayer>(player));
 
   s.setBlocking(false);
   s.bind(network::Addr(network::SI_ADDR_ANY, "4244", "UDP"));

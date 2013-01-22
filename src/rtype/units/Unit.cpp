@@ -298,7 +298,6 @@ std::ostream&   operator<<(std::ostream& stream, const Unit& unit)
 
 Unit *Unit::clone(void)
 {
-  std::cout << "clone" << std::endl;
   return (new Unit(*this));
 }
 

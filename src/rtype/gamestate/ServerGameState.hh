@@ -12,7 +12,8 @@ public:
 public:
   void  updateWithInput(const communication::Packet& packet);
   void	updateWorld(void);
-  void  requireMonsters();
+  void  requireMonsters(void);
+  void  requireBoss(void);
   void  moveOne(Player& p);
   void  moveAll(void);
 
