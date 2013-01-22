@@ -110,7 +110,6 @@ std::list<Monster*> PatternManager::get(const std::shared_ptr<UnitPool> &pool) c
 			if (monster)
 			{
 				// load definition in monster
-				//monster->setSpritePath(SPRITE_PATH + sharedDef->name);
 				monster->setResourceId(sharedDef->resourceId);
 				monster->setPv(sharedDef->pv);
 				monster->setMunition(sharedDef->munition);
