@@ -13,6 +13,9 @@ public:
 
 public:
 	Missile *clone(void);
+
+private:
+  const float MISSILE_SPEED;
 };
 
 #endif
