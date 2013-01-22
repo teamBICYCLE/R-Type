@@ -148,7 +148,10 @@ void PreGame::roomlistDispatch(const std::string& command)
   ss >> type;
   auto it = _roomlistMap.find(type);
   if (it != _roomlistMap.end()) {
-    it->second(type);
+    std::istreambuf_iterator<char> eos;
+    std::string s(std::istreambuf_iterator<char>(ss), eos);
+
+    it->second(s);
   }
 }
 
