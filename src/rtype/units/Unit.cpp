@@ -2,7 +2,9 @@
 #include <stdexcept>
 #include <system/log/Log.hh>
 #include "Unit.hh"
+#include "Missile.hh"
 #include "gamestate/GameState.hh"
+#include "pool/UnitPool.hh"
 
 using namespace TBSystem;
 
@@ -20,6 +22,7 @@ Unit::Unit(int id, const Vector2D& pos, const Vector2D& dir)
   , _munition(UNLIMITED)
   , _timeToReload(0)
   , _fireFrequence(10)
+  , _lastFire(std::chrono::system_clock::now())
 {
 }
 
@@ -37,6 +40,7 @@ Unit::Unit(void)
   , _munition()
   , _timeToReload()
   , _fireFrequence()
+  , _lastFire(std::chrono::system_clock::now())
 {
 }
 
@@ -54,6 +58,7 @@ Unit::Unit(const Unit& other)
   , _munition(other._munition)
   , _timeToReload(other._timeToReload)
   , _fireFrequence(other._fireFrequence)
+  , _lastFire(other._lastFire)
 {
 }
 
@@ -87,6 +92,7 @@ void    swap(Unit& lhs, Unit& rhs)
     std::swap(lhs._munition, rhs._munition);
     std::swap(lhs._timeToReload, rhs._timeToReload);
     std::swap(lhs._fireFrequence, rhs._fireFrequence);
+    std::swap(lhs._lastFire, rhs._lastFire);
 }
 
 uint32_t	Unit::getLastPacketSequence(void) const
@@ -140,12 +146,28 @@ void  Unit::move(void)
     _hitboxCenter = _pos;
 }
 
-bool  Unit::collideWith(Unit& other)
+bool  Unit::collideWith(const Unit& other) const
 {
   float dist = _hitboxCenter.distanceSquared(other.getHitboxCenter());
 
   return dist <= (((_hitboxRadius + other.getHitboxRadius()) / GameState::WINDOW_WIDTH) *
                  ((_hitboxRadius + other.getHitboxRadius()) / GameState::WINDOW_WIDTH));
+}
+
+Missile *Unit::fire(UnitPool *pool)
+{
+  Missile *newMissile = nullptr;
+  std::chrono::time_point<std::chrono::system_clock> now = std::chrono::system_clock::now();
+
+  if (now - _lastFire >= _fireFrequence) {
+    newMissile = pool->get<Missile>();
+    if (newMissile != nullptr) {
+      newMissile->setPos(_pos + Vector2D((_hitboxRadius / GameState::WINDOW_WIDTH), 0.f));
+      newMissile->setDir(Vector2D(_dir.x, 0.f));
+      _lastFire = now;
+    }
+  }
+  return newMissile;
 }
 
 void  Unit::setId(const uint32_t id)
