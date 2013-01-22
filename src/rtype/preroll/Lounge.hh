@@ -60,6 +60,7 @@ public:
 
 private:
   void sendUpdateToRoomPlayers(int roomId);
+  void sendRoomlistGlobally(void);
 
 private:
   TBSystem::network::Listener _listener;

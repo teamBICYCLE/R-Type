@@ -75,6 +75,13 @@ void  Lounge::handleClientDisconnect(const Client& c)
   // pensay a enlevay de la room si nessessaire
 }
 
+void Lounge::sendRoomlistGlobally(void)
+{
+  for (auto& c : _clients) {
+    sendRoomlist(c.getSocket(), "");
+  }
+}
+
 bool Lounge::sendRoomlist(std::shared_ptr<
                           TBSystem::network::sockets::ITcpSocket>& socket,
                   std::string params) const
@@ -156,6 +163,7 @@ bool Lounge::createRoom(std::shared_ptr<
                   + "\r\n");
   movePlayerToRoom(playerId, _rooms.back().getId());
   socket->send(rep.c_str(), rep.size());
+  sendRoomlistGlobally();
   return true;
 }
 
@@ -191,7 +199,9 @@ bool Lounge::removePlayerFromRoom(int playerId)
       sendUpdateToRoomPlayers(it->getId());
     }
   }
-  for (auto& it : itVect) _rooms.erase(it);
+  bool edit = false;
+  for (auto& it : itVect) _rooms.erase(it); edit = true;
+  if (edit) sendRoomlistGlobally();
   return ret;
 }
 
@@ -214,6 +224,7 @@ bool  Lounge::removePlayerFromRoom(int playerId, int roomId)
     else {
       sendUpdateToRoomPlayers(roomId);
     }
+    sendRoomlistGlobally();
     return true;
   }
   return false;
