@@ -15,12 +15,12 @@ ListView::~ListView()
 {
 }
 
-void	ListView::update(std::vector<void*> &list)
+void	ListView::update(std::vector<Room> &list)
 {
   _list.clear();
   for (auto it = list.begin(); it != list.end(); it++)
     {
-      ListItem		*item = new ListItem(_itemSize, "127.0.0.1:4242");
+      RoomListItem	*item = new RoomListItem(_itemSize, "0", "0", "0");
       item->setCallback(_globalCallback);
       this->addItemToList(item);
     }

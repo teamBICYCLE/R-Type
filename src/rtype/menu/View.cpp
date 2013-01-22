@@ -27,7 +27,7 @@ View::~View()
 {
 }
 
-void	View::update(std::vector<void*> &list)
+void	View::update(std::vector<Room> &list)
 {
   _listView->update(list);
 }

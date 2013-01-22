@@ -7,6 +7,8 @@
  * -----------------------------------------------------------------------------
  */
 
+#include "Room.hh"
+
 Room::Room(const std::string& infos)
 {
   std::stringstream ss(infos);
