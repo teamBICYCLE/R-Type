@@ -70,6 +70,7 @@ void  GraphicGameState::updateWithPosition(const communication::Packet& packet)
     else
     {
       GUnit *newEntity = _pool->get<GUnit>();
+      std::cout << "Setting id of newEntity from " << newEntity->getId() << " to " << id << std::endl;
       newEntity->setId(id);
       newEntity->setResourceId(packet.getResourceId());
       _others.push_back(newEntity);

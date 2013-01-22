@@ -22,7 +22,7 @@ public:
 	Unit *clone(void);
 
 public:
-	void setId(const uint32_t id);
+	virtual void setId(const uint32_t id);
 
 private:
 	sf::CircleShape _circle;

@@ -55,7 +55,7 @@ class   Unit : public IPackable
         virtual bool    collideWith(Unit& other);
 
     public:
-        void    setId(const uint32_t);
+        virtual void    setId(const uint32_t);
         void    setDir(const Vector2D& dir);
         void    setLastPacketSequence(uint32_t newPacketSequence);
         void    setPos(const Vector2D& pos);

@@ -26,6 +26,7 @@ GUnit::~GUnit(void)
 
 void GUnit::setId(const uint32_t id)
 {
+  std::cout << "Setting id!" << std::endl;
 	_id = id;
 	switch (_id) {
 		case 0 :
@@ -39,6 +40,9 @@ void GUnit::setId(const uint32_t id)
 			break;
 		case 3 :
 			_circle.setFillColor(sf::Color::Yellow);
+			break;
+    default:
+			_circle.setFillColor(sf::Color::White);
 			break;
 	}
 }
