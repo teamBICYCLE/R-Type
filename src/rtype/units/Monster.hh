@@ -21,7 +21,7 @@ public:
 public:
 	Monster *clone(void);
 
-private:
+protected:
 	moveStyle _movefct;
 };
 
