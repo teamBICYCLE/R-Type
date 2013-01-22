@@ -13,6 +13,8 @@
 # define VERTICAL_ITEM_SPACING	2
 # define MAX_ROW 8
 
+using namespace gooey;
+
 class ListView {
 protected:
   std::vector<ListItem*>	_list;

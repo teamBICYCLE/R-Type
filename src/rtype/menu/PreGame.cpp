@@ -2,13 +2,15 @@
 #include <functional>
 #include "PreGame.hh"
 #include "system/log/Log.hh"
+#include "client.h"
 
 PreGame::PreGame(const std::string &ip, const std::string &port)
  : _gameIsLaunched(false)
  , _currentRoom(-1)
  , _state(eHALLWAY)
+ , _serverIp(ip)
  , _window(sf::VideoMode(1200, 800), "SFML RType")
- , _menu("../resources/menu_background.jpg", _window.getSize(),
+ , _menu("./resources/menu_background.jpg", _window.getSize(),
        sf::Vector2f(500.0,50.0))
 {
   using namespace std::placeholders;
@@ -18,6 +20,7 @@ PreGame::PreGame(const std::string &ip, const std::string &port)
 	_cmdType["hi"] = std::bind(&PreGame::handleWelcome, this, _1);
 	_cmdType["err"] = std::bind(&PreGame::handleError, this, _1);
 	_cmdType["rep"] = std::bind(&PreGame::handleResponse, this, _1);
+	_cmdType["gamestart"] = std::bind(&PreGame::handleGamestart, this, _1);
 
   _responseMap["roomlist"] = std::bind(&PreGame::roomlistDispatch, this, _1);
   _responseMap["room_details"] = std::bind(&PreGame::roomdetailsDispatch, this, _1);
@@ -148,6 +151,18 @@ void PreGame::handleResponse(const std::string &response)
   }
 }
 
+void PreGame::handleGamestart(const std::string& id)
+{
+  std::stringstream ss(id);
+  int         intid;
+  int         port;
+
+  ss >> intid;
+  ss >> port;
+  TBSystem::log::info << "the port value is " << port << TBSystem::log::endl;
+  client(_serverIp, std::to_string(port), intid, _window);
+}
+
 void PreGame::joinRoom(const std::string& id)
 {
   std::string details("room_details " + id + "\r\n");
@@ -242,6 +257,13 @@ void PreGame::startGame(void)
   _socket->send(cmd.c_str(), cmd.size());
 }
 
+void PreGame::tryJoinRoom(int roomId)
+{
+  std::string cmd("join " + std::to_string(roomId) + "\r\n");
+
+  _socket->send(cmd.c_str(), cmd.size());
+}
+
 void PreGame::leaveRoom(void)
 {
   std::string cmd("leave " + std::to_string(_currentRoom) + "\r\n");
@@ -267,11 +289,15 @@ void PreGame::requestRoomdetails(int roomId)
 
 void PreGame::updateHallway(void)
 {
+  using namespace std::placeholders;
+
   if (_state == eHALLWAY) {
     _menu.setButtonOne(sf::Vector2f(100.0f, 50.0f),
                        std::bind(&PreGame::createRoom, this),
                        "");
+    _menu.unsetButtonTwo();
     _menu.update(_rooms);
+    _menu.setGlobalCallback(std::bind(&PreGame::tryJoinRoom, this, _1));
   }
 }
 

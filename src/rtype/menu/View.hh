@@ -11,6 +11,8 @@
 # include <SFML/Graphics.hpp>
 # include <functional>
 
+using namespace gooey;
+
 class View {
 private:
   ListView	*_listView;

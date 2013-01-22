@@ -32,9 +32,20 @@ add_executable(preroll_client
   PlayerListItem.hh
   Player.cpp
   Player.hh
+    ${GUI_TYPE} # Prevent windows from spawning a terminal window
+    ${INPUT}
+    ${UTILITIES}
+    ${GUNITS}
+    ${CLIENT_NETWORK}
+    ${CLIENT_GAMESTATE}
+    ${SPRITES}
+    ${CLIENT_POOL}
+    ../client.cpp
+
 )
 
 target_link_libraries(preroll_client
   system
+    csv-parser
   ${SFML_LIBRARIES}
 )

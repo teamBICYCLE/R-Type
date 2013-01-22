@@ -33,6 +33,7 @@ private:
 	void handleWelcome(const std::string &welcome);
 	void handleError(const std::string &error);
 	void handleResponse(const std::string &response);
+  void handleGamestart(const std::string& id);
 
 private:
   void updateHallway(void);
@@ -46,6 +47,7 @@ private:
   void requestRoomdetails(int roomId);
 
 private:
+  void tryJoinRoom(int roomId);
   void joinRoom(const std::string& id);
   void roomlistDispatch(const std::string& command);
   void roomlistStart();
@@ -68,6 +70,7 @@ private:
   state           _state;
   std::list<Room> _rooms;
   std::list<Player> _players;
+  std::string _serverIp;
 
 private:
 	std::map<std::string, std::function<void (const std::string &)>> _cmdType;
