@@ -5,18 +5,13 @@
 GUnit::GUnit(int id, const Vector2D& pos, const Vector2D& dir)
 	: Unit(id, pos, dir)
   , sf::Drawable()
-  , _circle(10.f)
 {
   setId(_id);
-  //toto.addSourceFolder("resources/sprites");
-  //_anim.reset(toto["resources/sprites/vaisseau.bmp"]->generateAnimInfo());
 }
 
 GUnit::GUnit(void)
-	: Unit()
-  , sf::Drawable()
-  , _circle(10.f)
-{	
+	: Unit() , sf::Drawable()
+{
 }
 
 GUnit::~GUnit(void)
@@ -24,27 +19,15 @@ GUnit::~GUnit(void)
 
 }
 
+void GUnit::setAnimationManager(const AnimationM &a)
+{
+	// nom = _resourceId;
+  	_anim.reset((*(a.get()))["resources/sprites/vaisseau.bmp"]->generateAnimInfo());
+}
+
 void GUnit::setId(const uint32_t id)
 {
-  std::cout << "Setting id!" << std::endl;
 	_id = id;
-	switch (_id) {
-		case 0 :
-			_circle.setFillColor(sf::Color::Green);
-			break;
-		case 1 :
-			_circle.setFillColor(sf::Color::Red);
-			break;
-		case 2 :
-			_circle.setFillColor(sf::Color::Blue);
-			break;
-		case 3 :
-			_circle.setFillColor(sf::Color::Yellow);
-			break;
-    default:
-			_circle.setFillColor(sf::Color::White);
-			break;
-	}
 }
 
 void GUnit::draw(sf::RenderTarget &target, sf::RenderStates states) const
@@ -52,20 +35,19 @@ void GUnit::draw(sf::RenderTarget &target, sf::RenderStates states) const
 	sf::Vector2f pos = static_cast<sf::Vector2f>(_pos);
 
 	// THIBAULT
-	// std::cout << "drawing " << _id << std::endl;
-	// if (_dir.y > 0)
-	// 	_anim->setAnimationName("top");
-	// else if (_dir.y < 0)
-	// 	_anim->setAnimationName("bot");
-	// else
-	// 	_anim->setAnimationName("mid");
 	
-	//_anim->getSprite();
-	// _anim->startAnimation();
+	if (_dir.y > 0)
+		_anim->setAnimationName("top");
+	else if (_dir.y < 0)
+		_anim->setAnimationName("bot");
+	else
+		_anim->setAnimationName("mid");
+	
+	_anim->startAnimation();
 	
 	pos.x *= GameState::WINDOW_WIDTH;
 	pos.y *= GameState::WINDOW_HEIGHT;
-	target.draw(_circle, sf::Transform().translate(pos));
+	target.draw(_anim->getSprite(), sf::Transform().translate(pos));
 }
 
 Unit *GUnit::clone(void)

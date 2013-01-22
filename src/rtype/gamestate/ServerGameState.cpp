@@ -94,6 +94,11 @@ void  ServerGameState::updateWorld(void)
   }
 }
 
+void ServerGameState::requireBoss(void)
+{
+
+}
+
 void  ServerGameState::requireMonsters(void)
 {
   std::list<Monster*> monsters = _pm.get(_pool);
