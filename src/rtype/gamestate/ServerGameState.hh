@@ -21,12 +21,12 @@ private:
 
 public:
   const std::vector<Player*>& getPlayers() const;
-  const std::list<Unit*>&     getEnemies() const;
+  const std::list<Monster*>&     getEnemies() const;
 
 private:
-	const PatternManager _pm;
+	const PatternManager  _pm;
   std::vector<Player*>  _players;
-	std::list<Unit*>	 _enemies;
+	std::list<Monster*>	  _enemies;
   std::chrono::time_point<std::chrono::system_clock> _lastIncrease;
   std::chrono::time_point<std::chrono::system_clock> _lastMonsterSpawn;
   const std::chrono::seconds  _levelIncreaseTick;

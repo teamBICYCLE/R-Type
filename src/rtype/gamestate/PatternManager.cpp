@@ -91,14 +91,14 @@ void PatternManager::createMoveStyles(void)
 	_moveStyles.insert(std::make_pair("sin", sinfct));
 }
 
-std::list<Unit *> PatternManager::get(const std::shared_ptr<UnitPool> &pool) const
+std::list<Monster*> PatternManager::get(const std::shared_ptr<UnitPool> &pool) const
 {
 	using namespace TBSystem;
 
 	int random = (std::rand() % _patterns.size());
 	std::list<std::shared_ptr<Pattern::Element>> elements;
 	elements = _patterns[random]->getPatternElements();
-	std::list<Unit *> ret;
+	std::list<Monster*> ret;
 
 	for (auto item  = elements.begin(); item != elements.end(); ++item)
 	{

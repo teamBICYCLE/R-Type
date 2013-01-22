@@ -64,7 +64,6 @@ void  ServerGameState::updateWorld(void)
   std::chrono::time_point<std::chrono::system_clock> now = std::chrono::system_clock::now();
 
   if (now - _lastIncrease >= _levelIncreaseTick) {
-    //std::cout << "Speed up!" << std::endl;
     _monsterSpawnRate = (_monsterSpawnRate * 9) / 10;//speed up by 10%
     _lastIncrease = now;
   }
@@ -80,11 +79,9 @@ void  ServerGameState::updateWorld(void)
   for (auto enemyIt = _enemies.begin(); enemyIt != _enemies.end(); ) {
     if ((*enemyIt)->isDead() == true) {//if enemy is dead..
       if ((*enemyIt)->wereOthersNotifiedOfDeath() == true) {//..and client were notified
-        //std::cout << "Killing it" << std::endl;
-        Monster *deadUnit = dynamic_cast<Monster*>(*enemyIt);
+        Monster *deadUnit = *enemyIt;
         enemyIt = _enemies.erase(enemyIt);//..we remove it
         _pool->release<Monster>(deadUnit);
-        //TO DO: le rendre a la pool
       }
     }
     else {//enemy alive
@@ -101,7 +98,7 @@ void  ServerGameState::requireMonsters(const Vector2D &left, const Vector2D &rig
 {
   //SHIT -v
   static int id = 5;
-  std::list<Unit *> monsters = _pm.get(_pool);
+  std::list<Monster*> monsters = _pm.get(_pool);
 
   float randx = left.x + ((float)rand()) / ((float)RAND_MAX / (right.x - left.x));
   float randy = left.y + ((float)rand()) / ((float)RAND_MAX / (right.y - left.y));
@@ -156,7 +153,7 @@ const std::vector<Player*>& ServerGameState::getPlayers() const
   return _players;
 }
 
-const std::list<Unit*>&   ServerGameState::getEnemies() const
+const std::list<Monster*>&   ServerGameState::getEnemies() const
 {
   return _enemies;
 }
