@@ -1,19 +1,20 @@
+#include <memory>
 #include "SUnitPool.hh"
 
 //static SUnitPool *	_instance = NULL;
 
 SUnitPool::SUnitPool(void) :
-	UnitPool()
+	UnitPool(std::shared_ptr<UnitFactory>(new SUnitFactory()))
 {
-	SUnitFactory f;
+	//SUnitFactory f;
 
 	// create Players
 	for (int i = 0; i != PLAYER_NB; ++i)
-		_collection[typeid(Player).name()].push_back(f.create<Player>());
+		_collection[typeid(Player).name()].push_back(_factory->create<Player>());
 
 	// create Monsters
 	for (int i = 0; i != MONSTER_NB; ++i)
-		_collection[typeid(Monster).name()].push_back(f.create<Monster>());
+		_collection[typeid(Monster).name()].push_back(_factory->create<Monster>());
 }
 
 SUnitPool::~SUnitPool(void)

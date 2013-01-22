@@ -20,7 +20,7 @@ ServerGameState::ServerGameState(const std::shared_ptr<UnitPool> &p, const std::
   , _lastIncrease(std::chrono::system_clock::now())
   , _lastMonsterSpawn(std::chrono::system_clock::now())
   , _levelIncreaseTick(10)
-  , _monsterSpawnRate(5000)
+  , _monsterSpawnRate(10000)
 {
    using namespace std::placeholders;
 
@@ -69,8 +69,12 @@ void  ServerGameState::updateWorld(void)
     _lastIncrease = now;
   }
   if (now - _lastMonsterSpawn >= _monsterSpawnRate) {
-    std::cout << "MONSTAH" << std::endl;
-    requireMonsters(Vector2D(0.1f, 0.1f), Vector2D(0.9f, 0.9f));
+    //std::cout << "MONSTAH" << std::endl;
+    std::cout << _enemies.size() << std::endl;
+    if (_enemies.size() <= 60)
+      requireMonsters(Vector2D(1.0f, 0.f), Vector2D(1.2f, 0.5f));
+    else
+      std::cout << "tempo" << std::endl;
     _lastMonsterSpawn = now;
   }
 
@@ -102,6 +106,7 @@ void  ServerGameState::requireMonsters(const Vector2D &left, const Vector2D &rig
 
   float randx = left.x + ((float)rand()) / ((float)RAND_MAX / (right.x - left.x));
   float randy = left.y + ((float)rand()) / ((float)RAND_MAX / (right.y - left.y));
+  std::cout << "x -> " << randx << " y -> " << randy << std::endl;
 
   // pour l'instant on verifie rien
   for (auto it : monsters)
@@ -112,7 +117,7 @@ void  ServerGameState::requireMonsters(const Vector2D &left, const Vector2D &rig
       it->setPos(Vector2D(newX, newY));
       //SHIT -v
       it->setId(id++);
-      std::cout << it->getResourceId() << std::endl;
+      //std::cout << it->getResourceId() << std::endl;
   }
   _enemies.insert(_enemies.end(), monsters.begin(), monsters.end());
 }

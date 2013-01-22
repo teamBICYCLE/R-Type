@@ -78,15 +78,14 @@ void PatternManager::createMoveStyles(void)
 	};
 
 	moveStyle sinfct = [](const Vector2D &pos) {
-    Vector2D ret;
-    ret.x = -1;
-    ret.y = std::sin(pos.x * 20); 
-    ret.normalize();
-    ret /= MONSTER_SPEED;
-    ret.y *= 1;
-    return (ret);
+	    Vector2D ret;
+	    ret.x = -1;
+	    ret.y = std::sin(pos.x * 20); 
+	    ret.normalize();
+	    ret /= MONSTER_SPEED;
+	    ret.y *= 1;
+	    return (ret);
 	};
-
 
 	_moveStyles.insert(std::make_pair("linear", linearfct));
 	_moveStyles.insert(std::make_pair("sin", sinfct));
@@ -99,7 +98,6 @@ std::list<Unit *> PatternManager::get(const std::shared_ptr<UnitPool> &pool) con
 	int random = (std::rand() % _patterns.size());
 	std::list<std::shared_ptr<Pattern::Element>> elements;
 	elements = _patterns[random]->getPatternElements();
-	//SUnitPool *pool = SUnitPool::getInstance();
 	std::list<Unit *> ret;
 
 	for (auto item  = elements.begin(); item != elements.end(); ++item)
@@ -109,27 +107,27 @@ std::list<Unit *> PatternManager::get(const std::shared_ptr<UnitPool> &pool) con
 		{
 			std::shared_ptr<MonsterDefinition> sharedDef = sharedm->second;
 			Monster *monster = pool->get<Monster>();
+			if (monster)
+			{
+				// load definition in monster
+				//monster->setSpritePath(SPRITE_PATH + sharedDef->name);
+				monster->setResourceId(sharedDef->resourceId);
+				monster->setPv(sharedDef->pv);
+				monster->setMunition(sharedDef->munition);
+				monster->setTimeToReload(std::chrono::milliseconds(sharedDef->timeToReload));
+				monster->setFireFrequence(std::chrono::milliseconds(sharedDef->fireFrenquence));
 
-			// load definition in monster
-			//monster->setSpritePath(SPRITE_PATH + sharedDef->name);
-			monster->setResourceId(sharedDef->resourceId);
-			monster->setPv(sharedDef->pv);
-			monster->setMunition(sharedDef->munition);
-			monster->setTimeToReload(std::chrono::milliseconds(sharedDef->timeToReload));
-			monster->setFireFrequence(std::chrono::milliseconds(sharedDef->fireFrenquence));
-
-			// load pattern informations in monster
-			monster->setPos(Vector2D((*item)->posx, (*item)->posy));
-			auto style = _moveStyles.find((*item)->moveStyle);
-			if (style == _moveStyles.end())
-				style = _moveStyles.find("linear");
-			monster->setMoveStyle(style->second);
-			ret.push_back(monster);
-			//std::cout << (*item)->posx << " " << (*item)->posy << " " << (*item)->type << " " << (*item)->moveStyle << std::endl;
+				// load pattern informations in monster
+				monster->setPos(Vector2D((*item)->posx, (*item)->posy));
+				auto style = _moveStyles.find((*item)->moveStyle);
+				if (style == _moveStyles.end())
+					style = _moveStyles.find("linear");
+				monster->setMoveStyle(style->second);
+				ret.push_back(monster);
+			}
 		}
 		else
 			log::warn << "Undefined reference to Monster " << (*item)->type << " (passed)" << log::endl;
 	}
-
 	return ret;
 }

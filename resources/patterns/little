@@ -1,0 +1,22 @@
+littlePATTERN_DEFINITION :
+
+char,type,move
+c,defaultMonster,linear
+d,defaultMonster,sin
+
+PATTERN_DRAWING :
+
+=====
+ c
+
+
+
+ d 
+   
+    
+
+    d
+  
+
+   c
+=====  

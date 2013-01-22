@@ -14,8 +14,8 @@
 # include "units/Monster.hh"
 
 # define	PLAYER_NB	4
-# define	MONSTER_NB	50
-# define	ROCKET_NB	150
+# define	MONSTER_NB	100
+# define	ROCKET_NB	350
 
 
 class UnitPool
@@ -29,7 +29,7 @@ public:
 	};
 
 public:
-	UnitPool(void);
+	UnitPool(const std::shared_ptr<UnitFactory> &);
 	virtual ~UnitPool(void);
 
 public:
@@ -41,17 +41,14 @@ public:
 		auto it = _collection.find(type);
 		if (it != _collection.end())
 		{
-			T *ptr;
+			T *ptr = NULL;
 			if (!_collection[type].empty())
 			{
 				ptr = dynamic_cast<T *>(_collection[type].front());
 				_collection[type].pop_front();
 			}
 			else
-			{
-				UnitFactory f;
-				ptr = f.create<T>();
-			}
+				ptr = _factory->create<T>();
 			ptr->setId(_currentId++);
 			return ptr;
 		}
@@ -85,6 +82,7 @@ public:
 protected:
 	std::map<const char *, std::list< Unit *>> _collection;
 	unsigned int _currentId;
+	std::shared_ptr<UnitFactory> _factory;
 };
 
 #endif /*!_UNIT_POOL_HH_*/

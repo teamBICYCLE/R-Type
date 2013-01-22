@@ -1,0 +1,17 @@
+PATTERN_DEFINITION :
+
+char,type,move
+#,defaultMonster,linear
+
+PATTERN_DRAWING :
+
+==========
+  #     #
+   #   #
+  #######
+ ## ### ##
+###########
+# ####### #
+# #     # #
+   ## ##
+===========

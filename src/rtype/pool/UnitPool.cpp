@@ -1,7 +1,7 @@
 #include "UnitPool.hh"
 
-UnitPool::UnitPool(void)
-	: _currentId(0)
+UnitPool::UnitPool(const std::shared_ptr<UnitFactory> &f)
+	: _currentId(0), _factory(f)
 {
 }
 

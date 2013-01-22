@@ -6,6 +6,7 @@
 #include <typeinfo>
 #include <memory>
 #include "units/Unit.hh"
+#include "units/Monster.hh"
 
 class UnitFactory
 {
@@ -24,7 +25,7 @@ public:
 			if (it.first == typeid(T).name())
 				return (dynamic_cast<T*>(it.second->clone()));
 		}
-		log::warn << "Factory : can't create this object (doesn't exist)" << log::endl;
+		log::warn << "Factory : can't create this object (" << typeid(T).name() << " doesn't exist)" << log::endl;
 		return NULL;
 	}
 
