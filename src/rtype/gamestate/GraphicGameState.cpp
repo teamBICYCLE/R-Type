@@ -70,15 +70,17 @@ void  GraphicGameState::updateWithPosition(const communication::Packet& packet)
 
     if (entity != nullptr)
       entity->unpack(packet.getSequence(), packet.getContent());
-    else
-    {
+    else {
       GUnit *newEntity = _pool->get<GUnit>();
-      //std::cout << "Setting id of newEntity from " << newEntity->getId() << " to " << id << std::endl;
-      newEntity->setId(id);
-      newEntity->setResourceId(packet.getResourceId());
-      newEntity->setAnimationManager(_animationManager);
-      _others.push_back(newEntity);
-      _others.back()->unpack(packet.getSequence(), packet.getContent());
+
+      if (newEntity != nullptr) {
+        //std::cout << "Setting id of newEntity from " << newEntity->getId() << " to " << id << std::endl;
+        newEntity->setId(id);
+        newEntity->setResourceId(packet.getResourceId());
+        newEntity->setAnimationManager(_animationManager);
+        _others.push_back(newEntity);
+        _others.back()->unpack(packet.getSequence(), packet.getContent());
+      }
     }
   }
 }
