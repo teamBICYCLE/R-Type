@@ -11,7 +11,7 @@ class Button {
 protected:
   sf::Texture			_texture;
   sf::Sprite			_sprite;
-  std::function<void()>		_callback;
+  std::function<void(int)>	_callback;
   void				*_param;
   sf::Vector2f			_dimension;
 
@@ -21,14 +21,14 @@ public:
   virtual ~Button();
 
   virtual void		draw(sf::RenderTarget& target);
-  void			onClick();
+  virtual void		onClick();
 
   bool		isClicked(sf::Vector2i coord) const;
   const sf::Vector2f&	getPosition() const;
   virtual void		setPosition(const sf::Vector2f &pos);
   const sf::Vector2f&	getDimension() const;
   void			setDimension(const sf::Vector2f &pos);
-  void			setCallback(const std::function<void()> &f);
+  void			setCallback(const std::function<void(int)> &f);
 };
 
 #endif // !__BUTTON_HH__

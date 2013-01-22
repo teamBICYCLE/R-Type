@@ -85,17 +85,17 @@ ListView*	View::getListView() const
   return _listView;
 }
 
-void		View::setGlobalCallback(std::function<void()> f)
+void		View::setGlobalCallback(std::function<void(int)> f)
 {
   _listView->setGlobalCallback(f);
 }
 
-void		View::setRefreshCallback(std::function<void()> f)
+void		View::setRefreshCallback(std::function<void(int)> f)
 {
   _refreshButton->setCallback(f);
 }
 
-void		View::setButtonOne(const sf::Vector2f& dim, std::function<void()> f,
+void		View::setButtonOne(const sf::Vector2f& dim, std::function<void(int)> f,
 				   const std::string& texture)
 {
   if (_buttonOne)
@@ -110,7 +110,7 @@ void		View::setButtonOne(const sf::Vector2f& dim, std::function<void()> f,
 
 }
 
-void		View::setButtonTwo(const sf::Vector2f& dim, std::function<void()> f,
+void		View::setButtonTwo(const sf::Vector2f& dim, std::function<void(int)> f,
 				   const std::string& texture)
 {
   if (_buttonTwo)

@@ -1,8 +1,8 @@
 #include "PlayerListItem.hh"
 
-PlayerListItem::PlayerListItem(const sf::Vector2f& dimension, const std::string& label,
+PlayerListItem::PlayerListItem(const sf::Vector2f& dimension, const std::string& id,
 			       const std::string& status, const std::string& texture)
-  : ListItem(dimension, "#"+label, texture), _status(status)
+  : ListItem(dimension, "#"+id, texture), _status(status)
 {
   _status.setPosition(sf::Vector2f(0,0));
   _status.setCharacterSize(14);

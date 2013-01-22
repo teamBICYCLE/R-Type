@@ -11,6 +11,7 @@
 class ListItem : public Button {
 protected:
   sf::Text		_label;
+  int			_id;
 
 public:
   ListItem(const sf::Vector2f& dimension,
@@ -19,9 +20,12 @@ public:
   virtual ~ListItem();
 
   virtual void		draw(sf::RenderTarget& target);
+  virtual void		onClick(void);
 
   const std::string	getLabel() const;
   void			setLabel(const std::string&);
+  int			getId() const;
+  void			setId(int);
   virtual void		setPosition(const sf::Vector2f& pos);
 };
 

@@ -21,7 +21,7 @@ void	Button::draw(sf::RenderTarget& target)
 void	Button::onClick(void)
 {
   if (_callback.target_type() != typeid(void))
-    _callback();
+    _callback(0);
 }
 
 bool		Button::isClicked(sf::Vector2i coord) const
@@ -54,7 +54,7 @@ void			Button::setDimension(const sf::Vector2f &dim)
   _dimension = dim;
 }
 
-void			Button::setCallback(const std::function<void()> &f)
+void			Button::setCallback(const std::function<void(int)> &f)
 {
   _callback = f;
 }
