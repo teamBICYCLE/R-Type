@@ -37,7 +37,7 @@ void			PlayerListItem::setPosition(const sf::Vector2f &pos)
   vec.x = pos.x + 20; // horizontal offset
   vec.y = pos.y + ((_dimension.y / 2) - (_label.getCharacterSize() / 2)); // vertical align center
   _label.setPosition(vec);
-  vec.x = pos.x + 150; // a modifier
+  vec.x = pos.x + (_dimension.x - 80);
   vec.y = pos.y + ((_dimension.y / 2) - (_status.getCharacterSize() / 2));
   _status.setPosition(vec);
 }

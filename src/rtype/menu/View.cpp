@@ -35,6 +35,7 @@ void	View::update(const std::list<Room> &list)
 
 void	View::update(const std::list<Player> &list)
 {
+  this->setTitle("");
   _listView->update(list);
 }
 
@@ -87,6 +88,11 @@ ListView*	View::getListView() const
 void		View::setGlobalCallback(std::function<void()> f)
 {
   _listView->setGlobalCallback(f);
+}
+
+void		View::setRefreshCallback(std::function<void()> f)
+{
+  _refreshButton->setCallback(f);
 }
 
 void		View::setButtonOne(const sf::Vector2f& dim, std::function<void()> f,
