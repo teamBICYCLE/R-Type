@@ -36,11 +36,17 @@ private:
 
 private:
   void updateHallway(void);
+  void updateRoom(void);
 
 private:
   void createRoom(void);
+  void startGame(void);
+  void leaveRoom(void);
+  void requestRoomlist(void);
+  void requestRoomdetails(int roomId);
 
 private:
+  void joinRoom(const std::string& id);
   void roomlistDispatch(const std::string& command);
   void roomlistStart();
   void roomlistAppend(const std::string& roomdetails);
@@ -52,8 +58,10 @@ private:
   std::string _commandLine;
 	bool _gameIsLaunched;
   int _id;
+  int _currentRoom;
   state           _state;
   std::list<Room> _rooms;
+  std::list<Player> _players;
 
 private:
 	std::map<std::string, std::function<void (const std::string &)>> _cmdType;

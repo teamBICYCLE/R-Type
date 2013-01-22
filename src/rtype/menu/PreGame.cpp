@@ -5,6 +5,7 @@
 
 PreGame::PreGame(const std::string &ip, const std::string &port)
  : _gameIsLaunched(false)
+ , _currentRoom(-1)
  , _state(eHALLWAY)
  , _window(sf::VideoMode(1200, 800), "SFML RType")
  , _menu("../resources/menu_background.jpg", _window.getSize(),
@@ -19,6 +20,7 @@ PreGame::PreGame(const std::string &ip, const std::string &port)
 	_cmdType["rep"] = std::bind(&PreGame::handleResponse, this, std::placeholders::_1);
 
   _responseMap["roomlist"] = std::bind(&PreGame::roomlistDispatch, this, _1);
+  _responseMap["join"] = std::bind(&PreGame::joinRoom, this, _1);
 
   _roomlistMap["start"] = std::bind(&PreGame::roomlistStart, this);
   _roomlistMap["room"] = std::bind(&PreGame::roomlistAppend, this, _1);
@@ -112,10 +114,10 @@ void PreGame::handleNotif(const std::string &notif)
 void PreGame::handleWelcome(const std::string &welcome)
 {
   std::stringstream ss(welcome);
-  std::string roomlist("roomlist\r\n");
+
 	TBSystem::log::info << " WELCOME !|" << welcome << TBSystem::log::endl;
   ss >> _id;
-  _socket->send(roomlist.c_str(), roomlist.size());
+  requestRoomlist();
 }
 
 void PreGame::handleError(const std::string &error)
@@ -138,6 +140,17 @@ void PreGame::handleResponse(const std::string &response)
 
     it->second(s);
   }
+}
+
+void PreGame::joinRoom(const std::string& id)
+{
+  std::string details("room_details " + id + "\r\n");
+
+  TBSystem::log::info << "will join " << id << TBSystem::log::endl;
+  _socket->send(details.c_str(), details.size());
+  _currentRoom = std::stoi(id);
+  _state = eROOM;
+  updateRoom();
 }
 
 void PreGame::roomlistDispatch(const std::string& command)
@@ -181,6 +194,36 @@ void PreGame::createRoom(void)
   _socket->send(cmd.c_str(), cmd.size());
 }
 
+void PreGame::startGame(void)
+{
+  std::string cmd("start " + std::to_string(_currentRoom) + "\r\n");
+
+  _socket->send(cmd.c_str(), cmd.size());
+}
+
+void PreGame::leaveRoom(void)
+{
+  std::string cmd("leave " + std::to_string(_currentRoom) + "\r\n");
+
+  _socket->send(cmd.c_str(), cmd.size());
+  _state = eHALLWAY;
+  updateHallway();
+}
+
+void PreGame::requestRoomlist(void)
+{
+  std::string roomlist("roomlist\r\n");
+
+  _socket->send(roomlist.c_str(), roomlist.size());
+}
+
+void PreGame::requestRoomdetails(int roomId)
+{
+  std::string cmd("room_details " + std::to_string(roomId) + "\r\n");
+
+  _socket->send(cmd.c_str(), cmd.size());
+}
+
 void PreGame::updateHallway(void)
 {
   if (_state == eHALLWAY) {
@@ -188,5 +231,18 @@ void PreGame::updateHallway(void)
                        std::bind(&PreGame::createRoom, this),
                        "");
     _menu.update(_rooms);
+  }
+}
+
+void PreGame::updateRoom(void)
+{
+  if (_state == eROOM) {
+    _menu.setButtonOne(sf::Vector2f(100.0f, 50.0f),
+                       std::bind(&PreGame::startGame, this),
+                       "");
+    _menu.setButtonTwo(sf::Vector2f(100.0f, 50.0f),
+                       std::bind(&PreGame::leaveRoom, this),
+                       "");
+    _menu.update(_players);
   }
 }
