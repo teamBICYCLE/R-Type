@@ -17,6 +17,7 @@ public:
 public:
 	virtual void    move(void);
 	void 	setMoveStyle(const moveStyle &);
+  virtual bool  isOffScreen(const float screenWidth) const;
 
 public:
 	Monster *clone(void);

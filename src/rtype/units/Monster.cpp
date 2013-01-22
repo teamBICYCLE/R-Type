@@ -35,3 +35,10 @@ void	Monster::move(void)
 	if (_pos.y + scaledHitboxDiameter > 1) _pos.y = 1 - scaledHitboxDiameter;
 	_hitboxCenter = _pos;
 }
+
+bool  Monster::isOffScreen(const float screenWidth) const
+{
+  if (_pos.x + (_hitboxRadius / screenWidth) <= 0)
+    return true;
+  return false;
+}
