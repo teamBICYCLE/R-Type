@@ -38,7 +38,7 @@ void	ListView::update(const std::list<Player>& list)
     }
   if (list.size() != 4)
     {
-      for (int i = list.size(); i < 5; ++i) {
+      for (int i = list.size(); i < 4; ++i) {
 	PlayerListItem	*item = new PlayerListItem(_itemSize, "", "EMPTY");
 	this->addItemToList(item);
       }
