@@ -17,28 +17,28 @@ static const std::chrono::milliseconds g_serverPacketRate(16);
 void  runServer(const std::vector<std::string>& clientsIps,
                 const std::string& port)
 {
+  int   playerIdx = 0;
+  float playerSpacing = GameState::WINDOW_HEIGHT / static_cast<float>(clientsIps.size());
   std::vector<network::Addr> clients;
-
-  for (auto& addr : clientsIps) {
-    log::debug  << "add client with addr " << addr << log::endl;
-    clients.push_back(network::Addr(addr, "4244", "UDP"));
-  }
-
   std::vector<Player*> players;
   std::shared_ptr<UnitPool> pool = std::shared_ptr<UnitPool>(new SUnitPool());
-  for (int i = 0; i < 4; i++)
-  {
+
+  for (auto& addr : clientsIps) {
     Player *player = pool->get<Player>();
 
     if (player == nullptr) {
       log::err << "Could not create the players" << log::endl;
       return;
     }
-    player->setId(i);
-    player->setPos(Vector2D(0.1f, 0.1f * (float)(i + 1)));
+    player->setId(playerIdx);
+    player->setPos(Vector2D(0.1f, (((playerSpacing * static_cast<float>(playerIdx + 1)) -
+                                   (playerSpacing / 2.f))) / GameState::WINDOW_HEIGHT));
     player->setDir(Vector2D(0.f, 0.f));
     player->setFireFrequence(std::chrono::milliseconds(200));
     players.push_back(player);
+    log::debug  << "add client with addr " << addr << log::endl;
+    clients.push_back(network::Addr(addr, "4244", "UDP"));
+    playerIdx++;
   }
 
   // START OF THE REAL LOOP
@@ -83,12 +83,12 @@ int     main(int argc, char *argv[])
 {
   std::vector<std::string>  clients;
 
-  clients.push_back("192.168.1.32");
-  clients.push_back("10.23.98.230");
+  //clients.push_back("192.168.1.32");
+  //clients.push_back("10.23.98.230");
   clients.emplace_back("10.23.99.201");
   clients.emplace_back("10.23.99.200");
   clients.emplace_back("10.23.98.230");
-  clients.push_back("10.23.98.165");
+  //clients.push_back("10.23.98.165");
   runServer(clients, "4242");
   return EXIT_SUCCESS;
 }
