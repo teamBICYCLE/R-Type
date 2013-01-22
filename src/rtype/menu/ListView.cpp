@@ -23,6 +23,7 @@ void	ListView::update(const std::list<Room>& list)
       RoomListItem	*item = new RoomListItem(_itemSize, std::to_string((*it).getId()),
 						 std::to_string((*it).getPlayers()),
 						 std::to_string((*it).getMaxPlayers()));
+      item->setId((*it).getId());
       item->setCallback(_globalCallback);
       this->addItemToList(item);
     }
@@ -98,7 +99,7 @@ const sf::Vector2f&		ListView::getItemSize() const
   return _itemSize;
 }
 
-void	ListView::setGlobalCallback(std::function<void()> f)
+void	ListView::setGlobalCallback(std::function<void(int)> f)
 {
   this->_globalCallback = f;
 }
