@@ -109,8 +109,9 @@ void Room::launchGame(const Lounge& lounge)
 
 void* launchServer(void* param) {
   std::vector<std::string> *players = (std::vector<std::string>*)param;
+  static short serverPort = 1234;
 
-  runServer(*players, "4242");
+  runServer(*players, std::to_string(serverPort++));
   return nullptr;
 }
 
