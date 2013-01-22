@@ -35,13 +35,13 @@ void	ListView::update(const std::list<Player>& list)
     {
       PlayerListItem	*item = new PlayerListItem(_itemSize, std::to_string((*it).getId()), "READY");
       this->addItemToList(item);
-      if (list.size() != 4)
-	{
-	  for (int i = list.size(); i < 5; ++i) {
-	    PlayerListItem	*item = new PlayerListItem(_itemSize, "", "EMPTY");
-	    this->addItemToList(item);
-	  }
-	}
+    }
+  if (list.size() != 4)
+    {
+      for (int i = list.size(); i < 5; ++i) {
+	PlayerListItem	*item = new PlayerListItem(_itemSize, "", "EMPTY");
+	this->addItemToList(item);
+      }
     }
 }
 
