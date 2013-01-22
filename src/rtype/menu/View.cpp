@@ -29,6 +29,7 @@ View::~View()
 
 void	View::update(const std::list<Room> &list)
 {
+  this->setTitle("Select a room:");
   _listView->update(list);
 }
 
