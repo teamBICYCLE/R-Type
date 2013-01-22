@@ -5,8 +5,12 @@
 
 PreGame::PreGame(const std::string &ip, const std::string &port)
  : _gameIsLaunched(false)
+ , _window(sf::VideoMode(1200, 800), "SFML RType")
+ , _menu("../resources/menu_background.jpg", _window.getSize(),
+       sf::Vector2f(500.0,50.0))
 {
   using namespace std::placeholders;
+
 
 	_cmdType["notif"] = std::bind(&PreGame::handleNotif, this, std::placeholders::_1);
 	_cmdType["hi"] = std::bind(&PreGame::handleWelcome, this, std::placeholders::_1);
@@ -32,41 +36,28 @@ PreGame::PreGame(const std::string &ip, const std::string &port)
 	}
 }
 
-PreGame::PreGame(const PreGame &other)
-	: _listener(other._listener), _socket(other._socket), _gameIsLaunched(false),
-	_cmdType(other._cmdType)
-{}
-
-PreGame::PreGame(PreGame&& other)
-{
-	swap(*this, other);
-}
-
-PreGame &PreGame::operator=(PreGame other)
-{
-	if (this != &other) {
-		swap(*this, other);
-	}
-	return (*this);
-}
-
-void swap(PreGame &lhs, PreGame &rhs)
-{
-	lhs._socket = rhs._socket;
-	lhs._gameIsLaunched = rhs._gameIsLaunched;
-	lhs._listener = rhs._listener;
-	lhs._cmdType = rhs._cmdType;
-}
-
 PreGame::~PreGame(void)
 {}
 
 void PreGame::run(void)
 {
-	while (1)
+	while (_window.isOpen())
 	{
+    sf::Event event;
+
+    while (_window.pollEvent(event)) {
+      if (event.type == sf::Event::Closed) {
+        _window.close();
+      }
+      if (event.type == sf::Event::MouseButtonPressed) {
+        _menu.clickEvent(sf::Mouse::getPosition(_window));
+      }
+    }
 		_listener.waitEvent(std::chrono::seconds(1));
 		_listener.execute();
+    _window.clear();
+    _menu.draw(_window);
+    _window.display();
 	}
 }
 
@@ -176,5 +167,5 @@ void PreGame::roomlistAppend(const std::string& roomdetails)
 void PreGame::roomlistEnd()
 {
   TBSystem::log::info << "In roomlist end" << TBSystem::log::endl;
-  // TODO Notify the GUI of the update
+  _menu.update(_rooms);
 }

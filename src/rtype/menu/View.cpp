@@ -27,7 +27,7 @@ View::~View()
 {
 }
 
-void	View::update(std::vector<Room> &list)
+void	View::update(const std::list<Room> &list)
 {
   _listView->update(list);
 }
@@ -104,7 +104,7 @@ void		View::setButtonTwo(const sf::Vector2f& dim, std::function<void()> f,
   if (_buttonTwo)
     delete _buttonTwo;
   if (texture.empty())
-    _buttonTwo = new Button(dim, sf::Vector2f(0,0));    
+    _buttonTwo = new Button(dim, sf::Vector2f(0,0));
   else
     _buttonTwo = new Button(dim, sf::Vector2f(0,0), texture);
   _buttonTwo->setPosition(sf::Vector2f((_listView->getPosition().x + _listView->getSize().x - (2 * dim.x + 4) + 1),

@@ -4,7 +4,7 @@
 # include "ListItem.hh"
 # include "Room.hh"
 # include "RoomListItem.hh"
-# include <vector>
+# include <list>
 # include <SFML/Graphics.hpp>
 # include <functional>
 
@@ -24,7 +24,7 @@ public:
   ListView(const sf::Vector2f &pos, const sf::Vector2f &itemSize, unsigned int maxRow = MAX_ROW);
   virtual ~ListView();
 
-  void		update(std::vector<Room>&);
+  void		update(const std::list<Room>&);
   bool		checkClick(sf::Vector2i coord) const;
   void		draw(sf::RenderTarget& target);
 

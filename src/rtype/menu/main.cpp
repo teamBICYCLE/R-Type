@@ -33,9 +33,6 @@ int	main(int argc, char *argv[])
   using namespace TBSystem::network::sockets;
 
   PreGame  pregame(argv[1], argv[2]);
-  sf::RenderWindow window(sf::VideoMode(1200, 800), "SFML RType");
-  View		view("../resources/menu_background.jpg", window.getSize(),
-               sf::Vector2f(500.0,50.0));
 
   pregame.run();
   return EXIT_SUCCESS;

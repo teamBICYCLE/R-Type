@@ -15,7 +15,7 @@ ListView::~ListView()
 {
 }
 
-void	ListView::update(std::vector<Room> &list)
+void	ListView::update(const std::list<Room>& list)
 {
   _list.clear();
   for (auto it = list.begin(); it != list.end(); it++)

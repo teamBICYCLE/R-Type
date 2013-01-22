@@ -3,20 +3,18 @@
 
 # include <string>
 #include <map>
+#include <SFML/Graphics.hpp>
 #include <system/network/Tcp.hh>
 #include <system/network/Addr.hh>
 #include <system/network/Listener.hh>
+#include "View.hh"
 #include "Room.hh"
 
 class PreGame
 {
 public:
 	PreGame(const std::string &ip = "localhost", const std::string &port = "4242");
-	PreGame(const PreGame &other);
-	PreGame(PreGame &&other);
-	PreGame &operator=(PreGame other);
-	friend void  swap(PreGame &lhs, PreGame &rhs);
-	virtual ~PreGame(void);
+	~PreGame(void);
 
 public:
 	void run(void);
@@ -49,6 +47,10 @@ private:
 	std::map<std::string, std::function<void (const std::string &)>> _cmdType;
 	std::map<std::string, std::function<void (const std::string &)>> _responseMap;
 	std::map<std::string, std::function<void (const std::string &)>> _roomlistMap;
+
+private:
+  sf::RenderWindow _window;
+  View            _menu;
 };
 
 #endif /*!__PRE_GAME__ */
