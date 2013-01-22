@@ -55,7 +55,9 @@ int main(int argc, char* argv[])
   //player->setDir(Vector2D(0.f, 0.f));
   std::shared_ptr<UnitPool> pool = std::shared_ptr<UnitPool>(new GUnitPool());
   GUnit * e = pool->get<GUnit>();
-  pool->release<GUnit>(e);
+  if (e != nullptr) {
+    pool->release<GUnit>(e);
+  }
   GraphicGameState  g(pool, std::shared_ptr<GPlayer>(new GPlayer(std::stoi(argv[3]),
                                   Vector2D(0.1f, 0.1f), Vector2D(0.f, 0.f))));
 
