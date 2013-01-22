@@ -127,13 +127,13 @@ void		View::setButtonTwo(const sf::Vector2f& dim, std::function<void()> f,
 void		View::unsetButtonOne()
 {
   if (_buttonOne)
-    delete _buttonOne;
+    delete _buttonOne; _buttonOne = nullptr;
 }
 
 void		View::unsetButtonTwo()
 {
   if (_buttonTwo)
-    delete _buttonTwo;
+    delete _buttonTwo; _buttonTwo = nullptr;
 }
 
 void		View::setTitle(const std::string& s)
