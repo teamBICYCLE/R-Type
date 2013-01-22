@@ -7,6 +7,7 @@
 #include <memory>
 #include "units/Unit.hh"
 #include "units/Monster.hh"
+#include "units/Missile.hh"
 
 class UnitFactory
 {
