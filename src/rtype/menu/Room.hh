@@ -10,6 +10,9 @@
 #ifndef _ROOM_H__
 #define _ROOM_H__
 
+# include <string>
+# include <sstream>
+
 class Room {
 public:
   Room(const std::string& infos);

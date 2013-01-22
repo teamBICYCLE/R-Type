@@ -7,6 +7,11 @@
  * -----------------------------------------------------------------------------
  */
 
+#include "Room.hh"
+#include <system/log/Log.hh>
+
+using namespace TBSystem;
+
 Room::Room(const std::string& infos)
 {
   std::stringstream ss(infos);
@@ -14,6 +19,8 @@ Room::Room(const std::string& infos)
   ss >> _id;
   ss >> _players;
   ss >> _maxplayers;
+  log::debug << "id = " << _id << " p = " << _players << " maxp = " << _maxplayers
+    << std::endl << "with " << infos << log::endl;
 }
 
 Room::~Room()
