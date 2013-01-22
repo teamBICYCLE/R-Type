@@ -13,6 +13,11 @@
 class PreGame
 {
 public:
+  enum state {
+    eHALLWAY,
+    eROOM
+  };
+
 	PreGame(const std::string &ip = "localhost", const std::string &port = "4242");
 	~PreGame(void);
 
@@ -30,6 +35,12 @@ private:
 	void handleResponse(const std::string &response);
 
 private:
+  void updateHallway(void);
+
+private:
+  void createRoom(void);
+
+private:
   void roomlistDispatch(const std::string& command);
   void roomlistStart();
   void roomlistAppend(const std::string& roomdetails);
@@ -41,6 +52,7 @@ private:
   std::string _commandLine;
 	bool _gameIsLaunched;
   int _id;
+  state           _state;
   std::list<Room> _rooms;
 
 private:

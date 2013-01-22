@@ -59,7 +59,7 @@ void	View::clickEvent(sf::Vector2i coord)
   else {
     if (_buttonOne && _buttonOne->isClicked(coord))
       _buttonOne->onClick();
-    if (_buttonOne && _buttonTwo->isClicked(coord))
+    if (_buttonTwo && _buttonTwo->isClicked(coord))
       _buttonTwo->onClick();
   }
 }
