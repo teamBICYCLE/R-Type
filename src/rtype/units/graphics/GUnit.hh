@@ -25,8 +25,12 @@ public:
 	virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
 
 private:
+	void switchSprite(void);
+
+private:
 	//sf::CircleShape _circle;
 	std::shared_ptr<Sprite::AnimationInfos> _anim;
+	unsigned int _currentResourceId;
 };
 
 #endif /*!_G_UNIT_HH_*/

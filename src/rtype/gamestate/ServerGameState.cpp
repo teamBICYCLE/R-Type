@@ -21,6 +21,8 @@ ServerGameState::ServerGameState(const std::shared_ptr<UnitPool> &p, const std::
   , _lastMonsterSpawn(std::chrono::system_clock::now())
   , _levelIncreaseTick(10)
   , _monsterSpawnRate(10000)
+  , _turn(1)
+  , _bossAppear(false)
 {
    using namespace std::placeholders;
 
@@ -67,12 +69,18 @@ void  ServerGameState::updateWorld(void)
     _monsterSpawnRate = (_monsterSpawnRate * 9) / 10;//speed up by 10%
     _lastIncrease = now;
   }
-  if (now - _lastMonsterSpawn >= _monsterSpawnRate) {
-    std::cout << _enemies.size() << std::endl;
+
+  if (_bossAppear && _enemies.size() == 0)
+  {
+    _turn = 0;
+    _bossAppear = false;
+  }
+  
+  if (_turn == BOSS_SPAWN && !_bossAppear)
+    requireBoss();
+  else if (now - _lastMonsterSpawn >= _monsterSpawnRate && !_bossAppear) {
     if (_enemies.size() <= 60)
       requireMonsters();
-    else
-      std::cout << "tempo" << std::endl;
     _lastMonsterSpawn = now;
   }
 
@@ -84,7 +92,7 @@ void  ServerGameState::updateWorld(void)
         _pool->release<Monster>(deadUnit);
       }
     }
-    else {//enemy alive
+    else { //enemy alive
       (*enemyIt)->move();
       if ((*enemyIt)->getPos().x +
           ((*enemyIt)->getHitboxRadius() / GameState::WINDOW_WIDTH) <= 0)
@@ -92,11 +100,28 @@ void  ServerGameState::updateWorld(void)
       ++enemyIt;
     }
   }
+  std::cout << _turn << std::endl;
+  ++_turn;
 }
 
 void ServerGameState::requireBoss(void)
 {
+    Monster *boss = _pool->get<Monster>();
+    boss->setPos(Vector2D(1.1f, 0.5f));
+    boss->setPv(100);
+    boss->setResourceId(4);
 
+    moveStyle move = [](const Vector2D &pos) {      
+      Vector2D v; v.x = 0;
+      if (pos.x >= 0.8f)
+        v.x -= 1 / MONSTER_SPEED;
+      return v;
+    };
+
+    boss->setMoveStyle(move);
+    boss->setBoss(true);
+    _bossAppear = true;
+    _enemies.push_back(boss);
 }
 
 void  ServerGameState::requireMonsters(void)

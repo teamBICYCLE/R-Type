@@ -17,12 +17,15 @@ public:
 public:
 	virtual void    move(void);
 	void 	setMoveStyle(const moveStyle &);
+	bool 	isBoss(void);
+	void    setBoss(bool v);
 
 public:
 	Monster *clone(void);
 
 protected:
 	moveStyle _movefct;
+	bool      _boss;
 };
 
 #endif /*!_MONSTER_HH_*/

@@ -4,6 +4,8 @@
 # include "GameState.hh"
 # include "PatternManager.hh"	
 
+# define  BOSS_SPAWN 300
+
 class ServerGameState : public GameState {
 public:
   ServerGameState(const std::shared_ptr<UnitPool> &, const std::vector<Player*>& v);
@@ -32,6 +34,8 @@ private:
   std::chrono::time_point<std::chrono::system_clock> _lastMonsterSpawn;
   const std::chrono::seconds  _levelIncreaseTick;
   std::chrono::milliseconds   _monsterSpawnRate;
+  unsigned int _turn;
+  bool _bossAppear;
 };
 
 #endif /* !_SERVERGAMESTATE_H__ */

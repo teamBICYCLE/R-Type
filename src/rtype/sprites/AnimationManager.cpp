@@ -27,6 +27,7 @@ AnimationManager& AnimationManager::operator=(const AnimationManager &other)
 
 bool AnimationManager::addSource(const std::string& spriteFile, const std::string &cfgFile)
 {
+	std::cout << "adding -> " << spriteFile << std::endl;
 	try {
 		_animations.insert(std::make_pair(spriteFile,
 							new Board(spriteFile, cfgFile)));
@@ -62,8 +63,15 @@ bool AnimationManager::findAssociatedFile(std::vector<std::string> &files)
 
 	while ((cfgFile = findCfgFile(files)) != files.end()) {
 		std::vector<std::string>::iterator imgFile = findAssociatedImg(files, *cfgFile);
-	
+
+
+		if (imgFile != files.end())
+			std::cout << " " << *cfgFile << " " << *imgFile << std::endl;
+		else
+			std::cout << "fail" << *cfgFile << std::endl;
+
 		if (imgFile != files.end()) {
+			std::cout << "success " << *cfgFile << *imgFile << std::endl;
 			try {
 				if (!addSource(*imgFile, *cfgFile)) {
 					success = false;
