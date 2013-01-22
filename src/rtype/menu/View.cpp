@@ -124,6 +124,18 @@ void		View::setButtonTwo(const sf::Vector2f& dim, std::function<void()> f,
   _buttonTwo->setCallback(f);
 }
 
+void		View::unsetButtonOne()
+{
+  if (_buttonOne)
+    delete _buttonOne;
+}
+
+void		View::unsetButtonTwo()
+{
+  if (_buttonTwo)
+    delete _buttonTwo;
+}
+
 void		View::setTitle(const std::string& s)
 {
   _title.setString(s);

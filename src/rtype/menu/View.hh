@@ -39,6 +39,8 @@ public:
   void		setRefreshCallback(std::function<void()>);
   void		setButtonOne(const sf::Vector2f& dim, std::function<void()> f, const std::string&);
   void		setButtonTwo(const sf::Vector2f& dim, std::function<void()> f, const std::string&);
+  void		unsetButtonOne();
+  void		unsetButtonTwo();
   void		setTitle(const std::string& s);
 };
 
