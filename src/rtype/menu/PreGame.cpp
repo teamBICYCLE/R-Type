@@ -53,7 +53,7 @@ void PreGame::run(void)
         _menu.clickEvent(sf::Mouse::getPosition(_window));
       }
     }
-		_listener.waitEvent(std::chrono::seconds(1));
+		_listener.waitEvent(std::chrono::milliseconds(10));
 		_listener.execute();
     _window.clear();
     _menu.draw(_window);
