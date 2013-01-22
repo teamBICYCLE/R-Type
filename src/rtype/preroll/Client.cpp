@@ -179,3 +179,8 @@ std::shared_ptr<TBSystem::network::sockets::ITcpSocket>& Client::getSocket()
 {
   return _socket;
 }
+
+void Client::send(std::string cmd)
+{
+  _socket->send(cmd.c_str(), cmd.size());
+}

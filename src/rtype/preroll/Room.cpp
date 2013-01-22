@@ -21,6 +21,7 @@ Room::Room(int maxplayers, Lounge& lounge)
   , _st(WAITING)
   , _maxplayers(maxplayers)
   , _lounge(lounge)
+  , _inGame(false)
 {
 }
 
@@ -90,7 +91,7 @@ bool  Room::isEmpty() const
 
 void* launchServer(void* players);
 
-void Room::launchGame(const Lounge& lounge)
+void Room::launchGame(Lounge& lounge)
 {
   std::vector<std::string> *playersAddr = new std::vector<std::string>;
 
@@ -102,8 +103,11 @@ void Room::launchGame(const Lounge& lounge)
                    });
 
     playersAddr->push_back(it->getAddr().getIpString());
+    it->send("gamestart\r\n");
   }
   log::debug << "start game LOL !" << log::endl;
+  _inGame = true;
+  lounge.sendRoomlistGlobally();
   t.start(&launchServer, playersAddr);
 }
 
@@ -123,4 +127,9 @@ bool  Room::isIn(int playerId) {
 const std::vector<int>& Room::getPlayersIds() const
 {
   return _playersIds;
+}
+
+bool Room::isInGame() const
+{
+  return _inGame;
 }

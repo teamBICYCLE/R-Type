@@ -57,9 +57,11 @@ public:
 public:
   void addClient(std::shared_ptr<Client>& c);
   const std::list<Client>& getClients() const;
+  std::list<Client>& getClients();
 
 private:
   void sendUpdateToRoomPlayers(int roomId);
+public:
   void sendRoomlistGlobally(void);
 
 private:

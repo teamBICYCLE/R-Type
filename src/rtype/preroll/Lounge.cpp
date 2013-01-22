@@ -90,7 +90,9 @@ bool Lounge::sendRoomlist(std::shared_ptr<
 
   ret  = "rep roomlist start\r\n";
   for (auto& r : _rooms) {
-    ret += "rep roomlist room " + r.toString() + "\r\n";
+    if (!r.isInGame()) {
+      ret += "rep roomlist room " + r.toString() + "\r\n";
+    }
   }
   ret += "rep roomlist end\r\n";
   socket->send(ret.c_str(), ret.size());
@@ -259,6 +261,12 @@ bool Lounge::tryStartRoom(int playerId, int roomId)
 
 const std::list<Client>&
 Lounge::getClients() const
+{
+  return _clients;
+}
+
+std::list<Client>&
+Lounge::getClients()
 {
   return _clients;
 }

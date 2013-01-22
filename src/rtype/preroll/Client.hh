@@ -44,6 +44,8 @@ public:
                  );
 
   void  welcome();
+  void send(std::string cmd);
+
 public:
   int getId() const;
   const TBSystem::network::Addr& getAddr() const;
