@@ -116,10 +116,7 @@ void  ServerGameState::requireMonsters(const Vector2D &left, const Vector2D &rig
       it->setPos(Vector2D(newX, newY));
       //SHIT -v
       it->setId(id++);
-<<<<<<< HEAD
-=======
       std::cout << "Monster id=" << it->getId() << std::endl;
->>>>>>> fd89606b7e2011d0409a7244471dc1072681c6c7
       //std::cout << it->getResourceId() << std::endl;
   }
   _enemies.insert(_enemies.end(), monsters.begin(), monsters.end());
