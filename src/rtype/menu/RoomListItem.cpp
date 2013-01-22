@@ -3,7 +3,7 @@
 RoomListItem::RoomListItem(const sf::Vector2f& dimension, const std::string& label,
 			   const std::string& minPlayer, const std::string& maxPlayer,
 			   const std::string& texture)
-  : ListItem(dimension, label, texture), _minPlayerLabel(minPlayer), _maxPlayerLabel("/" + maxPlayer)
+  : ListItem(dimension, "#"+label, texture), _minPlayerLabel(minPlayer), _maxPlayerLabel("/" + maxPlayer)
 {
   _minPlayerLabel.setPosition(sf::Vector2f(0,0));
   _maxPlayerLabel.setPosition(sf::Vector2f(0,0));
@@ -51,10 +51,10 @@ void			RoomListItem::setPosition(const sf::Vector2f &pos)
   vec.x = pos.x + 20; // horizontal offset
   vec.y = pos.y + ((_dimension.y / 2) - (_label.getCharacterSize() / 2)); // vertical align center
   _label.setPosition(vec);
-  vec.x = pos.x + 150; // a modifier
+  vec.x = pos.x + (_dimension.x - 40);
   vec.y = pos.y + ((_dimension.y / 2) - (_minPlayerLabel.getCharacterSize() / 2));
   _minPlayerLabel.setPosition(vec);
-  vec.x = pos.x + 160; // a modifier
+  vec.x = pos.x + (_dimension.x - 30);
   vec.y = pos.y + ((_dimension.y / 2) - (_maxPlayerLabel.getCharacterSize() / 2));
   _maxPlayerLabel.setPosition(vec);
 }
