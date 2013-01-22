@@ -3,6 +3,8 @@
 
 # include "ListView.hh"
 # include "ListItem.hh"
+# include "Room.hh"
+# include "RoomListItem.hh"
 # include "Button.hh"
 # include <SFML/Graphics.hpp>
 # include <functional>
@@ -22,7 +24,7 @@ public:
   View(const std::string& texture, const sf::Vector2u& size, const sf::Vector2f& listItemSize);
   virtual ~View();
 
-  void		update(std::vector<void*>&);
+  void		update(std::vector<Room>&);
   void		draw(sf::RenderWindow&);
   void		clickEvent(sf::Vector2i coord);
 

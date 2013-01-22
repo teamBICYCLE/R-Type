@@ -9,11 +9,11 @@
 # define DEFAULT_LISTITEM_TEXTURE "../resources/default_listitem.png"
 
 class ListItem : public Button {
-private:
+protected:
   sf::Text		_label;
 
 public:
-  ListItem(const sf::Vector2f& dimension, const sf::Vector2f& position = sf::Vector2f(0,0),
+  ListItem(const sf::Vector2f& dimension,
 	   const std::string& label = "",
 	   const std::string& texture = DEFAULT_LISTITEM_TEXTURE);
   virtual ~ListItem();

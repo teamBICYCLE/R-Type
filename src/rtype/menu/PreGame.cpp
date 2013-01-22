@@ -13,6 +13,8 @@ PreGame::PreGame(const std::string &ip, const std::string &port)
 	_cmdType["err"] = std::bind(&PreGame::handleError, this, std::placeholders::_1);
 	_cmdType["rep"] = std::bind(&PreGame::handleResponse, this, std::placeholders::_1);
 
+  _responseMap["roomlist"] = std::bind(&PreGame::roomlistDispatch, this, _1);
+
   _roomlistMap["start"] = std::bind(&PreGame::roomlistStart, this);
   _roomlistMap["room"] = std::bind(&PreGame::roomlistAppend, this, _1);
   _roomlistMap["end"] = std::bind(&PreGame::roomlistEnd, this);
@@ -137,7 +139,13 @@ void PreGame::handleResponse(const std::string &response)
   std::string cmd;
 
   line >> cmd;
+  auto it = _responseMap.find(cmd);
+  if (it != _responseMap.end()) {
+    std::istreambuf_iterator<char> eos;
+    std::string s(std::istreambuf_iterator<char>(line), eos);
 
+    it->second(s);
+  }
 }
 
 void PreGame::roomlistDispatch(const std::string& command)
@@ -145,6 +153,7 @@ void PreGame::roomlistDispatch(const std::string& command)
   std::stringstream ss(command);
   std::string type;
 
+  TBSystem::log::info << "In dispatch with `" << command << "`" << TBSystem::log::endl;
   ss >> type;
   auto it = _roomlistMap.find(type);
   if (it != _roomlistMap.end()) {
@@ -154,15 +163,18 @@ void PreGame::roomlistDispatch(const std::string& command)
 
 void PreGame::roomlistStart()
 {
+  TBSystem::log::info << "In roomlist start" << TBSystem::log::endl;
   _rooms.clear();
 }
 
 void PreGame::roomlistAppend(const std::string& roomdetails)
 {
+  TBSystem::log::info << "In roomlist append" << TBSystem::log::endl;
   _rooms.emplace_back(roomdetails);
 }
 
 void PreGame::roomlistEnd()
 {
+  TBSystem::log::info << "In roomlist end" << TBSystem::log::endl;
   // TODO Notify the GUI of the update
 }

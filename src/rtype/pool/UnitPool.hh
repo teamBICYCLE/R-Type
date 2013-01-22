@@ -12,6 +12,7 @@
 # include "units/graphics/GPlayer.hh"
 # include "units/graphics/GUnit.hh"
 # include "units/Monster.hh"
+# include "units/Missile.hh"
 
 # define	PLAYER_NB	4
 # define	MONSTER_NB	100

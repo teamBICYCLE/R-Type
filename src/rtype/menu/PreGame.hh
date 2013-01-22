@@ -47,6 +47,7 @@ private:
 
 private:
 	std::map<std::string, std::function<void (const std::string &)>> _cmdType;
+	std::map<std::string, std::function<void (const std::string &)>> _responseMap;
 	std::map<std::string, std::function<void (const std::string &)>> _roomlistMap;
 };
 

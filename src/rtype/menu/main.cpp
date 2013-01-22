@@ -38,32 +38,5 @@ int	main(int argc, char *argv[])
                sf::Vector2f(500.0,50.0));
 
   pregame.run();
-  std::vector<void*>	test;
-
-  test.push_back(new std::string("toto"));
-  test.push_back(new std::string("toto"));
-  test.push_back(new std::string("toto"));
-  test.push_back(new std::string("toto"));
-
-  view.setTitle("Select a Room");
-  view.setButtonOne(sf::Vector2f(100,100), std::bind(playCallback), "");
-  view.setButtonTwo(sf::Vector2f(100,100), std::bind(quitCallback), "");
-  view.setGlobalCallback(std::bind(listCallback));
-  view.update(test);
-  while (window.isOpen())
-    {
-      sf::Event event;
-      while (window.pollEvent(event))
-	{
-	  if (event.type == sf::Event::Closed)
-	    window.close();
-	  if (event.type == sf::Event::MouseButtonPressed)
-	    view.clickEvent(sf::Mouse::getPosition(window));
-	}
-      window.clear();
-      view.draw(window);
-      window.display();
-    }
-
   return EXIT_SUCCESS;
 }

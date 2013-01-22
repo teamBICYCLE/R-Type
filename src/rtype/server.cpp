@@ -29,6 +29,11 @@ void  runServer(const std::vector<std::string>& clientsIps,
   for (int i = 0; i < 4; i++)
   {
     Player *player = pool->get<Player>();
+
+    if (player == nullptr) {
+      log::err << "Could not create the players" << log::endl;
+      return;
+    }
     player->setId(i);
     player->setPos(Vector2D(0.1f, 0.1f * (float)(i + 1)));
     player->setDir(Vector2D(0.f, 0.f));
