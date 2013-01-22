@@ -119,3 +119,8 @@ bool  Room::isIn(int playerId) {
   return std::find(_playersIds.begin(), _playersIds.end(), playerId) !=
     _playersIds.end();
 }
+
+const std::vector<int>& Room::getPlayersIds() const
+{
+  return _playersIds;
+}

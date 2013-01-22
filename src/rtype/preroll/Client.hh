@@ -54,6 +54,7 @@ public:
                   Lounge& lounge,
                   std::string params
                  );
+  std::shared_ptr<TBSystem::network::sockets::ITcpSocket>& getSocket();
 
 private:
   static int            _s_lastID;

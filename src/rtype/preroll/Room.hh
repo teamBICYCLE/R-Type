@@ -35,7 +35,7 @@ public:
   bool    addPlayer(int c);
   bool    removePlayer(int c);
   bool    isEmpty() const;
-
+  const std::vector<int>& getPlayersIds() const;
   void    launchGame(const Lounge& lounge);
 
   bool    isIn(int playerId);

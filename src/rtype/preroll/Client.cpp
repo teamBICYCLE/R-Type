@@ -52,7 +52,7 @@ Client::Client(
       std::string rep;
     if (!_isInRoom && l_lounge.movePlayerToRoom(_id, roomId)) {
       _isInRoom = true;
-      rep = "rep join OK " + std::to_string(roomId) + "\r\n";
+      rep = "rep join " + std::to_string(roomId) + "\r\n";
     }
     else {
       rep = "err could not join room\r\n";
@@ -173,4 +173,9 @@ void Client::setInRoom(bool b)
 bool Client::isInRoom() const
 {
   return _isInRoom;
+}
+
+std::shared_ptr<TBSystem::network::sockets::ITcpSocket>& Client::getSocket()
+{
+  return _socket;
 }

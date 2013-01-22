@@ -59,6 +59,9 @@ public:
   const std::list<Client>& getClients() const;
 
 private:
+  void sendUpdateToRoomPlayers(int roomId);
+
+private:
   TBSystem::network::Listener _listener;
   std::list<Client>         _clients;
   std::list<Room>           _rooms;
