@@ -66,17 +66,23 @@ void NetworkHandler::sendToAll(uint8_t *packet, int packetSize)
   }
 }
 
-void NetworkHandler::addReliablePacket(uint8_t *packet, int packetSize, Unit *deadUnit)
+void NetworkHandler::addReliablePacket(const uint8_t *packet, int packetSize)
 {
   Packet tmp(packet, packetSize);
 
   _reliablePackets.emplace_back(_outAddr, tmp);//unit is dead, send this to everyone
-  //others are planned to be notified, no need to handle the dead unit anymore
-  deadUnit->setOthersNotifiedOfDeath(true);
 }
 
 void  NetworkHandler::broadcast(const ServerGameState& g)
 {
+  if (g.running() == false) {
+    Packet  endGamePacket(communication::Packet::Type::END_GAME, 0, 0,
+                          nullptr, 0);
+
+    endGamePacket.setReliable(true);
+    addReliablePacket(endGamePacket.getData(), endGamePacket.getDataSize());
+    return;
+  }
   //send player update to other players
   for (auto& p : g.getPlayers()) {
     sendEntity(p);
@@ -97,9 +103,15 @@ void  NetworkHandler::broadcast(const ServerGameState& g)
     sendEntity(playerMissile);
   }
 
+  trySendAll();
+}
+
+void  NetworkHandler::trySendAll(void)
+{
   //retry sending every non-ack reliable packets
-  for (auto& packet : _reliablePackets)
+  for (auto& packet : _reliablePackets) {
     packet.tryAgain(_socket);
+  }
 }
 
 void  NetworkHandler::sendEntity(Unit *entity)
@@ -118,7 +130,9 @@ void  NetworkHandler::sendEntity(Unit *entity)
     }
     else {
       //entity is dead, notify others
-      addReliablePacket(buf, packetSize, entity);
+      addReliablePacket(buf, packetSize);
+      //others are planned to be notified, no need to handle the dead unit anymore
+      entity->setOthersNotifiedOfDeath(true);
     }
   }
   delete [] buf;
@@ -127,6 +141,11 @@ void  NetworkHandler::sendEntity(Unit *entity)
 void NetworkHandler::setClients(const std::vector<network::Addr>& c)
 {
   _outAddr = c;
+}
+
+bool NetworkHandler::allReliablePacketsSent(void) const
+{
+  return (_reliablePackets.size() == 0);
 }
 
 }

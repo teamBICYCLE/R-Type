@@ -38,7 +38,7 @@ void  ServerGameState::updateWithInput(const communication::Packet& packet)
 {
   const uint32_t  id = packet.getId();
 
-  if (id <= _players.size()) {
+  if (id < _players.size()) {
     Input::Data d;
     Player *player = _players[id];
 
@@ -105,7 +105,7 @@ void  ServerGameState::updateWorld(void)
     _turn = 0;
     _bossAppear = false;
   }
-  
+
   if (_turn == BOSS_SPAWN && !_bossAppear)
     requireBoss();
   else if (now - _lastMonsterSpawn >= _monsterSpawnRate && !_bossAppear) {
@@ -122,12 +122,19 @@ void  ServerGameState::updateWorld(void)
         return true;
       }
     }
+    bool  allDead = true;
     for (auto& player : _players) {
       //check monster against players. Monsters do not die upon collision
       if (player->isDead() == false &&
           player->collideWith(*monster) == true) {
         player->setDead(true);
       }
+      if (player->isDead() == false) {
+        allDead = false;
+      }
+    }
+    if (allDead == true) {
+      _running = false;
     }
     return false;
   };

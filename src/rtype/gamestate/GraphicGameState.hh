@@ -31,6 +31,7 @@ public:
 public:
   void  updateWithPosition  (const communication::Packet& packet);
   void  updateWithDeath     (const communication::Packet& packet);
+  void  endGame             (const communication::Packet& packet);
   void  simulate            (const Input::Data& input);
   void  animationUpdate     (void);
 

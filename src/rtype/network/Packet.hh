@@ -15,7 +15,8 @@ public:
     POSITION = 0,
     INPUT,
     DEATH,
-    ACK
+    ACK,
+    END_GAME
   };
 
 public:
