@@ -104,6 +104,7 @@ void Room::launchGame(Lounge& lounge)
                    return c.getId() == id;
                    });
 
+    it->setInRoom(false);
     playersAddr->push_back(it->getAddr().getIpString());
     it->send("gamestart " + std::to_string(i++) + " " +
              std::to_string(serverPort++) + "\r\n");
@@ -111,6 +112,7 @@ void Room::launchGame(Lounge& lounge)
   log::debug << "start game LOL !" << log::endl;
   _inGame = true;
   lounge.sendRoomlistGlobally();
+  _playersIds.clear();
   t.start(&launchServer, playersAddr);
 }
 
