@@ -31,7 +31,7 @@ void Monster::setBoss(bool v)
 	_boss = v;
 }
 
-Monster *Monster::clone(void)
+Unit *Monster::clone(void)
 {
 	return (new Monster(*this));
 }

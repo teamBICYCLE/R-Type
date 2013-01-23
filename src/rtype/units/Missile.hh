@@ -12,7 +12,7 @@ public:
 	virtual ~Missile(void);
 
 public:
-	Missile *clone(void);
+	Unit *clone(void);
   virtual bool  isOffScreen(const float screenWidth) const;
 
 public:

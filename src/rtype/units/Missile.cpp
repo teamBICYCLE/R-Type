@@ -20,7 +20,7 @@ Missile::~Missile(void)
 {
 }
 
-Missile *Missile::clone(void)
+Unit *Missile::clone(void)
 {
 	return (new Missile(*this));
 }

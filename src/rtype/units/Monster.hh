@@ -22,7 +22,7 @@ public:
   	virtual bool  isOffScreen(const float screenWidth) const;
 
 public:
-	Monster *clone(void);
+	Unit *clone(void);
 
 protected:
 	moveStyle _movefct;

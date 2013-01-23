@@ -52,6 +52,7 @@ void  ServerGameState::updateWithInput(const communication::Packet& packet)
       if (d.isFiring() == true) {
         Missile *newMissile = player->fire(_pool.get());
         if (newMissile != nullptr) {
+          newMissile->setResourceId(5);
           _playerMissiles.push_back(newMissile);
         }
       }
@@ -83,7 +84,6 @@ void  ServerGameState::updateEntities(std::list<UnitType*>& entities,
       fireFun(*entityIt); 
       if ((*entityIt)->isOffScreen(GameState::WINDOW_WIDTH) == true ||
           collideFun(*entityIt) == true) {
-        //std::cout << "Seting dead" << std::endl;
         (*entityIt)->setDead(true);
       }
       ++entityIt;
@@ -109,8 +109,9 @@ void  ServerGameState::updateWorld(void)
   if (_turn == BOSS_SPAWN && !_bossAppear)
     requireBoss();
   else if (now - _lastMonsterSpawn >= _monsterSpawnRate && !_bossAppear) {
-    if (_enemies.size() <= 60)
+    if (_enemies.size() <= 60) {
       requireMonsters();
+    }
     _lastMonsterSpawn = now;
   }
 

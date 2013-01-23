@@ -57,6 +57,7 @@ bool GUnit::playerAnimation(void) const
 void GUnit::draw(sf::RenderTarget &target, sf::RenderStates states) const
 {
 	(void)states;
+	std::cout << "$$$$$$$$$$$$$$$$$$$$$$$ " << _id << " " << _resourceId << std::endl;
 	sf::Vector2f pos = static_cast<sf::Vector2f>(_pos);
 	bool valid = false;
 
@@ -66,6 +67,8 @@ void GUnit::draw(sf::RenderTarget &target, sf::RenderStates states) const
 		valid = _anim->setAnimationName("mid");
 	else
 		valid = _anim->setAnimationName("mid");
+
+	//std::cout << "resource id : " << _resourceId << std::endl;
 
 	if (valid)
 	{
