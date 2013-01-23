@@ -15,6 +15,11 @@ int	main(int argc, char *argv[])
 {
   PreGame  pregame(argv[1], argv[2]);
 
-  pregame.run();
+  try {
+    pregame.run();
+  }
+  catch (std::exception& e) {
+    std::cout << e.what() << std::endl;
+  }
   return EXIT_SUCCESS;
 }
