@@ -82,4 +82,5 @@ void  runServer(const std::vector<std::string>& clientsIps,
     nh.trySendAll();
     //std::this_thread::sleep_for(g_serverUpdateRate - accumulator);
   }
+  log::debug << "BOUCLE INF !!!! ========" << log::endl;
 }
