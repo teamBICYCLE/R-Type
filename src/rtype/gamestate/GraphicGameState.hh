@@ -48,6 +48,7 @@ private:
   Vector2D    _backgroundDirection;
   std::shared_ptr<GPlayer>  _player;
   std::list<GUnit*>         _others;
+  std::list<GUnit*>         _deadUnits;
   std::shared_ptr<Sprite::AnimationManager>  _animationManager;
 };
 

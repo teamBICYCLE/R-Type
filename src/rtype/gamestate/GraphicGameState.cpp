@@ -55,6 +55,9 @@ void GraphicGameState::draw(sf::RenderTarget &target, sf::RenderStates states) c
   for (auto& entity : _others) {
       target.draw(*entity);
   }
+  for (auto& entity : _deadUnits) {
+      target.draw(*entity);
+  }
 }
 
 // client
@@ -97,11 +100,10 @@ void  GraphicGameState::updateWithDeath(const communication::Packet& packet)
   {
     GUnit *entity = findEntityById(id);
 
-    //need someting like deleteLater, juste to animate the death
     if (entity != nullptr) {
       std::cout << "Entity with id=" << entity->getId() << " died" << std::endl;
       _others.remove(entity);
-      _pool->release<GUnit>(entity);
+      _deadUnits.push_back(entity);
     }
   }
 }
@@ -131,6 +133,12 @@ void  GraphicGameState::animationUpdate(void)
   if (pos.x <= 0)//if the x of the second background is less than zero...
     _backgroundPos.x = 0;//then we reset the position of the first background to loop again
   _backgroundSprite2->setPosition(pos);
+
+  for (auto deadUnitIt = _deadUnits.begin(); deadUnitIt != _deadUnits.end(); ++deadUnitIt) {
+    //si l'animation de mort est finie
+    _pool->release<GUnit>(*deadUnitIt);
+    deadUnitIt = _deadUnits.erase(deadUnitIt);
+  }
 }
 
 GUnit *GraphicGameState::findEntityById(const uint32_t id)
