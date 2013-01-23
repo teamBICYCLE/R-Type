@@ -15,6 +15,7 @@ namespace Sprite
 		AnimationInfos &operator=(const AnimationInfos &other);
 		virtual ~AnimationInfos(void);
 
+		void setPlayAnimNumber(const int nbPlay);
 		bool setAnimationName(const std::string &animName);
 		void startAnimation(void);
 		std::chrono::milliseconds getDurationAnimation(void);
@@ -25,6 +26,7 @@ namespace Sprite
 	 	std::string _currentAnim;
 	 	std::chrono::steady_clock::time_point _currentSpriteTime;
 	 	Board _spriteBoard;
+	 	int _nbPlay;
 	};
 }
 #endif /*!__ANIMATION_INFOS__*/
