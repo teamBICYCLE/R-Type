@@ -11,6 +11,7 @@ project(client)
 include_directories(${PROJECT_SOURCE_DIR})
 
 add_executable(preroll_client
+  ${GUI_TYPE} # Prevent windows from spawning a terminal window
   Button.cpp
   Button.hh
   ListItem.cpp
@@ -32,20 +33,18 @@ add_executable(preroll_client
   PlayerListItem.hh
   Player.cpp
   Player.hh
-    ${GUI_TYPE} # Prevent windows from spawning a terminal window
-    ${INPUT}
-    ${UTILITIES}
-    ${GUNITS}
-    ${CLIENT_NETWORK}
-    ${CLIENT_GAMESTATE}
-    ${SPRITES}
-    ${CLIENT_POOL}
-    ../client.cpp
-
-)
+  ${INPUT}
+  ${UTILITIES}
+  ${GUNITS}
+  ${CLIENT_NETWORK}
+  ${CLIENT_GAMESTATE}
+  ${SPRITES}
+  ${CLIENT_POOL}
+  ../client.cpp
+  )
 
 target_link_libraries(preroll_client
   system
-    csv-parser
+  csv-parser
   ${SFML_LIBRARIES}
-)
+  )
