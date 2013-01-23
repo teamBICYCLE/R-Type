@@ -105,7 +105,12 @@ bool  Client::handleRcv(
   char  buf[512];
   std::string::size_type pos;
 
-  buf[socket->recv(buf, sizeof(buf))] = '\0';
+  try {
+    buf[socket->recv(buf, sizeof(buf))] = '\0';
+  }
+  catch (std::exception&) {
+    return false;
+  }
   if (!buf[0]) return false;
   _commandLine += buf;
 

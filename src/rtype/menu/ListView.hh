@@ -13,6 +13,7 @@
 # define VERTICAL_ITEM_SPACING	2
 # define MAX_ROW 8
 
+
 class ListView {
 protected:
   std::vector<ListItem*>	_list;
@@ -27,7 +28,7 @@ public:
   virtual ~ListView();
 
   void		update(const std::list<Room>&);
-  void		update(const std::list<Player>&);
+  void		update(const std::list<gooey::Player>&);
   bool		checkClick(sf::Vector2i coord) const;
   void		draw(sf::RenderTarget& target);
 

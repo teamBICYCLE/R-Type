@@ -1,11 +1,14 @@
 #include "PlayerListItem.hh"
 
 PlayerListItem::PlayerListItem(const sf::Vector2f& dimension, const std::string& id,
-			       const std::string& status, const std::string& texture)
-  : ListItem(dimension, "#"+id, texture), _status(status)
+			       const std::string& status, const sf::Color& color, 
+			       const std::string& texture)
+  : ListItem(dimension, "#"+id, texture), _status(status), _color(sf::Vector2f(20,50))
 {
   _status.setPosition(sf::Vector2f(0,0));
   _status.setCharacterSize(14);
+  _color.setPosition(sf::Vector2f(0,0));
+  _color.setFillColor(color);
 }
 
 PlayerListItem::~PlayerListItem()
@@ -15,6 +18,7 @@ PlayerListItem::~PlayerListItem()
 void		PlayerListItem::draw(sf::RenderTarget& target)
 {
   target.draw(_sprite);
+  target.draw(_color);
   target.draw(_label);
   target.draw(_status);
 }
@@ -40,4 +44,7 @@ void			PlayerListItem::setPosition(const sf::Vector2f &pos)
   vec.x = pos.x + (_dimension.x - 80);
   vec.y = pos.y + ((_dimension.y / 2) - (_status.getCharacterSize() / 2));
   _status.setPosition(vec);
+  vec.x = pos.x + 60;
+  vec.y = pos.y;
+  _color.setPosition(vec);
 }

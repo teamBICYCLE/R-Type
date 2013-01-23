@@ -94,6 +94,8 @@ void* launchServer(void* players);
 void Room::launchGame(Lounge& lounge)
 {
   std::vector<std::string> *playersAddr = new std::vector<std::string>;
+  int i = 0;
+  static short serverPort = 1234;
 
   for (int id : _playersIds) {
     auto it =
@@ -103,7 +105,8 @@ void Room::launchGame(Lounge& lounge)
                    });
 
     playersAddr->push_back(it->getAddr().getIpString());
-    it->send("gamestart\r\n");
+    it->send("gamestart " + std::to_string(i++) + " " +
+             std::to_string(serverPort++) + "\r\n");
   }
   log::debug << "start game LOL !" << log::endl;
   _inGame = true;

@@ -1,23 +1,28 @@
 #include <stdexcept>
 #include <functional>
 #include "PreGame.hh"
+#include "gamestate/GameState.hh"
 #include "system/log/Log.hh"
+#include "client.h"
 
 PreGame::PreGame(const std::string &ip, const std::string &port)
  : _gameIsLaunched(false)
  , _currentRoom(-1)
  , _state(eHALLWAY)
- , _window(sf::VideoMode(1200, 800), "SFML RType")
- , _menu("../resources/menu_background.jpg", _window.getSize(),
+ , _serverIp(ip)
+ , _window(sf::VideoMode(GameState::WINDOW_WIDTH, GameState::WINDOW_HEIGHT),
+           "SFML RType")
+ , _menu("./resources/menu_background.jpg", _window.getSize(),
        sf::Vector2f(500.0,50.0))
 {
   using namespace std::placeholders;
 
 
-	_cmdType["notif"] = std::bind(&PreGame::handleNotif, this, _1);
-	_cmdType["hi"] = std::bind(&PreGame::handleWelcome, this, _1);
-	_cmdType["err"] = std::bind(&PreGame::handleError, this, _1);
-	_cmdType["rep"] = std::bind(&PreGame::handleResponse, this, _1);
+  _cmdType["notif"] = std::bind(&PreGame::handleNotif, this, _1);
+  _cmdType["hi"] = std::bind(&PreGame::handleWelcome, this, _1);
+  _cmdType["err"] = std::bind(&PreGame::handleError, this, _1);
+  _cmdType["rep"] = std::bind(&PreGame::handleResponse, this, _1);
+  _cmdType["gamestart"] = std::bind(&PreGame::handleGamestart, this, _1);
 
   _responseMap["roomlist"] = std::bind(&PreGame::roomlistDispatch, this, _1);
   _responseMap["room_details"] = std::bind(&PreGame::roomdetailsDispatch, this, _1);
@@ -32,17 +37,18 @@ PreGame::PreGame(const std::string &ip, const std::string &port)
   _roomdetailsMap["player"] = std::bind(&PreGame::roomdetailsAppend, this, _1);
   _roomdetailsMap["end"] = std::bind(&PreGame::roomdetailsEnd, this);
 
-  	try {
-  		_socket.reset(new TBSystem::network::sockets::Tcp);
-  		TBSystem::network::Addr addr(ip, port, "TCP");
-  		_socket->connect(addr);
-  		_listener.addSocket(_socket,
-  			std::bind(&PreGame::read, this, std::placeholders::_1),
-  			std::bind(&PreGame::disconnected, this));
-	} catch (std::runtime_error &e) {
-		TBSystem::log::err << e.what() << TBSystem::log::endl;
-		throw std::invalid_argument("Could not connect to server");
-	}
+  try {
+    _socket.reset(new TBSystem::network::sockets::Tcp);
+    TBSystem::network::Addr addr(ip, port, "TCP");
+    _socket->connect(addr);
+    _listener.addSocket(_socket,
+                        std::bind(&PreGame::read, this, std::placeholders::_1),
+                        std::bind(&PreGame::disconnected, this));
+  } catch (std::runtime_error &e) {
+    TBSystem::log::err << e.what() << TBSystem::log::endl;
+    throw std::invalid_argument("Could not connect to server");
+  }
+  _musicPlayer.play("menu");
 }
 
 PreGame::~PreGame(void)
@@ -148,6 +154,20 @@ void PreGame::handleResponse(const std::string &response)
   }
 }
 
+void PreGame::handleGamestart(const std::string& id)
+{
+  std::stringstream ss(id);
+  int         intid;
+  int         port;
+
+  ss >> intid;
+  ss >> port;
+  TBSystem::log::info << "the port value is " << port << TBSystem::log::endl;
+  _musicPlayer.play("game");
+  _state = eHALLWAY;
+  client(_serverIp, std::to_string(port), intid, _window);
+}
+
 void PreGame::joinRoom(const std::string& id)
 {
   std::string details("room_details " + id + "\r\n");
@@ -242,6 +262,13 @@ void PreGame::startGame(void)
   _socket->send(cmd.c_str(), cmd.size());
 }
 
+void PreGame::tryJoinRoom(int roomId)
+{
+  std::string cmd("join " + std::to_string(roomId) + "\r\n");
+
+  _socket->send(cmd.c_str(), cmd.size());
+}
+
 void PreGame::leaveRoom(void)
 {
   std::string cmd("leave " + std::to_string(_currentRoom) + "\r\n");
@@ -267,11 +294,15 @@ void PreGame::requestRoomdetails(int roomId)
 
 void PreGame::updateHallway(void)
 {
+  using namespace std::placeholders;
+
   if (_state == eHALLWAY) {
     _menu.setButtonOne(sf::Vector2f(100.0f, 50.0f),
                        std::bind(&PreGame::createRoom, this),
-                       "");
+                       "./resources/create_button.png");
+    _menu.unsetButtonTwo();
     _menu.update(_rooms);
+    _menu.setGlobalCallback(std::bind(&PreGame::tryJoinRoom, this, _1));
   }
 }
 
@@ -280,10 +311,10 @@ void PreGame::updateRoom(void)
   if (_state == eROOM) {
     _menu.setButtonOne(sf::Vector2f(100.0f, 50.0f),
                        std::bind(&PreGame::startGame, this),
-                       "");
+                       "./resources/play_button.png");
     _menu.setButtonTwo(sf::Vector2f(100.0f, 50.0f),
                        std::bind(&PreGame::leaveRoom, this),
-                       "");
+                       "./resources/leave_button.png");
     _menu.update(_players);
   }
 }

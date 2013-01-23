@@ -70,8 +70,10 @@ bool  Lounge::acceptClient(std::shared_ptr<
 
 void  Lounge::handleClientDisconnect(const Client& c)
 {
-  removePlayerFromRoom(c.getId());
+  int id = c.getId();
+
   _clients.erase(std::find(_clients.begin(), _clients.end(), c));
+  removePlayerFromRoom(id);
   // pensay a enlevay de la room si nessessaire
 }
 
