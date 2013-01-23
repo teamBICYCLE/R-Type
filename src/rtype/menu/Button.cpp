@@ -27,8 +27,9 @@ void	Button::onClick(void)
 bool		Button::isClicked(sf::Vector2i coord) const
 {
   float			x, y;
-  x = coord.x;
-  y = coord.y;
+
+  x = static_cast<float>(coord.x);
+  y = static_cast<float>(coord.y);
   if (_sprite.getGlobalBounds().contains(x, y))
     return true;
   return false;
