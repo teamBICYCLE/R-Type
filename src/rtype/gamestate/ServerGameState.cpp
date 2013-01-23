@@ -123,37 +123,41 @@ void  ServerGameState::updateWorld(void)
         return true;
       }
     }
-    bool  allDead = true;
-    for (auto& player : _players) {
-      //check monster against players. Monsters do not die upon collision
-      if (player->isDead() == false &&
-          player->collideWith(*monster) == true) {
-        player->getHit();
-      }
-      if (player->isDead() == false) {
-        allDead = false;
-      }
-    }
-    if (allDead == true) {
-      _running = false;
-    }
+    //bool  allDead = true;
+    //for (auto& player : _players) {
+    //  //check monster against players. Monsters do not die upon collision
+    //  if (player->isDead() == false &&
+    //      player->collideWith(*monster) == true) {
+    //    player->getHit();
+    //  }
+    //  if (player->isDead() == false) {
+    //    allDead = false;
+    //  }
+    //}
+    //if (allDead == true) {
+    //  _running = false;
+    //}
     return false;
   };
 
-  std::function<bool(const Unit*)> monsterMissileCollision = [this] (const Unit *monsterMissile) -> bool {
-    for (auto& player : _players) {
-      //check monster missiles against players
-      if (player->isDead() == false &&
-          player->collideWith(*monsterMissile) == true) {
-        player->getHit();
-        return true;
-      }
-    }
-    return false;
-  };
+  //std::function<bool(const Unit*)> monsterMissileCollision = [this] (const Unit *monsterMissile) -> bool {
+  //  for (auto& player : _players) {
+  //    //check monster missiles against players
+  //    if (player->isDead() == false &&
+  //        player->collideWith(*monsterMissile) == true) {
+  //      player->getHit();
+  //      return true;
+  //    }
+  //  }
+  //  return false;
+  //};
 
   std::function<void(Unit *)> noFire = [](Unit *u) -> void {
     (void)u;
+  };
+
+  std::function<bool(const Unit*)> noCollide = [] (const Unit*) -> bool {
+    return false;
   };
 
   std::function<void(Unit *)> monsterFire = [this](Unit *u) -> void {
@@ -165,8 +169,8 @@ void  ServerGameState::updateWorld(void)
     }
   };
 
-  updateEntities<Missile>(_monsterMissiles, monsterMissileCollision, noFire);
-  updateEntities<Missile>(_playerMissiles, [] (const Unit*) -> bool {return false;}, noFire);
+  updateEntities<Missile>(_monsterMissiles, noCollide, noFire);
+  updateEntities<Missile>(_playerMissiles, noCollide, noFire);
   updateEntities<Monster>(_enemies, monsterCollision, monsterFire);
   ++_turn;
 }
@@ -237,14 +241,34 @@ void  ServerGameState::requireMonsters(void)
 void  ServerGameState::moveOne(Player& p)
 {
   p.move();
+  for (auto& monster : _enemies) {
+    if (p.isDead() == false &&
+        p.collideWith(*monster) == true) {
+      p.getHit();
+    }
+  }
+
+  for (auto& monsterMissile : _monsterMissiles) {
+    if (p.isDead() == false &&
+        p.collideWith(*monsterMissile) == true) {
+      p.getHit();
+      monsterMissile->getHit();
+    }
+  }
 }
 
 void  ServerGameState::moveAll(void)
 {
-   for (auto& p : _players) {
-      if (p->isDead() == false) //only move alive player
-        moveOne(*p);
-   }
+  bool  allDead = true;
+  for (auto& p : _players) {
+    if (p->isDead() == false) //only move alive player
+      moveOne(*p);
+    if (p->isDead() == false)
+      allDead = false;
+  }
+  if (allDead == true) {
+    _running = false;
+  }
 }
 
 void  ServerGameState::setPlayerDirection(uint32_t id, const Vector2D& dir)

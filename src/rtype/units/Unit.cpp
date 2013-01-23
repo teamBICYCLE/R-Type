@@ -249,6 +249,7 @@ void    Unit::setFireFrequence(const std::chrono::milliseconds &t)
 
 void    Unit::getHit(void)
 {
+  //std::cout << "pv=" << _pv << std::endl;
   if (_pv != 0) {
     _pv -= 1;
   }

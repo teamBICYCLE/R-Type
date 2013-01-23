@@ -97,7 +97,7 @@ bool  ReliablePacket::allSent(void) const
     if (client.second == false)//at least one did not receive it
       return false;
   }
-  std::cout << "All sent!" << std::endl;
+  //std::cout << "All sent!" << std::endl;
   return true;
 }
 
