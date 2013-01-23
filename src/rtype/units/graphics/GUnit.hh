@@ -23,6 +23,7 @@ public:
   virtual void    setId(const uint32_t id);
   void	setAnimationManager(const AnimationM &);
   Unit	  *clone(void);
+ std::shared_ptr<Sprite::AnimationInfos> getAnimInfo(void);
 
 public:
 	virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;

@@ -60,7 +60,12 @@ void GUnit::draw(sf::RenderTarget &target, sf::RenderStates states) const
 	sf::Vector2f pos = static_cast<sf::Vector2f>(_pos);
 	bool valid = false;
 
-	if (_resourceId < PLAYERS_ID)
+	_anim->setPlayAnimNumber(-1);
+	if (isDead()) {
+		valid = _anim->setAnimationName("die");
+		_anim->setPlayAnimNumber(1);
+	}
+	else if (_resourceId < PLAYERS_ID)
 		valid = GUnit::playerAnimation();
 	else if (_resourceId == MISSILE_ID)
 		valid = _anim->setAnimationName("mid");
@@ -84,4 +89,9 @@ void GUnit::draw(sf::RenderTarget &target, sf::RenderStates states) const
 Unit *GUnit::clone(void)
 {
   	return (new GUnit(*this));
+}
+
+std::shared_ptr<Sprite::AnimationInfos> GUnit::getAnimInfo(void)
+{
+	return (_anim);
 }
