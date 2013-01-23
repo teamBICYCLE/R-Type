@@ -5,19 +5,9 @@
 # this stuff is worth it, you can buy me a beer in return. Thomas Duplomb
 ################################################################################
 
-
-list(APPEND LOUNGE_HEADERS
-  ${CMAKE_CURRENT_LIST_DIR}/INetworkSerializable.hh
-  ${CMAKE_CURRENT_LIST_DIR}/Client.hh
-  ${CMAKE_CURRENT_LIST_DIR}/Room.hh
-  ${CMAKE_CURRENT_LIST_DIR}/Lounge.hh
-)
-
-list(APPEND LOUNGE_SOURCES
-  ${CMAKE_CURRENT_LIST_DIR}/Client.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/Room.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/Lounge.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/server.cpp
-)
-
-set(LOUNGE ${LOUNGE_HEADERS} ${LOUNGE_SOURCES})
+list(APPEND MUSIC
+  ${CMAKE_CURRENT_LIST_DIR}/Music.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/Music.hh
+  ${CMAKE_CURRENT_LIST_DIR}/Sound.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/Sound.hh
+  )

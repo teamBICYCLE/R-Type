@@ -259,12 +259,12 @@ const std::chrono::milliseconds &Unit::getFireFrequence(void) const
 
 inline int16_t  to_short(float f)
 {
-  return f * 10000;
+  return static_cast<int16_t>(f * 10000.f);
 }
 
 inline float  to_float(short s)
 {
-  return s / 10000.f;
+  return static_cast<float>(s) / 10000.f;
 }
 
 size_t  Unit::pack(uint8_t *out, size_t outSize) const

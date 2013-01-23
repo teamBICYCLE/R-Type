@@ -11,6 +11,9 @@
 #include "GraphicGameState.hh"
 #include "pool/GUnitPool.hh"
 #include "units/graphics/GPlayer.hh"
+#include "audio/Sound.hh"
+
+extern Sound sounds;
 
 using namespace TBSystem;
 
@@ -82,6 +85,7 @@ void  GraphicGameState::updateWithPosition(const communication::Packet& packet)
         //std::cout << "Setting id of newEntity from " << newEntity->getId() << " to " << id << std::endl;
         newEntity->setId(id);
         newEntity->setResourceId(packet.getResourceId());
+        if (packet.getResourceId() == 5) sounds.play("shoot");
         newEntity->setAnimationManager(_animationManager);
         _others.push_back(newEntity);
         _others.back()->unpack(packet.getSequence(), packet.getContent());
@@ -111,6 +115,7 @@ void  GraphicGameState::updateWithDeath(const communication::Packet& packet)
 
 void  GraphicGameState::endGame(const communication::Packet& packet)
 {
+  (void)packet;
   std::cout << "End of game" << std::endl;
   _running = false;
 }

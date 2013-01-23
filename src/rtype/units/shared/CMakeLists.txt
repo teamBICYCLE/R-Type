@@ -9,3 +9,7 @@ add_library(DefaultMonster SHARED
 add_library(DumbMonster SHARED
 	${CMAKE_CURRENT_LIST_DIR}/DumbMonster.cpp
 )
+
+add_library(RockMonster SHARED
+	${CMAKE_CURRENT_LIST_DIR}/RockMonster.cpp
+)

@@ -7,4 +7,6 @@
 
 add_subdirectory(libs)
 add_subdirectory(rtype)
+if (DEBUG)
 add_subdirectory(tests)
+endif ()

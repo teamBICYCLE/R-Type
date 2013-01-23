@@ -81,7 +81,10 @@ namespace network {
         {
             int fd;
             sockaddr_in addr;
-            unsigned int tmp = sizeof(addr);
+#ifdef __gnu_linux__
+            unsigned
+#endif
+            int tmp = sizeof(addr);
 
             errno = 0;
             fd = ::accept(_socket, reinterpret_cast<sockaddr*>(&addr), &tmp);
