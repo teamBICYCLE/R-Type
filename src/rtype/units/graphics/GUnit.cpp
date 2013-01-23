@@ -41,23 +41,28 @@ void GUnit::setId(const uint32_t id)
 	_id = id;
 }
 
+bool GUnit::playerAnimation(void) const
+{
+	bool valid = false;
+	if (_dir.y > 0)
+		valid = _anim->setAnimationName("bot"); // recuperer l'id
+	else if (_dir.y < 0)
+		valid = _anim->setAnimationName("top");
+	else
+		valid = _anim->setAnimationName("mid");	
+	return valid;
+}
+
 void GUnit::draw(sf::RenderTarget &target, sf::RenderStates states) const
 {
 	(void)states;
 	sf::Vector2f pos = static_cast<sf::Vector2f>(_pos);
 	bool valid = false;
 
-	if (_resourceId < 4)
-	{
-		if (_dir.y > 0)
-			valid = _anim->setAnimationName("bot"); // recuperer l'id
-		else if (_dir.y < 0)
-			valid = _anim->setAnimationName("top");
-		else
-			valid = _anim->setAnimationName("mid");	
-	}
-	if (_resourceId == 5)
-		valid = _anim->setAnimationName("mid3"); // parente du missile
+	if (_resourceId < PLAYERS_ID)
+		valid = GUnit::playerAnimation();
+	if (_resourceId == MISSILE_ID)
+		valid = _anim->setAnimationName("mid3");
 	else
 		valid = _anim->setAnimationName("mid");
 

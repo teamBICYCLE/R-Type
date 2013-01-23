@@ -1,11 +1,14 @@
 #ifndef		_G_UNIT_HH_
 # define	_G_UNIT_HH_
 
-#include <SFML/Graphics.hpp>
-#include <memory>
-#include "units/Unit.hh"
-#include "sprites/AnimationInfos.hh"
-#include "sprites/AnimationManager.hh"
+# include <SFML/Graphics.hpp>
+# include <memory>
+# include "units/Unit.hh"
+# include "sprites/AnimationInfos.hh"
+# include "sprites/AnimationManager.hh"
+
+# define PLAYERS_ID 4 
+# define MISSILE_ID 5
 
 typedef std::shared_ptr<Sprite::AnimationManager> AnimationM;
 
@@ -23,6 +26,7 @@ public:
 
 public:
 	virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
+	bool playerAnimation(void) const;
 
 private:
 	void switchSprite(void);
