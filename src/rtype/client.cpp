@@ -70,7 +70,8 @@ int main(int argc, char* argv[])
   int accumulator = 0;
   int timeDraw = 0;
   window.setFramerateLimit(300);
-  while (window.isOpen())
+  while (window.isOpen() &&
+         g.running() == true)
   {
     int frameTime = clock.getElapsedTime().asMilliseconds();
     if (frameTime > g_maxFrameTime)

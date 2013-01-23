@@ -14,7 +14,7 @@ const int GameState::WINDOW_WIDTH = 800;
 const int GameState::WINDOW_HEIGHT = 800;
 
 GameState::GameState(const std::shared_ptr<UnitPool> &p)
-  : PLAYER_SPEED(200.f), _pool(p)
+  : PLAYER_SPEED(200.f), _pool(p), _running(true)
 {
 }
 
@@ -35,6 +35,11 @@ void  GameState::update(const std::vector<communication::Packet>& v)
    {
       this->update(p);
    }
+}
+
+bool  GameState::running(void) const
+{
+  return _running;
 }
 
 Vector2D  GameState::convertToSpeed(const Vector2D& direction) const
