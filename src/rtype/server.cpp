@@ -78,6 +78,8 @@ void  runServer(const std::vector<std::string>& clientsIps,
       std::this_thread::sleep_for(g_serverUpdateRate - accumulator);
   }
   while (nh.allReliablePacketsSent() == false) {
+    g.update(nh.getIncomingPackets());
     nh.trySendAll();
+    //std::this_thread::sleep_for(g_serverUpdateRate - accumulator);
   }
 }
