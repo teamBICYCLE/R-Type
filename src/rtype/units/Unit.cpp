@@ -23,6 +23,8 @@ Unit::Unit(int id, const Vector2D& pos, const Vector2D& dir)
   , _timeToReload(0)
   , _fireFrequence(10)
   , _lastFire(std::chrono::system_clock::now())
+  , _timeToDisconnect(5000)
+  , _lastServerUpdate(std::chrono::system_clock::now())
 {
 }
 
@@ -41,6 +43,8 @@ Unit::Unit(void)
   , _timeToReload()
   , _fireFrequence()
   , _lastFire(std::chrono::system_clock::now())
+  , _timeToDisconnect(5000)
+  , _lastServerUpdate(std::chrono::system_clock::now())
 {
 }
 
@@ -59,6 +63,8 @@ Unit::Unit(const Unit& other)
   , _timeToReload(other._timeToReload)
   , _fireFrequence(other._fireFrequence)
   , _lastFire(other._lastFire)
+  , _timeToDisconnect(other._timeToDisconnect)
+  , _lastServerUpdate(other._lastServerUpdate)
 {
 }
 
@@ -93,6 +99,8 @@ void    swap(Unit& lhs, Unit& rhs)
     std::swap(lhs._timeToReload, rhs._timeToReload);
     std::swap(lhs._fireFrequence, rhs._fireFrequence);
     std::swap(lhs._lastFire, rhs._lastFire);
+    std::swap(lhs._timeToDisconnect, rhs._timeToDisconnect);
+    std::swap(lhs._lastServerUpdate, rhs._lastServerUpdate);
 }
 
 uint32_t	Unit::getLastPacketSequence(void) const
@@ -258,6 +266,21 @@ void    Unit::getHit(void)
   }
 }
 
+bool    Unit::isDisconnected(void) const
+{
+  std::chrono::time_point<std::chrono::system_clock> now = std::chrono::system_clock::now();
+
+  std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(now - _lastServerUpdate).count() << std::endl;
+  if (now - _lastServerUpdate >= _timeToDisconnect)
+    return true;
+  return false;
+}
+
+void    Unit::refreshLastServerUpdate(void)
+{
+  _lastServerUpdate = std::chrono::system_clock::now();
+}
+
 const std::chrono::milliseconds &Unit::getTimeToReload(void) const
 {
   return _timeToReload;
@@ -305,6 +328,7 @@ void    Unit::unpack(const uint32_t newPacketSequence, const uint8_t* content)
 {
   const UnitPacket_u *info = reinterpret_cast<const UnitPacket_u*>(content);
 
+  refreshLastServerUpdate();
   if (_lastPacketSequence < newPacketSequence)
   {
     _lastPacketSequence = newPacketSequence;

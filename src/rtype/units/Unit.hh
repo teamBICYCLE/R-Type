@@ -73,6 +73,8 @@ class   Unit : public IPackable
         void    setTimeToReload(const std::chrono::milliseconds &);
         void    setFireFrequence(const std::chrono::milliseconds &);
         void    getHit(void);
+        bool    isDisconnected(void) const;
+        void    refreshLastServerUpdate(void);
 
     public:
         virtual size_t  pack(uint8_t *out, size_t outSize) const;
@@ -103,6 +105,8 @@ class   Unit : public IPackable
         std::chrono::milliseconds _timeToReload;
         std::chrono::milliseconds _fireFrequence;
         std::chrono::time_point<std::chrono::system_clock>  _lastFire;
+        std::chrono::milliseconds _timeToDisconnect;
+        std::chrono::time_point<std::chrono::system_clock>  _lastServerUpdate;
 };
 
 #endif /* !__UNIT_HH__ */

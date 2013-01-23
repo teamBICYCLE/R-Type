@@ -54,6 +54,7 @@ Addr::Addr()
   : _special(static_cast<SpecialIp>(-1))
   , _infosRes(nullptr)
   , _isValid(false)
+  , _disconnected(false)
 {
   socketInit();
 }
@@ -69,6 +70,7 @@ Addr::Addr(const Addr& other)
   , _proto(other._proto)
   , _infosRes(other._infosRes)
   , _isValid(other._isValid)
+  , _disconnected(other._disconnected)
 {
   memcpy(&_valid, &other._valid, sizeof(sockaddr_in));
 }
@@ -77,7 +79,8 @@ Addr::Addr(const std::string & ip, const std::string & port,
            const std::string & proto)
   : _special(static_cast<SpecialIp>(-1))
   , _infosRes(nullptr)
-    , _isValid(false)
+  , _isValid(false)
+  , _disconnected(false)
 {
   set(ip, port, proto);
 }
@@ -86,7 +89,8 @@ Addr::Addr(SpecialIp ip, const std::string & port,
            const std::string & proto)
   : _special(static_cast<SpecialIp>(-1))
   , _infosRes(nullptr)
-    , _isValid(false)
+  , _isValid(false)
+  , _disconnected(false)
 {
   set(ip, port, proto);
 }
@@ -189,6 +193,16 @@ std::string Addr::getIpString() const
 {
   if (!_isValid) throw std::runtime_error("unrecognized addr");
   return inet_ntoa(_valid.sin_addr);
+}
+
+bool  Addr::isDisconnected(void) const
+{
+  return _disconnected;
+}
+
+void  Addr::setDisconnected(bool b)
+{
+  _disconnected = b;
 }
 
 }

@@ -38,6 +38,8 @@ GraphicGameState::GraphicGameState(const std::shared_ptr<UnitPool> &p,
       std::bind(&GraphicGameState::updateWithDeath, this, _1);
    _updateMap[communication::Packet::Type::END_GAME] =
       std::bind(&GraphicGameState::endGame, this, _1);
+   _updateMap[communication::Packet::Type::CLIENT_DISCONNECTED] =
+      std::bind(&GraphicGameState::clientDisconnected, this, _1);
 
   _backgroundTexture->loadFromFile("resources/background.jpg");
   _backgroundSprite1->setTexture(*_backgroundTexture);
@@ -118,6 +120,11 @@ void  GraphicGameState::endGame(const communication::Packet& packet)
   (void)packet;
   std::cout << "End of game" << std::endl;
   _running = false;
+}
+
+void  GraphicGameState::clientDisconnected(const communication::Packet& packet)
+{
+  std::cout << "Client #" << packet.getId() << " disconnected" << std::endl;
 }
 
 void  GraphicGameState::simulate(const Input::Data& input)

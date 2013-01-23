@@ -42,6 +42,7 @@ void  ServerGameState::updateWithInput(const communication::Packet& packet)
     Input::Data d;
     Player *player = _players[id];
 
+    //player->refreshLastServerUpdate();
     if (player->isDead() == true)
       return;//if the player is dead, ignore his inputs
     d.unpack(packet.getSequence(), packet.getContent());

@@ -8,3 +8,4 @@ bin/*
 resources/shared/*
 *.out
 *.swp
+*.wav
