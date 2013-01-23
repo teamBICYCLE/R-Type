@@ -182,13 +182,13 @@ void ServerGameState::requireBoss(void)
     Monster *boss = _pool->get<Monster>();
     if (boss)
     {
-      boss->setPos(Vector2D(1.1f, 0.35f));
-      boss->setPv(100);
+      boss->setPos(Vector2D(1.1f, 0.40f));
+      boss->setPv(35);
       boss->setResourceId(4);
 
       moveStyle move = [](const Vector2D &pos) {      
         Vector2D v; v.x = 0;
-        if (pos.x >= 0.6f)
+        if (pos.x >= 0.7f)
           v.x -= 1 / MONSTER_SPEED;
         return v;
       };

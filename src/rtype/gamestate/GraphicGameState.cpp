@@ -70,7 +70,6 @@ void  GraphicGameState::updateWithPosition(const communication::Packet& packet)
 {
   const uint32_t id = packet.getId();
 
-  std::cout << "graphic id -> " << id << std::endl;
   if (id == _player->getId())
     _player->unpack(packet.getSequence(), packet.getContent());
   else
@@ -85,9 +84,7 @@ void  GraphicGameState::updateWithPosition(const communication::Packet& packet)
     else {
       GUnit *newEntity = _pool->get<GUnit>();
 
-      std::cout << "romain a tout essaye meme le caca (((((((((((((((((((((((((((" << newEntity << std::endl;
       if (newEntity != nullptr) {
-        std::cout << "Setting id of newEntity from " << newEntity->getId() << " to " << id << std::endl;
         newEntity->setId(id);
         //std::cout << "new packet !" << packet.getResourceId() << std::endl;
         newEntity->setResourceId(packet.getResourceId());

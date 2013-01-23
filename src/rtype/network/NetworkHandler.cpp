@@ -100,8 +100,6 @@ void  NetworkHandler::broadcast(const ServerGameState& g)
 
     //send player missiles update
     for (auto& playerMissile : g.getPlayerMissiles()) {
-      std::cout << "il sont bien envoye ces coquins =========================================" << playerMissile->getId()
-      << " avec " << playerMissile->getResourceId() << std::endl;
       sendEntity(playerMissile);
     }
   }

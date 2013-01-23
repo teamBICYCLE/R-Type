@@ -50,10 +50,8 @@ public:
 			}
 			else {
 				ptr = _factory->create<T>();
-				std::cout << "cest chiant ca" << std::endl;
 			}
 			ptr->setId(_currentId++);
-			std::cout << "ID -> " << _currentId << std::endl;
 			return ptr;
 		}
 		else
