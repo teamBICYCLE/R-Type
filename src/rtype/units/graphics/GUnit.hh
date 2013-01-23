@@ -28,7 +28,7 @@ private:
 	void switchSprite(void);
 
 private:
-	//sf::CircleShape _circle;
+	sf::CircleShape _circle;
 	std::shared_ptr<Sprite::AnimationInfos> _anim;
 	unsigned int _currentResourceId;
 };

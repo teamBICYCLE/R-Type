@@ -10,7 +10,7 @@ extern "C"
 
 	unsigned int getResourceId(void)
 	{
-		return 5;
+		return 6;
 	}
 
 	unsigned int getPv(void)

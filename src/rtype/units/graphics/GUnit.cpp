@@ -5,6 +5,7 @@
 GUnit::GUnit(int id, const Vector2D& pos, const Vector2D& dir)
 	: Unit(id, pos, dir)
   	, sf::Drawable()
+  	, _circle(10)
 {
   setId(_id);
 }
@@ -12,6 +13,7 @@ GUnit::GUnit(int id, const Vector2D& pos, const Vector2D& dir)
 GUnit::GUnit(void)
 	: Unit()
 	, sf::Drawable()
+	, _circle(10)
 {
 }
 
@@ -27,7 +29,7 @@ void GUnit::setAnimationManager(const AnimationM &m)
 	if (_resourceId > 3)
 		path = std::to_string(_resourceId);
 
-	// nom = _resourceId;
+	//std::cout << "----> img ---> " << "resources/sprites/" + path + ".bmp" << std::endl;
 	_anim.reset((*(m.get()))["resources/sprites/" + path + ".bmp"]->generateAnimInfo());
 	// throw ---^
 	//_currentResourceId = _resourceId;
@@ -43,19 +45,34 @@ void GUnit::draw(sf::RenderTarget &target, sf::RenderStates states) const
 {
 	(void)states;
 	sf::Vector2f pos = static_cast<sf::Vector2f>(_pos);
+	bool valid = false;
 
-	if (_dir.y > 0)
-		_anim->setAnimationName("top");
-	else if (_dir.y < 0)
-		_anim->setAnimationName("bot");
+	if (_resourceId < 4)
+	{
+		if (_dir.y > 0)
+			valid = _anim->setAnimationName("bot"); // recuperer l'id
+		else if (_dir.y < 0)
+			valid = _anim->setAnimationName("top");
+		else
+			valid = _anim->setAnimationName("mid");	
+	}
+	if (_resourceId == 5)
+		valid = _anim->setAnimationName("mid3"); // parente du missile
 	else
-		_anim->setAnimationName("mid");
-	
-	_anim->startAnimation();
-	
-	pos.x *= GameState::WINDOW_WIDTH;
-	pos.y *= GameState::WINDOW_HEIGHT;
-	target.draw(_anim->getSprite(), sf::Transform().translate(pos));
+		valid = _anim->setAnimationName("mid");
+
+	if (valid)
+	{
+		sf::Sprite sprite = _anim->getSprite();
+		
+		pos.x *= GameState::WINDOW_WIDTH;
+		pos.y *= GameState::WINDOW_HEIGHT;
+
+		//target.draw(_circle, sf::Transform().translate(pos));
+		pos.x -= (sprite.getGlobalBounds().width / 2);
+		pos.y -= (sprite.getGlobalBounds().height / 4);  
+		target.draw(_anim->getSprite(), sf::Transform().translate(pos));
+	}
 }
 
 Unit *GUnit::clone(void)
