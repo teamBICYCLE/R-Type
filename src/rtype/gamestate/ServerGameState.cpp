@@ -161,41 +161,6 @@ void  ServerGameState::updateWorld(void)
   updateEntities<Missile>(_playerMissiles, [] (const Unit*) -> bool {return false;}, noFire);
   updateEntities<Monster>(_enemies, monsterCollision, monsterFire);
   ++_turn;
-  //for (auto enemyIt = _enemies.begin(); enemyIt != _enemies.end(); ) {
-  //  if ((*enemyIt)->isDead() == true) {//if enemy is dead..
-  //    if ((*enemyIt)->wereOthersNotifiedOfDeath() == true) {//..and client were notified
-  //      Monster *deadUnit = *enemyIt;
-  //      enemyIt = _enemies.erase(enemyIt);//..we remove it
-  //      _pool->release<Monster>(deadUnit);
-  //    }
-  //  }
-  //  else {//enemy alive
-  //    (*enemyIt)->move();
-  //    if ((*enemyIt)->isOffScreen(GameState::WINDOW_WIDTH) == true)
-  //      (*enemyIt)->setDead(true);
-  //    ++enemyIt;
-  //  }
-  //}
-
-  //for (auto monsterMissileIt = _monsterMissiles.begin();
-  //     monsterMissileIt != _monsterMissiles.end(); ) {
-  //  (*monsterMissileIt)->move();
-  //  if ((*monsterMissileIt)->isOffScreen(GameState::WINDOW_WIDTH) == true)
-  //    (*monsterMissileIt)->setDead(true);
-  //  ++monsterMissileIt;
-  //}
-
-  //for (auto playerMissileIt = _playerMissiles.begin();
-  //     playerMissileIt != _playerMissiles.end(); ) {
-  //  std::cout << "moving missile" << std::endl;
-  //  std::cout << "prev pos: " << (*playerMissileIt)->getPos() << std::endl;
-  //  (*playerMissileIt)->move();
-  //  std::cout << "post pos: " << (*playerMissileIt)->getPos() << std::endl;
-  //  if ((*playerMissileIt)->isOffScreen(GameState::WINDOW_WIDTH) == true)
-  //    (*playerMissileIt)->setDead(true);
-  //  ++playerMissileIt;
-  //}
-  //std::cout << "---------" << std::endl;
 }
 
 void ServerGameState::requireBoss(void)
