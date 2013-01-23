@@ -18,9 +18,12 @@
 #include <string.h>
 #include <tchar.h>
 #endif
+#include "audio/Sound.hh"
 
 using namespace std;
 using namespace TBSystem;
+
+Sound sounds;
 
 //static const std::chrono::milliseconds g_frameDelta(1000 / 60);
 //static const std::chrono::milliseconds g_maxFrameTime(25);

@@ -9,6 +9,7 @@
 #include <system/network/Listener.hh>
 #include "View.hh"
 #include "Room.hh"
+#include "audio/Music.hh"
 
 class PreGame
 {
@@ -81,6 +82,7 @@ private:
 private:
   sf::RenderWindow _window;
   View            _menu;
+  Music           _musicPlayer;
 };
 
 #endif /*!__PRE_GAME__ */

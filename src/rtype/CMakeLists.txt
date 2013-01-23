@@ -25,6 +25,7 @@ include("sprites/CMakeLists.txt")
 include("pool/CMakeLists.txt")
 include("menu/CMakeLists.txt")
 include("preroll/CMakeLists.txt")
+include("audio/CMakeLists.txt")
 
 add_executable(client
     ${GUI_TYPE} # Prevent windows from spawning a terminal window
@@ -36,6 +37,7 @@ add_executable(client
     ${SPRITES}
     ${CLIENT_POOL}
     ${MENU}
+    ${MUSIC}
     client.cpp
 )
 

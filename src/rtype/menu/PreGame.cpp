@@ -18,11 +18,11 @@ PreGame::PreGame(const std::string &ip, const std::string &port)
   using namespace std::placeholders;
 
 
-	_cmdType["notif"] = std::bind(&PreGame::handleNotif, this, _1);
-	_cmdType["hi"] = std::bind(&PreGame::handleWelcome, this, _1);
-	_cmdType["err"] = std::bind(&PreGame::handleError, this, _1);
-	_cmdType["rep"] = std::bind(&PreGame::handleResponse, this, _1);
-	_cmdType["gamestart"] = std::bind(&PreGame::handleGamestart, this, _1);
+  _cmdType["notif"] = std::bind(&PreGame::handleNotif, this, _1);
+  _cmdType["hi"] = std::bind(&PreGame::handleWelcome, this, _1);
+  _cmdType["err"] = std::bind(&PreGame::handleError, this, _1);
+  _cmdType["rep"] = std::bind(&PreGame::handleResponse, this, _1);
+  _cmdType["gamestart"] = std::bind(&PreGame::handleGamestart, this, _1);
 
   _responseMap["roomlist"] = std::bind(&PreGame::roomlistDispatch, this, _1);
   _responseMap["room_details"] = std::bind(&PreGame::roomdetailsDispatch, this, _1);
@@ -37,17 +37,18 @@ PreGame::PreGame(const std::string &ip, const std::string &port)
   _roomdetailsMap["player"] = std::bind(&PreGame::roomdetailsAppend, this, _1);
   _roomdetailsMap["end"] = std::bind(&PreGame::roomdetailsEnd, this);
 
-  	try {
-  		_socket.reset(new TBSystem::network::sockets::Tcp);
-  		TBSystem::network::Addr addr(ip, port, "TCP");
-  		_socket->connect(addr);
-  		_listener.addSocket(_socket,
-  			std::bind(&PreGame::read, this, std::placeholders::_1),
-  			std::bind(&PreGame::disconnected, this));
-	} catch (std::runtime_error &e) {
-		TBSystem::log::err << e.what() << TBSystem::log::endl;
-		throw std::invalid_argument("Could not connect to server");
-	}
+  try {
+    _socket.reset(new TBSystem::network::sockets::Tcp);
+    TBSystem::network::Addr addr(ip, port, "TCP");
+    _socket->connect(addr);
+    _listener.addSocket(_socket,
+                        std::bind(&PreGame::read, this, std::placeholders::_1),
+                        std::bind(&PreGame::disconnected, this));
+  } catch (std::runtime_error &e) {
+    TBSystem::log::err << e.what() << TBSystem::log::endl;
+    throw std::invalid_argument("Could not connect to server");
+  }
+  _musicPlayer.play("menu");
 }
 
 PreGame::~PreGame(void)
@@ -162,6 +163,7 @@ void PreGame::handleGamestart(const std::string& id)
   ss >> intid;
   ss >> port;
   TBSystem::log::info << "the port value is " << port << TBSystem::log::endl;
+  _musicPlayer.play("game");
   client(_serverIp, std::to_string(port), intid, _window);
 }
 
