@@ -1,6 +1,7 @@
 #include <stdexcept>
 #include <functional>
 #include "PreGame.hh"
+#include "gamestate/GameState.hh"
 #include "system/log/Log.hh"
 #include "client.h"
 
@@ -9,7 +10,8 @@ PreGame::PreGame(const std::string &ip, const std::string &port)
  , _currentRoom(-1)
  , _state(eHALLWAY)
  , _serverIp(ip)
- , _window(sf::VideoMode(1200, 800), "SFML RType")
+ , _window(sf::VideoMode(GameState::WINDOW_WIDTH, GameState::WINDOW_HEIGHT),
+           "SFML RType")
  , _menu("./resources/menu_background.jpg", _window.getSize(),
        sf::Vector2f(500.0,50.0))
 {

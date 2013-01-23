@@ -10,7 +10,7 @@
 #include "GameState.hh"
 #include "input/Data.hh"
 
-const int GameState::WINDOW_WIDTH = 800;
+const int GameState::WINDOW_WIDTH = 1200;
 const int GameState::WINDOW_HEIGHT = 800;
 
 GameState::GameState(const std::shared_ptr<UnitPool> &p)

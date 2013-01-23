@@ -11,8 +11,6 @@
 # include <SFML/Graphics.hpp>
 # include <functional>
 
-using namespace gooey;
-
 class View {
 private:
   ListView	*_listView;
@@ -29,7 +27,7 @@ public:
   virtual ~View();
 
   void		update(const std::list<Room>&);
-  void		update(const std::list<Player>&);
+  void		update(const std::list<gooey::Player>&);
   void		draw(sf::RenderWindow&);
   void		clickEvent(sf::Vector2i coord);
 

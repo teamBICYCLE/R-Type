@@ -69,7 +69,7 @@ private:
   int _currentRoom;
   state           _state;
   std::list<Room> _rooms;
-  std::list<Player> _players;
+  std::list<gooey::Player> _players;
   std::string _serverIp;
 
 private:

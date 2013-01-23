@@ -33,7 +33,7 @@ void	View::update(const std::list<Room> &list)
   _listView->update(list);
 }
 
-void	View::update(const std::list<Player> &list)
+void	View::update(const std::list<gooey::Player> &list)
 {
   this->setTitle("");
   _listView->update(list);

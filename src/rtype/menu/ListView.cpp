@@ -29,7 +29,7 @@ void	ListView::update(const std::list<Room>& list)
     }
 }
 
-void	ListView::update(const std::list<Player>& list)
+void	ListView::update(const std::list<gooey::Player>& list)
 {
   _list.clear();
   for (auto it = list.begin(); it != list.end(); it++)
