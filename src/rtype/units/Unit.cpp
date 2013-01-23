@@ -19,7 +19,7 @@ Unit::Unit(int id, const Vector2D& pos, const Vector2D& dir)
   , _othersNotifiedOfDeath(false)
   , _resourceId(1)
   , _pv(1)
-  , _munition(UNLIMITED)
+  , _canShoot(true)
   , _timeToReload(0)
   , _fireFrequence(10)
   , _lastFire(std::chrono::system_clock::now())
@@ -37,7 +37,7 @@ Unit::Unit(void)
   , _othersNotifiedOfDeath(false)
   , _resourceId()
   , _pv(1)
-  , _munition()
+  , _canShoot(true)
   , _timeToReload()
   , _fireFrequence()
   , _lastFire(std::chrono::system_clock::now())
@@ -55,7 +55,7 @@ Unit::Unit(const Unit& other)
   , _othersNotifiedOfDeath(other._othersNotifiedOfDeath)
   , _resourceId(other._resourceId)
   , _pv(other._pv)
-  , _munition(other._munition)
+  , _canShoot(other._canShoot)
   , _timeToReload(other._timeToReload)
   , _fireFrequence(other._fireFrequence)
   , _lastFire(other._lastFire)
@@ -89,7 +89,7 @@ void    swap(Unit& lhs, Unit& rhs)
     std::swap(lhs._othersNotifiedOfDeath, rhs._othersNotifiedOfDeath);
     std::swap(lhs._resourceId, rhs._resourceId);
     std::swap(lhs._pv, rhs._pv);
-    std::swap(lhs._munition, rhs._munition);
+    std::swap(lhs._canShoot, rhs._canShoot);
     std::swap(lhs._timeToReload, rhs._timeToReload);
     std::swap(lhs._fireFrequence, rhs._fireFrequence);
     std::swap(lhs._lastFire, rhs._lastFire);
@@ -135,11 +135,6 @@ bool  Unit::wereOthersNotifiedOfDeath(void) const
   return _othersNotifiedOfDeath;
 }
 
-// const std::string &Unit::getSpritePath(void) const
-// {
-//   return _spritePath;
-// }
-
 void  Unit::move(void)
 {
     _pos += _dir;
@@ -159,11 +154,13 @@ Missile *Unit::fire(UnitPool *pool)
   Missile *newMissile = nullptr;
   std::chrono::time_point<std::chrono::system_clock> now = std::chrono::system_clock::now();
 
-  if (now - _lastFire >= _fireFrequence) {
+  if (_canShoot == true &&
+      now - _lastFire >= _fireFrequence) {
     newMissile = pool->get<Missile>();
     if (newMissile != nullptr) {
       newMissile->setPos(_pos + Vector2D(((_hitboxRadius * 2.f) / GameState::WINDOW_WIDTH), (_hitboxRadius / GameState::WINDOW_HEIGHT)));
       newMissile->setDir(Vector2D(_dir.x, 0.f));
+      newMissile->setMissileMoveStyle();
       _lastFire = now;
     }
   }
@@ -230,14 +227,14 @@ unsigned int Unit::getPv(void) const
   return _pv;
 }
 
-void  Unit::setMunition(const unsigned int v)
+void  Unit::setCanShoot(bool b)
 {
-  _munition = v;
+  _canShoot = b;
 }
 
-int Unit::getMunition(void)
+bool Unit::canShoot(void) const
 {
-  return _munition;
+  return _canShoot;
 }
 
 void    Unit::setTimeToReload(const std::chrono::milliseconds &t)
@@ -248,6 +245,17 @@ void    Unit::setTimeToReload(const std::chrono::milliseconds &t)
 void    Unit::setFireFrequence(const std::chrono::milliseconds &t)
 {
   _fireFrequence = t;
+}
+
+void    Unit::getHit(void)
+{
+  //std::cout << "pv=" << _pv << std::endl;
+  if (_pv != 0) {
+    _pv -= 1;
+  }
+  if (_pv == 0) {
+    _isDead = true;
+  }
 }
 
 const std::chrono::milliseconds &Unit::getTimeToReload(void) const
@@ -262,12 +270,12 @@ const std::chrono::milliseconds &Unit::getFireFrequence(void) const
 
 inline int16_t  to_short(float f)
 {
-  return f * 10000;
+  return static_cast<int16_t>(f * 10000.f);
 }
 
 inline float  to_float(short s)
 {
-  return s / 10000.f;
+  return static_cast<float>(s) / 10000.f;
 }
 
 size_t  Unit::pack(uint8_t *out, size_t outSize) const
@@ -333,6 +341,6 @@ void  Unit::reset(void)
     _othersNotifiedOfDeath = false;
     _resourceId = 1;
     _pv = 1;
-    _munition = UNLIMITED;
+    _canShoot = true;
 }
 

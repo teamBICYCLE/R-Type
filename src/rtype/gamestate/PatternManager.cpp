@@ -63,7 +63,10 @@ void PatternManager::checkShared(const std::string &file)
 	def->pv = p();
 	def->munition = m();
 	def->timeToReload = r();
-	def->fireFrenquence = f();
+	unsigned int fireFrequence = f();
+	if (fireFrequence < 1000)
+		fireFrequence = 1000;
+	def->fireFrenquence = fireFrequence;
 	_monsters.insert(std::make_pair(n(), def));
 }
 
@@ -113,7 +116,7 @@ std::list<Monster*> PatternManager::get(const std::shared_ptr<UnitPool> &pool) c
 					// load definition in monster
 					monster->setResourceId(sharedDef->resourceId);
 					monster->setPv(sharedDef->pv);
-					monster->setMunition(sharedDef->munition);
+					monster->setCanShoot(static_cast<bool>(sharedDef->munition));
 					monster->setTimeToReload(std::chrono::milliseconds(sharedDef->timeToReload));
 					monster->setFireFrequence(std::chrono::milliseconds(sharedDef->fireFrenquence));
 

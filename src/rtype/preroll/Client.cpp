@@ -52,7 +52,7 @@ Client::Client(
       std::string rep;
     if (!_isInRoom && l_lounge.movePlayerToRoom(_id, roomId)) {
       _isInRoom = true;
-      rep = "rep join OK " + std::to_string(roomId) + "\r\n";
+      rep = "rep join " + std::to_string(roomId) + "\r\n";
     }
     else {
       rep = "err could not join room\r\n";
@@ -105,7 +105,12 @@ bool  Client::handleRcv(
   char  buf[512];
   std::string::size_type pos;
 
-  buf[socket->recv(buf, sizeof(buf))] = '\0';
+  try {
+    buf[socket->recv(buf, sizeof(buf))] = '\0';
+  }
+  catch (std::exception&) {
+    return false;
+  }
   if (!buf[0]) return false;
   _commandLine += buf;
 
@@ -173,4 +178,14 @@ void Client::setInRoom(bool b)
 bool Client::isInRoom() const
 {
   return _isInRoom;
+}
+
+std::shared_ptr<TBSystem::network::sockets::ITcpSocket>& Client::getSocket()
+{
+  return _socket;
+}
+
+void Client::send(std::string cmd)
+{
+  _socket->send(cmd.c_str(), cmd.size());
 }

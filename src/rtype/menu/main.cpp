@@ -11,29 +11,15 @@
 #include <iostream>
 #include "PreGame.hh"
 
-void	playCallback()
-{
-  std::cout << "==PLAY==" << std::endl;
-}
-
-void	quitCallback()
-{
-  std::cout << "==QUIT==" << std::endl;
-}
-
-void	listCallback()
-{
-  std::cout << "==LISTITEM CLICKED==" << std::endl;
-}
-
 int	main(int argc, char *argv[])
 {
-  using namespace TBSystem;
-  using namespace TBSystem::network;
-  using namespace TBSystem::network::sockets;
-
   PreGame  pregame(argv[1], argv[2]);
 
-  pregame.run();
+  try {
+    pregame.run();
+  }
+  catch (std::exception& e) {
+    std::cout << e.what() << std::endl;
+  }
   return EXIT_SUCCESS;
 }

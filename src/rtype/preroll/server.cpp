@@ -32,8 +32,12 @@ int main(int argc, const char *argv[])
   mainSocket->bind(addr);
   mainSocket->listen(10);
   // main loop
-  server(mainSocket);
-
+  try {
+    server(mainSocket);
+  }
+  catch (std::exception& e) {
+    std::cout << e.what() << std::endl;
+  }
   // cleanup
   return 0;
 }

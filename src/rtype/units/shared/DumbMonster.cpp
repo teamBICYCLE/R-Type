@@ -1,6 +1,3 @@
-#include <string>
-#include <chrono>
-
 extern "C" 
 {
 	const char *getName(void)
@@ -30,6 +27,6 @@ extern "C"
 
 	int fireFrequence(void)
 	{
-		return 2;
+		return 2500;
 	}
 }

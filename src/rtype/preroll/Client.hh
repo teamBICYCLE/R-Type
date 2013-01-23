@@ -44,6 +44,8 @@ public:
                  );
 
   void  welcome();
+  void send(std::string cmd);
+
 public:
   int getId() const;
   const TBSystem::network::Addr& getAddr() const;
@@ -54,6 +56,7 @@ public:
                   Lounge& lounge,
                   std::string params
                  );
+  std::shared_ptr<TBSystem::network::sockets::ITcpSocket>& getSocket();
 
 private:
   static int            _s_lastID;

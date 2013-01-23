@@ -5,30 +5,19 @@
 # this stuff is worth it, you can buy me a beer in return. Thomas Duplomb
 ################################################################################
 
-project(preroll)
 
-include_directories(${PROJECT_SOURCE_DIR})
-
-add_executable(preroll_server
-  Client.cpp
-  Client.hh
-  Room.cpp
-  Room.hh
-  INetworkSerializable.hh
-  Lounge.cpp
-  Lounge.hh
-  server.cpp
-  ${UTILITIES}
-  ${UNITS}
-  ${SERVER_NETWORK}
-  ${SERVER_GAMESTATE}
-  ${SERVER_POOL}
-  ../input/Data.hh
-  ../input/Data.cpp
-  ../server.cpp
+list(APPEND LOUNGE_HEADERS
+  ${CMAKE_CURRENT_LIST_DIR}/INetworkSerializable.hh
+  ${CMAKE_CURRENT_LIST_DIR}/Client.hh
+  ${CMAKE_CURRENT_LIST_DIR}/Room.hh
+  ${CMAKE_CURRENT_LIST_DIR}/Lounge.hh
 )
 
-target_link_libraries(preroll_server
-  system
-  csv-parser
+list(APPEND LOUNGE_SOURCES
+  ${CMAKE_CURRENT_LIST_DIR}/Client.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/Room.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/Lounge.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/server.cpp
 )
+
+set(LOUNGE ${LOUNGE_HEADERS} ${LOUNGE_SOURCES})
