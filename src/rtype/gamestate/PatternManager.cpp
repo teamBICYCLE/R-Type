@@ -63,7 +63,10 @@ void PatternManager::checkShared(const std::string &file)
 	def->pv = p();
 	def->munition = m();
 	def->timeToReload = r();
-	def->fireFrenquence = f();
+	unsigned int fireFrequence = f();
+	if (fireFrequence < 1000)
+		fireFrequence = 1000;
+	def->fireFrenquence = fireFrequence;
 	_monsters.insert(std::make_pair(n(), def));
 }
 
