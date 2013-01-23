@@ -13,6 +13,7 @@
 #include <system/network/Tcp.hh>
 #include <system/network/Addr.hh>
 #include <system/network/Listener.hh>
+#include <stdexcept>
 #include "Lounge.hh"
 
 using namespace TBSystem;
@@ -32,15 +33,19 @@ int main(int argc, const char *argv[])
     return EXIT_FAILURE;
   }
   resourcesPath = argv[1];
-  // creation socket
-  std::shared_ptr<network::sockets::ITcpSocket> mainSocket(new network::sockets::Tcp);
-  network::Addr addr(network::SI_ADDR_ANY, "4242", "TCP");
 
-  mainSocket->bind(addr);
-  mainSocket->listen(10);
-  // main loop
   try {
+    // creation socket
+    std::shared_ptr<network::sockets::ITcpSocket> mainSocket(new network::sockets::Tcp);
+    network::Addr addr(network::SI_ADDR_ANY, "4242", "TCP");
+
+    mainSocket->bind(addr);
+    mainSocket->listen(10);
+    // main loop
     server(mainSocket);
+  }
+  catch (std::runtime_error &e) {
+    std::cout << e.what() << std::endl;
   }
   catch (std::exception& e) {
     std::cout << e.what() << std::endl;
