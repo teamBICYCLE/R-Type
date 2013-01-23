@@ -1,0 +1,15 @@
+PATTERN_DEFINITION :
+
+char,type,move
+a,advancedMonster,linear
+b,strongRockMonster,linear
+
+PATTERN_DRAWING :
+
+=====
+b      
+b   a
+b a  
+b   a
+b       
+=====

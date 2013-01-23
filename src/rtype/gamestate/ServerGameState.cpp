@@ -174,21 +174,24 @@ void  ServerGameState::updateWorld(void)
 void ServerGameState::requireBoss(void)
 {
     Monster *boss = _pool->get<Monster>();
-    boss->setPos(Vector2D(1.1f, 0.35f));
-    boss->setPv(100);
-    boss->setResourceId(4);
+    if (boss)
+    {
+      boss->setPos(Vector2D(1.1f, 0.35f));
+      boss->setPv(100);
+      boss->setResourceId(4);
 
-    moveStyle move = [](const Vector2D &pos) {      
-      Vector2D v; v.x = 0;
-      if (pos.x >= 0.6f)
-        v.x -= 1 / MONSTER_SPEED;
-      return v;
-    };
+      moveStyle move = [](const Vector2D &pos) {      
+        Vector2D v; v.x = 0;
+        if (pos.x >= 0.6f)
+          v.x -= 1 / MONSTER_SPEED;
+        return v;
+      };
 
-    boss->setMoveStyle(move);
-    boss->setBoss(true);
-    _bossAppear = true;
-    _enemies.push_back(boss);
+      boss->setMoveStyle(move);
+      boss->setBoss(true);
+      _bossAppear = true;
+      _enemies.push_back(boss);
+    }
 }
 
 void  ServerGameState::requireMonsters(void)
@@ -209,7 +212,6 @@ void  ServerGameState::requireMonsters(void)
     randy = left.y + ((float)rand()) / ((float)RAND_MAX / (right.y - left.y));
   else
   {
-    //std::cout << "calc" << std::endl;
     for (auto player : _players)
         if (!player->isDead())
           randy += player->getPos().y;
@@ -225,10 +227,9 @@ void  ServerGameState::requireMonsters(void)
   for (auto it : monsters)
   {
       Vector2D originalPos = it->getPos();
-      float newX = randx + (originalPos.x * 0.03f); // TMP
-      float newY = randy + (originalPos.y * 0.05f); // TMP
+      float newX = randx + (originalPos.x * 0.03f); 
+      float newY = randy + (originalPos.y * 0.05f);
       it->setPos(Vector2D(newX, newY));
-      //std::cout << "Monster id=" << it->getId() << std::endl;
   }
   _enemies.insert(_enemies.end(), monsters.begin(), monsters.end());
 }
@@ -236,15 +237,6 @@ void  ServerGameState::requireMonsters(void)
 void  ServerGameState::moveOne(Player& p)
 {
   p.move();
-  //for (auto& enemy : _enemies)
-  //{
-  //  if (p.collideWith(*enemy) == true)
-  //  {
-  //    p.setDead(true);
-  //    std::cout << "COLLIDED" << std::endl;
-  //    break;
-  //  }
-  //}
 }
 
 void  ServerGameState::moveAll(void)

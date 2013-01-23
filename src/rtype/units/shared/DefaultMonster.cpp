@@ -1,6 +1,3 @@
-#include <string>
-#include <chrono>
-
 extern "C" 
 {
 	const char *getName(void)
