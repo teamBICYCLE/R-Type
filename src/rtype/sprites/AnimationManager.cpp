@@ -28,6 +28,7 @@ AnimationManager& AnimationManager::operator=(const AnimationManager &other)
 bool AnimationManager::addSource(const std::string& spriteFile, const std::string &cfgFile)
 {
 	try {
+		TBSystem::log::debug << "added " << spriteFile << " " << cfgFile << TBSystem::log::endl;
 		_animations.insert(std::make_pair(spriteFile,
 							new Board(spriteFile, cfgFile)));
 	} catch (std::exception &e) {
@@ -49,8 +50,13 @@ Board *AnimationManager::operator[](const std::string &spriteFile)
 bool AnimationManager::addSourceFolder(const std::string &path)
 {
 	std::vector<std::string> fileList;
+	using namespace TBSystem::log;
 	
 	fileList = TBSystem::ExploreDir::run(path);
+	TBSystem::log::debug << path << TBSystem::log::endl;
+	for (auto& c : fileList) {
+		debug << "%%%%%" << c << endl;
+	}
 	std::sort(fileList.begin(), fileList.end());
 	return (findAssociatedFile(fileList));
 }

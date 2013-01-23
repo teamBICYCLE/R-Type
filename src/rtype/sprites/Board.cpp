@@ -1,7 +1,9 @@
 #include "Board.hh"
 #include <iostream>
+#include <system/log/Log.hh>
 
 using namespace Sprite;
+using namespace TBSystem::log;
 
 Board::Board(const std::string &boardFile, const std::string &boardCfg)
 {
@@ -44,6 +46,7 @@ void Board::refreshMap(const std::string &boardFile, const std::string &boardCfg
 		}
 		refreshAnimMap(csvCfg);
 	} catch (std::runtime_error &e) {
+		debug << e.what() << endl;
 		throw std::invalid_argument("Could not load config file : [" + boardCfg + "]." + e.what());
     }
 }

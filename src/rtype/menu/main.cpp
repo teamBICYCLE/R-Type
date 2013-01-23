@@ -16,7 +16,7 @@
 
 std::string resourcesPath;
 
-#ifdef _WIN32
+#ifdef _WIN32LOL
 int WINAPI WinMain(HINSTANCE hInstance,
                    HINSTANCE hPrevInstance,
                    LPSTR lpCmdLine,
@@ -32,10 +32,11 @@ int WINAPI WinMain(HINSTANCE hInstance,
         argc++ ;
         argv[argc] = _tcstok( 0, TEXT(" \t") ) ;
     }
-#elif defined __gnu_linux__
+#endif
+//#elif defined __gnu_linux__
 int main(int argc, char* argv[])
 {
-#endif
+//#endif
   if (argc < 4) {
     TBSystem::log::err << "Usage: ./client <ip> <port> <resources_path>" << TBSystem::log::endl;
     return EXIT_FAILURE;

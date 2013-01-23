@@ -8,6 +8,17 @@
 
 using namespace TBSystem;
 
+#include <stdio.h>  /* defines FILENAME_MAX */
+#ifdef _WIN32
+    #include <direct.h>
+    #define GetCurrentDir _getcwd
+#else
+    #include <unistd.h>
+    #define GetCurrentDir getcwd
+ #endif
+
+
+
 ExploreDir::ExploreDir(void)
 {
 }
@@ -39,10 +50,17 @@ ExploreDir::~ExploreDir(void)
 #elif _WIN32
     std::vector<std::string> ExploreDir::run(const std::string &dir, const std::string &ext)
     {
+		 char cCurrentPath[FILENAME_MAX];
+
+	GetCurrentDir(cCurrentPath, sizeof(cCurrentPath));
+
+
+cCurrentPath[sizeof(cCurrentPath) - 1] = '\0'; /* not really required */
+
+printf ("The current working directory is %s\n", cCurrentPath);
         WIN32_FIND_DATA data;
-        std::wstring path(L"*");
-        std::wstring *name;
-        HANDLE hFile = FindFirstFile(dir.c_str(), &data);
+        std::string path(dir + "/*");
+        HANDLE hFile = FindFirstFile(path.c_str(), &data);
         std::vector<std::string> files;
 
         if (hFile == INVALID_HANDLE_VALUE)
@@ -51,9 +69,11 @@ ExploreDir::~ExploreDir(void)
             return files;
         }
 
-        while (FindNextFile(hFile, &data) != 0 || GetLastError() != ERROR_NO_MORE_FILES)
+        while (FindNextFile(hFile, &data) != 0 || GetLastError() != ERROR_NO_MORE_FILES) {
             if (checkExtension(data.cFileName, ext))
-                files.push_back(data.cFileName);
+                files.push_back(dir + "/" + data.cFileName);
+		}
+		FindClose(hFile);
         return files;
     }
 #else
@@ -69,6 +89,7 @@ bool ExploreDir::checkExtension(const std::string &file, const std::string &need
             return true;
         return false;
     }
+	return true;
 }
 
 
