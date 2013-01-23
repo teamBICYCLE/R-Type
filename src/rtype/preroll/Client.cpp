@@ -108,7 +108,7 @@ bool  Client::handleRcv(
   try {
     buf[socket->recv(buf, sizeof(buf))] = '\0';
   }
-  catch (std::exception& e) {
+  catch (std::exception&) {
     return false;
   }
   if (!buf[0]) return false;
