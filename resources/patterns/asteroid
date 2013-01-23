@@ -1,0 +1,22 @@
+PATTERN_DEFINITION :
+
+char,type,move
+a,rockMonster,sin
+
+PATTERN_DRAWING :
+
+==========
+ a    a
+        a
+    a
+a
+   a    a
+ a    
+     a
+   a 
+       a
+    a
+ a 
+      a
+   a   
+==========

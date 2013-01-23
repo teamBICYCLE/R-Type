@@ -2,7 +2,7 @@
 
 Missile::Missile(int id, const Vector2D& pos, const Vector2D& dir)
   : Monster(id, pos, dir)
-  , MISSILE_SPEED(100.f)
+  , MISSILE_SPEED(150.f)
   //, _resourceId(5)
 {
   setMissileMoveStyle();

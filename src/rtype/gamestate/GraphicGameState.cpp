@@ -111,6 +111,7 @@ void  GraphicGameState::updateWithDeath(const communication::Packet& packet)
 
 void  GraphicGameState::endGame(const communication::Packet& packet)
 {
+  (void)packet;
   std::cout << "End of game" << std::endl;
   _running = false;
 }
