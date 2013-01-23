@@ -3,7 +3,7 @@
 #include <system/log/Log.hh>
 #include <system/dll/DLoader.hh>
 #include <ctime>
-#include <cstdlib> 
+#include <cstdlib>
 #include <cmath>
 #include "pool/UnitPool.hh"
 #include "PatternManager.hh"
@@ -82,7 +82,7 @@ void PatternManager::createMoveStyles(void)
 	moveStyle sinfct = [](const Vector2D &pos) {
 	    Vector2D ret;
 	    ret.x = -1;
-	    ret.y = std::sin(pos.x * 20); 
+	    ret.y = std::sin(pos.x * 20);
 	    ret.normalize();
 	    ret /= MONSTER_SPEED;
 	    ret.y *= 1;
@@ -118,7 +118,12 @@ std::list<Monster*> PatternManager::get(const std::shared_ptr<UnitPool> &pool) c
 					monster->setPv(sharedDef->pv);
 					monster->setCanShoot(static_cast<bool>(sharedDef->munition));
 					monster->setTimeToReload(std::chrono::milliseconds(sharedDef->timeToReload));
-					monster->setFireFrequence(std::chrono::milliseconds(sharedDef->fireFrenquence));
+					monster->setFireFrequence(
+                  std::chrono::milliseconds(static_cast<int>(
+                                                             sharedDef->fireFrenquence +
+                                            ((sharedDef->fireFrenquence * 50) / 100.0f) *
+                                            ((std::rand() % 100) / 100.0f)
+                                            )));
 
 					// load pattern informations in monster
 					monster->setPos(Vector2D((*item)->posx, (*item)->posy));
