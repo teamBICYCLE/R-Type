@@ -9,17 +9,16 @@ Roomlist
 --------                                                                     
 client  : `roomlist`                                                     
 server  : `rep roomlist start`                                               
-server  : `rep roomlist room ROOMSERIALIZATION`                              
-server  : `...`                                                              
-server  : `rep roomlist room ROOMSERIALIZATION`                              
+server  : `rep roomlist room ROOMID PLAYERCOUNT MAXPLAYER`
+server  : `rep roomlist room ...`
+server  : `rep roomlist room ROOMID PLAYERCOUNT MAXPLAYER`                              
 server  : `rep roomlist end`                                                 
                                                                              
 Room details                                                                 
 ------------                                                                 
 client  : `room_details ID`                                              
 client  : `rep room_details ID start`                                        
-server  : `rep room_details ID room ROOMSERIALIZATION`                       
-server  : `rep room_details ID player status PLAYERSERIALIZATION`            
+server  : `rep room_details ID player PLAYERID`            
 server  : `rep room_details ID player ...`                                   
 server  : `rep room_details ID end`                                          
                                                                              
@@ -33,7 +32,7 @@ updates de cette room
 Join                                                                         
 ----                                                                         
 client  : `join ID`                                                      
-server  : `rep join OK ID`                                                   
+server  : `rep join ID`                                                   
 OU                                                                           
 server  : `err reason`                                            
                                                                              
@@ -41,7 +40,7 @@ server  : `err reason`
 Create                                                                       
 ------                                                                       
 client  : `create`                                                       
-server  : `rep create OK ID`                                                 
+server  : `rep join ID`                                                 
 OU                                                                           
 server  : `err reason`                                             
                                                                              
@@ -51,29 +50,3 @@ client  : `leave ID`
 server  : `rep leave OK`                                                     
 OU                                                                           
 server  : `err reason`                                              
-                                                                             
-Notifications                                                                
-=============                                                              
-                                                                           
-Joueur                                                                     
-------                                                                     
-server  : `notif player join ROOM_ID PLAYERSERIALIZATION`                  
-server  : `notif player ready ROOM_ID PLAYERSERIALIZATION`                 
-server  : `notif player not_ready ROOM_ID PLAYERSERIALIZATION`             
-server  : `notif player leave ROOM_ID PLAYERSERIALIZATION`                 
-                                                                           
-Partie                                                                     
-------                                                                     
-server  : `notif gamestart ROOM_ID`                                        
-server  : `notif gameend ROOM_ID`                                          
-                                                                           
-Serialisation                                                              
-=============                                                              
-                                                                           
-Joueur                                                                     
-------                                                                     
-`id ip login`                                                              
-                                                                           
-Room                                                                       
-----                                                                       
-`id status playercount playermax`

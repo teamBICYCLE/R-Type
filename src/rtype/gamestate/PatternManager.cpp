@@ -116,7 +116,7 @@ std::list<Monster*> PatternManager::get(const std::shared_ptr<UnitPool> &pool) c
 					// load definition in monster
 					monster->setResourceId(sharedDef->resourceId);
 					monster->setPv(sharedDef->pv);
-					monster->setMunition(sharedDef->munition);
+					monster->setCanShoot(static_cast<bool>(sharedDef->munition));
 					monster->setTimeToReload(std::chrono::milliseconds(sharedDef->timeToReload));
 					monster->setFireFrequence(std::chrono::milliseconds(sharedDef->fireFrenquence));
 

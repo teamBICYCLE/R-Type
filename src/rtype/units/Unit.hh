@@ -9,8 +9,6 @@
 # include "network/Packet.hh"
 # include "utilities/Vector2D.hh"
 
-# define    UNLIMITED   (-1)
-
 //Forward declaration
 class UnitPool;
 class Missile;
@@ -50,7 +48,7 @@ class   Unit : public IPackable
         //const std::string & getSpritePath(void) const;
         unsigned int        getResourceId(void) const;
         unsigned int        getPv(void) const;
-        int                 getMunition(void);
+        bool                canShoot(void) const;
         const std::chrono::milliseconds &getTimeToReload(void) const;
         const std::chrono::milliseconds &getFireFrequence(void) const;
 
@@ -71,7 +69,7 @@ class   Unit : public IPackable
         //void    setSpritePath(const std::string &);
         void    setResourceId(const unsigned int);
         void    setPv(const unsigned int);
-        void    setMunition(const unsigned int);
+        void    setCanShoot(bool b);
         void    setTimeToReload(const std::chrono::milliseconds &);
         void    setFireFrequence(const std::chrono::milliseconds &);
 
@@ -100,7 +98,7 @@ class   Unit : public IPackable
         //std::string _spritePath;
         unsigned int _resourceId;
         unsigned int _pv;
-        int _munition;
+        bool    _canShoot;
         std::chrono::milliseconds _timeToReload;
         std::chrono::milliseconds _fireFrequence;
         std::chrono::time_point<std::chrono::system_clock>  _lastFire;
