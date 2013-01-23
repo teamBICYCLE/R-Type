@@ -167,7 +167,7 @@ void  ServerGameState::updateWorld(void)
     Missile *m = u->fire(this->_pool.get());
     if (m)
     {
-      //m->setDir(Vector2D(-1.f, 0));
+      m->setResourceId(5);
       _monsterMissiles.push_back(m);
     }
   };
@@ -189,7 +189,7 @@ void ServerGameState::requireBoss(void)
 
       moveStyle move = [](const Vector2D &pos) {      
         Vector2D v; v.x = 0;
-        if (pos.x >= 0.7f)
+        if (pos.x >= 0.8f)
           v.x -= 1 / MONSTER_SPEED;
         return v;
       };
