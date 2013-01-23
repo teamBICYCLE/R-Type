@@ -53,8 +53,6 @@ void	View::draw(sf::RenderWindow& target)
     _buttonOne->draw(target);
   if (_buttonTwo)
     _buttonTwo->draw(target);
-  if (_refreshButton)
-    _refreshButton->draw(target);
 }
 
 void	View::clickEvent(sf::Vector2i coord)
