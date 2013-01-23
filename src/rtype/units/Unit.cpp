@@ -247,6 +247,17 @@ void    Unit::setFireFrequence(const std::chrono::milliseconds &t)
   _fireFrequence = t;
 }
 
+void    Unit::getHit(void)
+{
+  //std::cout << "pv=" << _pv << std::endl;
+  if (_pv != 0) {
+    _pv -= 1;
+  }
+  if (_pv == 0) {
+    _isDead = true;
+  }
+}
+
 const std::chrono::milliseconds &Unit::getTimeToReload(void) const
 {
   return _timeToReload;

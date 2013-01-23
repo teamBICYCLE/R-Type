@@ -2,7 +2,7 @@ extern "C"
 {
 	const char *getName(void)
 	{
-		return "dumbMonster";
+		return "advancedMonster";
 	}
 
 	unsigned int getResourceId(void)
@@ -12,12 +12,12 @@ extern "C"
 
 	unsigned int getPv(void)
 	{
-		return 1;
+		return 2;
 	}
 
 	unsigned int getMunition(void)
 	{
-		return 0;
+		return 10;
 	}
 
 	int timeToReload(void)
@@ -27,6 +27,6 @@ extern "C"
 
 	int fireFrequence(void)
 	{
-		return 2500;
+		return 5000;
 	}
 }

@@ -81,10 +81,11 @@ void  ServerGameState::updateEntities(std::list<UnitType*>& entities,
     else {//entity alive
       (*entityIt)->move();
       fireFun(*entityIt); 
-      if ((*entityIt)->isOffScreen(GameState::WINDOW_WIDTH) == true ||
-          collideFun(*entityIt) == true) {
-        //std::cout << "Seting dead" << std::endl;
+      if ((*entityIt)->isOffScreen(GameState::WINDOW_WIDTH) == true) {
         (*entityIt)->setDead(true);
+      }
+      if (collideFun(*entityIt) == true) {
+        (*entityIt)->getHit();
       }
       ++entityIt;
     }
@@ -118,41 +119,45 @@ void  ServerGameState::updateWorld(void)
     for (auto& playerMissile : _playerMissiles) {
       //check monster against player missiles
       if (playerMissile->collideWith(*monster) == true) {
-        playerMissile->setDead(true);
+        playerMissile->getHit();
         return true;
       }
     }
-    bool  allDead = true;
-    for (auto& player : _players) {
-      //check monster against players. Monsters do not die upon collision
-      if (player->isDead() == false &&
-          player->collideWith(*monster) == true) {
-        player->setDead(true);
-      }
-      if (player->isDead() == false) {
-        allDead = false;
-      }
-    }
-    if (allDead == true) {
-      _running = false;
-    }
+    //bool  allDead = true;
+    //for (auto& player : _players) {
+    //  //check monster against players. Monsters do not die upon collision
+    //  if (player->isDead() == false &&
+    //      player->collideWith(*monster) == true) {
+    //    player->getHit();
+    //  }
+    //  if (player->isDead() == false) {
+    //    allDead = false;
+    //  }
+    //}
+    //if (allDead == true) {
+    //  _running = false;
+    //}
     return false;
   };
 
-  std::function<bool(const Unit*)> monsterMissileCollision = [this] (const Unit *monsterMissile) -> bool {
-    for (auto& player : _players) {
-      //check monster missiles against players
-      if (player->isDead() == false &&
-          player->collideWith(*monsterMissile) == true) {
-        player->setDead(true);
-        return true;
-      }
-    }
-    return false;
-  };
+  //std::function<bool(const Unit*)> monsterMissileCollision = [this] (const Unit *monsterMissile) -> bool {
+  //  for (auto& player : _players) {
+  //    //check monster missiles against players
+  //    if (player->isDead() == false &&
+  //        player->collideWith(*monsterMissile) == true) {
+  //      player->getHit();
+  //      return true;
+  //    }
+  //  }
+  //  return false;
+  //};
 
   std::function<void(Unit *)> noFire = [](Unit *u) -> void {
     (void)u;
+  };
+
+  std::function<bool(const Unit*)> noCollide = [] (const Unit*) -> bool {
+    return false;
   };
 
   std::function<void(Unit *)> monsterFire = [this](Unit *u) -> void {
@@ -164,8 +169,8 @@ void  ServerGameState::updateWorld(void)
     }
   };
 
-  updateEntities<Missile>(_monsterMissiles, monsterMissileCollision, noFire);
-  updateEntities<Missile>(_playerMissiles, [] (const Unit*) -> bool {return false;}, noFire);
+  updateEntities<Missile>(_monsterMissiles, noCollide, noFire);
+  updateEntities<Missile>(_playerMissiles, noCollide, noFire);
   updateEntities<Monster>(_enemies, monsterCollision, monsterFire);
   ++_turn;
 }
@@ -173,21 +178,24 @@ void  ServerGameState::updateWorld(void)
 void ServerGameState::requireBoss(void)
 {
     Monster *boss = _pool->get<Monster>();
-    boss->setPos(Vector2D(1.1f, 0.35f));
-    boss->setPv(100);
-    boss->setResourceId(4);
+    if (boss)
+    {
+      boss->setPos(Vector2D(1.1f, 0.35f));
+      boss->setPv(100);
+      boss->setResourceId(4);
 
-    moveStyle move = [](const Vector2D &pos) {      
-      Vector2D v; v.x = 0;
-      if (pos.x >= 0.6f)
-        v.x -= 1 / MONSTER_SPEED;
-      return v;
-    };
+      moveStyle move = [](const Vector2D &pos) {      
+        Vector2D v; v.x = 0;
+        if (pos.x >= 0.6f)
+          v.x -= 1 / MONSTER_SPEED;
+        return v;
+      };
 
-    boss->setMoveStyle(move);
-    boss->setBoss(true);
-    _bossAppear = true;
-    _enemies.push_back(boss);
+      boss->setMoveStyle(move);
+      boss->setBoss(true);
+      _bossAppear = true;
+      _enemies.push_back(boss);
+    }
 }
 
 void  ServerGameState::requireMonsters(void)
@@ -208,7 +216,6 @@ void  ServerGameState::requireMonsters(void)
     randy = left.y + ((float)rand()) / ((float)RAND_MAX / (right.y - left.y));
   else
   {
-    //std::cout << "calc" << std::endl;
     for (auto player : _players)
         if (!player->isDead())
           randy += player->getPos().y;
@@ -224,10 +231,9 @@ void  ServerGameState::requireMonsters(void)
   for (auto it : monsters)
   {
       Vector2D originalPos = it->getPos();
-      float newX = randx + (originalPos.x * 0.03f); // TMP
-      float newY = randy + (originalPos.y * 0.05f); // TMP
+      float newX = randx + (originalPos.x * 0.03f); 
+      float newY = randy + (originalPos.y * 0.05f);
       it->setPos(Vector2D(newX, newY));
-      //std::cout << "Monster id=" << it->getId() << std::endl;
   }
   _enemies.insert(_enemies.end(), monsters.begin(), monsters.end());
 }
@@ -235,23 +241,34 @@ void  ServerGameState::requireMonsters(void)
 void  ServerGameState::moveOne(Player& p)
 {
   p.move();
-  //for (auto& enemy : _enemies)
-  //{
-  //  if (p.collideWith(*enemy) == true)
-  //  {
-  //    p.setDead(true);
-  //    std::cout << "COLLIDED" << std::endl;
-  //    break;
-  //  }
-  //}
+  for (auto& monster : _enemies) {
+    if (p.isDead() == false &&
+        p.collideWith(*monster) == true) {
+      p.getHit();
+    }
+  }
+
+  for (auto& monsterMissile : _monsterMissiles) {
+    if (p.isDead() == false &&
+        p.collideWith(*monsterMissile) == true) {
+      p.getHit();
+      monsterMissile->getHit();
+    }
+  }
 }
 
 void  ServerGameState::moveAll(void)
 {
-   for (auto& p : _players) {
-      if (p->isDead() == false) //only move alive player
-        moveOne(*p);
-   }
+  bool  allDead = true;
+  for (auto& p : _players) {
+    if (p->isDead() == false) //only move alive player
+      moveOne(*p);
+    if (p->isDead() == false)
+      allDead = false;
+  }
+  if (allDead == true) {
+    _running = false;
+  }
 }
 
 void  ServerGameState::setPlayerDirection(uint32_t id, const Vector2D& dir)

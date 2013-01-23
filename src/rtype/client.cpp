@@ -52,10 +52,6 @@ void client(const std::string& ip, const std::string& port, int id,
   cfg._right = sf::Keyboard::Right;
   cfg._fire = sf::Keyboard::Space;
 
-  //GPlayer *player = GUnitPool::getInstance()->get<GPlayer>();
-  //player->setId(std::stoi(argv[3]));
-  //player->setPos(Vector2D(0.1f, 0.1f));
-  //player->setDir(Vector2D(0.f, 0.f));
   std::shared_ptr<UnitPool> pool = std::shared_ptr<UnitPool>(new GUnitPool());
   std::shared_ptr<Sprite::AnimationManager> animationM = std::shared_ptr<Sprite::AnimationManager>(new Sprite::AnimationManager());
   animationM->addSourceFolder("resources/sprites");

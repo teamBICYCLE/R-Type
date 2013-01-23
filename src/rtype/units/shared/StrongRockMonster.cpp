@@ -2,17 +2,17 @@ extern "C"
 {
 	const char *getName(void)
 	{
-		return "dumbMonster";
+		return "strongRockMonster";
 	}
 
 	unsigned int getResourceId(void)
 	{
-		return 6;
+		return 8;
 	}
 
 	unsigned int getPv(void)
 	{
-		return 1;
+		return 2;
 	}
 
 	unsigned int getMunition(void)
