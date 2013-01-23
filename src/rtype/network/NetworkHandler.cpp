@@ -62,7 +62,8 @@ std::vector<communication::Packet> NetworkHandler::getIncomingPackets()
 void NetworkHandler::sendToAll(uint8_t *packet, int packetSize)
 {
   for (auto& addr : _outAddr) {
-    _socket.send(packet, packetSize, addr);
+    //if (addr.isDisconnected() == false)
+      _socket.send(packet, packetSize, addr);
   }
 }
 
@@ -85,7 +86,19 @@ void  NetworkHandler::broadcast(const ServerGameState& g)
   else {
     //send player update to other players
     for (auto& p : g.getPlayers()) {
-      sendEntity(p);
+      //if (p->isDisconnected() == true) {
+      //  Packet  disconnectedPacket(communication::Packet::Type::CLIENT_DISCONNECTED,
+      //                             p->getId(), p->getResourceId(), nullptr, 0);
+
+      //  disconnectedPacket.setReliable(true);
+      //  _outAddr[p->getId()].setDisconnected(true);
+      //  std::cout << "Client #" << p->getId() << " is probably disconnected" << std::endl;
+      //  addReliablePacket(disconnectedPacket.getData(), disconnectedPacket.getDataSize());
+      //}
+      //else {
+      //  _outAddr[p->getId()].setDisconnected(false);
+        sendEntity(p);
+      //}
     }
 
     //send monsters update
@@ -98,6 +111,7 @@ void  NetworkHandler::broadcast(const ServerGameState& g)
       sendEntity(monsterMissile);
     }
 
+    //_disconnected = b;
     //send player missiles update
     for (auto& playerMissile : g.getPlayerMissiles()) {
       sendEntity(playerMissile);

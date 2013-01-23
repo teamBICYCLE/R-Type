@@ -3,6 +3,8 @@
 #include "gamestate/GameState.hh"
 #include "GUnit.hh"
 
+extern std::string resourcesPath;
+
 GUnit::GUnit(int id, const Vector2D& pos, const Vector2D& dir)
 	: Unit(id, pos, dir)
   	, sf::Drawable()
@@ -30,7 +32,7 @@ void GUnit::setAnimationManager(const AnimationM &m)
 		path = std::to_string(_resourceId);
 
 	try {
-		_anim.reset((*(m.get()))["resources/sprites/" + path + ".bmp"]->generateAnimInfo());
+		_anim.reset((*(m.get()))[resourcesPath + "/sprites/" + path + ".bmp"]->generateAnimInfo());
 	} catch (const std::invalid_argument &e) {
 		TBSystem::log::warn << e.what() << TBSystem::log::endl;
 	}
@@ -60,7 +62,12 @@ void GUnit::draw(sf::RenderTarget &target, sf::RenderStates states) const
 	sf::Vector2f pos = static_cast<sf::Vector2f>(_pos);
 	bool valid = false;
 
-	if (_resourceId < PLAYERS_ID)
+	_anim->setPlayAnimNumber(-1);
+	if (isDead()) {
+		valid = _anim->setAnimationName("die");
+		_anim->setPlayAnimNumber(1);
+	}
+	else if (_resourceId < PLAYERS_ID)
 		valid = GUnit::playerAnimation();
 	else if (_resourceId == MISSILE_ID)
 		valid = _anim->setAnimationName("mid");
@@ -84,4 +91,9 @@ void GUnit::draw(sf::RenderTarget &target, sf::RenderStates states) const
 Unit *GUnit::clone(void)
 {
   	return (new GUnit(*this));
+}
+
+std::shared_ptr<Sprite::AnimationInfos> GUnit::getAnimInfo(void)
+{
+	return (_anim);
 }

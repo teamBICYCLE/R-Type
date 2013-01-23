@@ -16,7 +16,8 @@ public:
     INPUT,
     DEATH,
     ACK,
-    END_GAME
+    END_GAME,
+    CLIENT_DISCONNECTED
   };
 
 public:

@@ -17,6 +17,8 @@
 
 using namespace TBSystem;
 
+std::string resourcesPath;
+
 int  server(std::shared_ptr<network::sockets::ITcpSocket> & sock) {
   Lounge lounge(sock);
 
@@ -25,6 +27,11 @@ int  server(std::shared_ptr<network::sockets::ITcpSocket> & sock) {
 
 int main(int argc, const char *argv[])
 {
+  if (argc < 2) {
+    std::cerr << "Usage: ./server <resources_path>" << std::endl;
+    return EXIT_FAILURE;
+  }
+  resourcesPath = argv[1];
   // creation socket
   std::shared_ptr<network::sockets::ITcpSocket> mainSocket(new network::sockets::Tcp);
   network::Addr addr(network::SI_ADDR_ANY, "4242", "TCP");

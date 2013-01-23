@@ -24,11 +24,13 @@ using namespace std;
 using namespace TBSystem;
 
 Sound sounds;
+extern std::string resourcesPath;
 
 //static const std::chrono::milliseconds g_frameDelta(1000 / 60);
 //static const std::chrono::milliseconds g_maxFrameTime(25);
 static const int  g_frameDelta(16);
 static const int  g_maxFrameTime(25);
+static const int  g_msToDisconnect(5000);
 
 //#ifdef _WIN32
 //int WINAPI WinMain(HINSTANCE hInstance,
@@ -54,7 +56,7 @@ void client(const std::string& ip, const std::string& port, int id,
 
   std::shared_ptr<UnitPool> pool = std::shared_ptr<UnitPool>(new GUnitPool());
   std::shared_ptr<Sprite::AnimationManager> animationM = std::shared_ptr<Sprite::AnimationManager>(new Sprite::AnimationManager());
-  animationM->addSourceFolder("resources/sprites");
+  animationM->addSourceFolder(resourcesPath + "/sprites");
 
   GPlayer *player = new GPlayer(id, Vector2D(0.1f, 0.1f), Vector2D(0.f, 0.f));
   player->setAnimationManager(animationM);
@@ -64,9 +66,9 @@ void client(const std::string& ip, const std::string& port, int id,
   s.bind(network::Addr(network::SI_ADDR_ANY, "4244", "UDP"));
 
   sf::Clock clock;
-  int lastFpsPrinted = 0;
+  int lastServerUpdate = 0;
   int accumulator = 0;
-  int timeDraw = 0;
+
   window.setFramerateLimit(300);
   while (window.isOpen() &&
          g.running() == true)
@@ -75,17 +77,14 @@ void client(const std::string& ip, const std::string& port, int id,
     if (frameTime > g_maxFrameTime)
       frameTime = g_maxFrameTime;
     accumulator += frameTime;
-    lastFpsPrinted += frameTime;
-
-    if (lastFpsPrinted >= 1000)
-    {
-      std::cout << timeDraw << "fps" << std::endl;
-      timeDraw = 0;
-      lastFpsPrinted -= 1000;
-    }
+    lastServerUpdate += frameTime;
 
     clock.restart();
 
+    if (lastServerUpdate >= g_msToDisconnect) {
+      log::err << "Connection to server lost." << std::endl;
+      break;
+    }
     while (accumulator >= g_frameDelta)
     {
       uint8_t buf[256];
@@ -101,6 +100,7 @@ void client(const std::string& ip, const std::string& port, int id,
       while (s.recv(buf, sizeof(buf), server) != -1) {
         communication::Packet p((uint8_t*)buf, sizeof(buf));
 
+        lastServerUpdate = 0;
         packets.push_back(p);
         if (p.isReliable() == true) {//if the packet needs an ack, we send it
           p.setType(communication::Packet::Type::ACK);
@@ -121,6 +121,5 @@ void client(const std::string& ip, const std::string& port, int id,
     window.clear();
     window.draw(g);
     window.display();
-    timeDraw++;
   }
 }

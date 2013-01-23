@@ -76,6 +76,7 @@ void  ReliablePacket::tryAgain(TBSystem::network::sockets::Udp& socket)
 {
   auto clientIt = _clientsStatus.begin();
   auto packetIt = _packets.begin();
+
   while (clientIt != _clientsStatus.end() &&
          packetIt != _packets.end())
   {

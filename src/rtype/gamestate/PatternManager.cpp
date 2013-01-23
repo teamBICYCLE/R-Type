@@ -3,10 +3,12 @@
 #include <system/log/Log.hh>
 #include <system/dll/DLoader.hh>
 #include <ctime>
-#include <cstdlib> 
+#include <cstdlib>
 #include <cmath>
 #include "pool/UnitPool.hh"
 #include "PatternManager.hh"
+
+extern std::string resourcesPath;
 
 PatternManager::PatternManager(void)
 {
@@ -24,7 +26,7 @@ PatternManager::~PatternManager(void)
 void PatternManager::load(void)
 {
 	using namespace TBSystem;
-	std::vector<std::string> files = ExploreDir::run(PATTERNS_PATH);
+	std::vector<std::string> files = ExploreDir::run(resourcesPath + "/patterns");
 	if (files.size() == 0)
 		log::warn << "No patterns defined for generate random Monsters" << log::endl;
 	for (auto it : files)
@@ -35,7 +37,7 @@ void PatternManager::loadShared(void)
 {
 	using namespace TBSystem;
 
-	std::vector<std::string> files = ExploreDir::run(SHARED_PATH, SHARED_EXT);
+	std::vector<std::string> files = ExploreDir::run(resourcesPath + "/shared", SHARED_EXT);
 	if (files.size() == 0)
 		log::warn << "No shared libraries for Monster" << log::endl;
 	for (auto it : files)
@@ -82,7 +84,7 @@ void PatternManager::createMoveStyles(void)
 	moveStyle sinfct = [](const Vector2D &pos) {
 	    Vector2D ret;
 	    ret.x = -1;
-	    ret.y = std::sin(pos.x * 20); 
+	    ret.y = std::sin(pos.x * 20);
 	    ret.normalize();
 	    ret /= MONSTER_SPEED;
 	    ret.y *= 1;
@@ -118,7 +120,12 @@ std::list<Monster*> PatternManager::get(const std::shared_ptr<UnitPool> &pool) c
 					monster->setPv(sharedDef->pv);
 					monster->setCanShoot(static_cast<bool>(sharedDef->munition));
 					monster->setTimeToReload(std::chrono::milliseconds(sharedDef->timeToReload));
-					monster->setFireFrequence(std::chrono::milliseconds(sharedDef->fireFrenquence));
+					monster->setFireFrequence(
+                  std::chrono::milliseconds(static_cast<int>(
+                                                             sharedDef->fireFrenquence +
+                                            ((sharedDef->fireFrenquence * 50) / 100.0f) *
+                                            ((std::rand() % 100) / 100.0f)
+                                            )));
 
 					// load pattern informations in monster
 					monster->setPos(Vector2D((*item)->posx, (*item)->posy));

@@ -14,6 +14,7 @@
 #include "audio/Sound.hh"
 
 extern Sound sounds;
+extern std::string resourcesPath;
 
 using namespace TBSystem;
 
@@ -38,8 +39,10 @@ GraphicGameState::GraphicGameState(const std::shared_ptr<UnitPool> &p,
       std::bind(&GraphicGameState::updateWithDeath, this, _1);
    _updateMap[communication::Packet::Type::END_GAME] =
       std::bind(&GraphicGameState::endGame, this, _1);
+   _updateMap[communication::Packet::Type::CLIENT_DISCONNECTED] =
+      std::bind(&GraphicGameState::clientDisconnected, this, _1);
 
-  _backgroundTexture->loadFromFile("resources/background.jpg");
+  _backgroundTexture->loadFromFile(resourcesPath + "/background.jpg");
   _backgroundSprite1->setTexture(*_backgroundTexture);
   _backgroundSprite2->setTexture(*_backgroundTexture);
 }
@@ -112,6 +115,7 @@ void  GraphicGameState::updateWithDeath(const communication::Packet& packet)
     if (entity != nullptr) {
       _others.remove(entity);
       _deadUnits.push_back(entity);
+      entity->setDead(true);
     }
   }
 }
@@ -123,6 +127,11 @@ void  GraphicGameState::endGame(const communication::Packet& packet)
   _running = false;
 }
 
+void  GraphicGameState::clientDisconnected(const communication::Packet& packet)
+{
+  std::cout << "Client #" << packet.getId() << " disconnected" << std::endl;
+}
+
 void  GraphicGameState::simulate(const Input::Data& input)
 {
   const uint32_t playerId = input.getId();
@@ -132,7 +141,7 @@ void  GraphicGameState::simulate(const Input::Data& input)
   {
     _player->setDir(GameState::convertToSpeed(input.getVector()));
     _player->move();
-  }
+  }// 
 }
 
 void  GraphicGameState::animationUpdate(void)
@@ -150,9 +159,10 @@ void  GraphicGameState::animationUpdate(void)
   _backgroundSprite2->setPosition(pos);
 
   for (auto deadUnitIt = _deadUnits.begin(); deadUnitIt != _deadUnits.end(); ++deadUnitIt) {
-    //si l'animation de mort est finie
-    _pool->release<GUnit>(*deadUnitIt);
-    deadUnitIt = _deadUnits.erase(deadUnitIt);
+    if ((*deadUnitIt)->getAnimInfo()->getSprite().getTextureRect() == sf::Rect<int>(0, 0, 0, 0)) {
+        _pool->release<GUnit>(*deadUnitIt);
+        deadUnitIt = _deadUnits.erase(deadUnitIt);
+    }
   }
 }
 

@@ -69,6 +69,9 @@ public:
 
     virtual std::string getIpString() const;
 
+    bool  isDisconnected(void) const;
+    void  setDisconnected(bool b);
+
 private:
     SpecialIp   _special;
     std::string _ip;
@@ -78,6 +81,7 @@ private:
     mutable struct addrinfo*     _infosRes;
     mutable bool        _isValid;
     mutable struct sockaddr_in _valid;
+    bool  _disconnected;
 };
 }
 }
