@@ -1,5 +1,7 @@
 #ifdef  __gnu_linux__
 # include <dirent.h>
+#elif defined _WIN32
+# include <Windows.h>
 #endif
 #include "ExploreDir.hh"
 #include "system/log/Log.hh"
