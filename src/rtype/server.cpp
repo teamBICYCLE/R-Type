@@ -51,7 +51,7 @@ void  runServer(const std::vector<std::string>& clientsIps,
   nh.setClients(clients);
   network::sockets::Udp s;
   ServerGameState g(pool, players);
-  while (1)
+  while (g.running() == true)
   {
     newTime = std::chrono::system_clock::now();
     std::chrono::milliseconds frameTime = std::chrono::duration_cast<std::chrono::milliseconds>
@@ -77,6 +77,9 @@ void  runServer(const std::vector<std::string>& clientsIps,
     if (accumulator < g_serverUpdateRate)//sleep to the next frame
       std::this_thread::sleep_for(g_serverUpdateRate - accumulator);
   }
+  while (nh.allReliablePacketsSent() == false) {
+    nh.trySendAll();
+  }
 }
 
 int     main(int argc, char *argv[])
@@ -86,8 +89,8 @@ int     main(int argc, char *argv[])
   //clients.push_back("192.168.1.32");
   //clients.push_back("10.23.98.230");
   clients.emplace_back("10.23.99.201");
-  clients.emplace_back("10.23.99.200");
-  clients.emplace_back("10.23.98.230");
+  //clients.emplace_back("10.23.99.200");
+  //clients.emplace_back("10.23.98.230");
   //clients.push_back("10.23.98.165");
   runServer(clients, "4242");
   return EXIT_SUCCESS;

@@ -25,7 +25,8 @@ public:
 
   void  update(const communication::Packet& packet);
   void  update(const std::vector<communication::Packet>& v);
-  
+  bool    running(void) const;
+
 protected:
   Vector2D  convertToSpeed(const Vector2D& direction) const;
 
@@ -38,6 +39,7 @@ protected:
   std::map<communication::Packet::Type, UpdateFunction> _updateMap;
   const float PLAYER_SPEED;
   std::shared_ptr<UnitPool> _pool;
+  bool  _running;
 };
 
 #endif /* !_GAMESTATE_H__ */
