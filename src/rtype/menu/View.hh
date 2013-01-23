@@ -11,6 +11,8 @@
 # include <SFML/Graphics.hpp>
 # include <functional>
 
+# define LOGO_PATH "./resources/logo.png"
+
 class View {
 private:
   ListView	*_listView;
@@ -19,6 +21,8 @@ private:
   Button	*_refreshButton;
   sf::Texture		_texture;
   sf::Sprite		_background;
+  sf::Texture		_logoTexture;
+  sf::Sprite		_logo;
   sf::Vector2u		_size;
   sf::Text		_title;
 

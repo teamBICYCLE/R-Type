@@ -296,7 +296,7 @@ void PreGame::updateHallway(void)
   if (_state == eHALLWAY) {
     _menu.setButtonOne(sf::Vector2f(100.0f, 50.0f),
                        std::bind(&PreGame::createRoom, this),
-                       "");
+                       "./resources/create_button.png");
     _menu.unsetButtonTwo();
     _menu.update(_rooms);
     _menu.setGlobalCallback(std::bind(&PreGame::tryJoinRoom, this, _1));
@@ -308,10 +308,10 @@ void PreGame::updateRoom(void)
   if (_state == eROOM) {
     _menu.setButtonOne(sf::Vector2f(100.0f, 50.0f),
                        std::bind(&PreGame::startGame, this),
-                       "");
+                       "./resources/play_button.png");
     _menu.setButtonTwo(sf::Vector2f(100.0f, 50.0f),
                        std::bind(&PreGame::leaveRoom, this),
-                       "");
+                       "./resources/leave_button.png");
     _menu.update(_players);
   }
 }

@@ -128,9 +128,9 @@ bool ResourcesArchiver::unpack(const char *data, const std::string &dir)
         try {
             isize = 0;
             isize = std::stoi(size);            
-        } catch (std::invalid_argument &e) {
+        } catch (std::invalid_argument &) {
             return dataError(); 
-        } catch (std::out_of_range &e) {
+        } catch (std::out_of_range &) {
             return dataError(); 
         }
 
