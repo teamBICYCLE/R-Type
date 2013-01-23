@@ -109,6 +109,7 @@ void  GraphicGameState::updateWithDeath(const communication::Packet& packet)
     if (entity != nullptr) {
       _others.remove(entity);
       _deadUnits.push_back(entity);
+      entity->setDead(true);
     }
   }
 }
@@ -129,7 +130,7 @@ void  GraphicGameState::simulate(const Input::Data& input)
   {
     _player->setDir(GameState::convertToSpeed(input.getVector()));
     _player->move();
-  }
+  }// 
 }
 
 void  GraphicGameState::animationUpdate(void)
@@ -147,9 +148,10 @@ void  GraphicGameState::animationUpdate(void)
   _backgroundSprite2->setPosition(pos);
 
   for (auto deadUnitIt = _deadUnits.begin(); deadUnitIt != _deadUnits.end(); ++deadUnitIt) {
-    //si l'animation de mort est finie
-    _pool->release<GUnit>(*deadUnitIt);
-    deadUnitIt = _deadUnits.erase(deadUnitIt);
+    if ((*deadUnitIt)->getAnimInfo()->getSprite().getTextureRect() == sf::Rect<int>(0, 0, 0, 0)) {
+        _pool->release<GUnit>(*deadUnitIt);
+        deadUnitIt = _deadUnits.erase(deadUnitIt);
+    }
   }
 }
 

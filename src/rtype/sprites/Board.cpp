@@ -89,8 +89,11 @@ Animation Board::createSpriteBoard(csv::Parser &csvCfg, unsigned int cfgIndex)
 
 sf::Sprite &Board::getSprite(const std::string &animName, std::chrono::milliseconds time, int nbPlay)
 {
-	if (nbPlay != -1 && static_cast<int>((time / (_animations[animName].getDuration().count())).count()) /
-							(_animations[animName].getRects().size()) > nbPlay) {
+	if (_animations.find(animName) == _animations.end() || _animations[animName].getDuration().count() == 0 ||
+		_animations[animName].getRects().size() == 0) {
+	   _board->setTextureRect(sf::Rect<int>(0,0,0,0));
+	} else if (nbPlay != -1 && static_cast<int>((time / (_animations[animName].getDuration().count())).count()) /
+							(_animations[animName].getRects().size()) >= nbPlay) {
 		_board->setTextureRect(sf::Rect<int>(0,0,0,0));
 	} else {
 	_board->setTextureRect(_animations[animName][static_cast<int>((time /
