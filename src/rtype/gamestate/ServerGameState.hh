@@ -4,7 +4,7 @@
 # include "GameState.hh"
 # include "PatternManager.hh"	
 
-# define  BOSS_SPAWN 1000
+# define  BOSS_SPAWN 10000
 
 class ServerGameState : public GameState {
 public:
