@@ -8,13 +8,16 @@ View::View(const std::string& texture, const sf::Vector2u& size, const sf::Vecto
 {
   float x,y;
 
+  _logoTexture.loadFromFile(LOGO_PATH);
+  _logo.setTexture(_logoTexture);
+  _logo.setPosition(sf::Vector2f(120,60));
   _texture.loadFromFile(texture);
   _background.setTexture(_texture);
   _background.setPosition(size.x, size.y);
   _background.setOrigin(1920 / 2, 1920 / 2);
   _background.scale(1.8,1.8);
   x = (_size.x / 2) - (listItemSize.x / 2);
-  y = (_size.y / 2) - (MAX_ROW * listItemSize.y / 2);
+  y = (_size.y / 2) - ((MAX_ROW - 1)  * listItemSize.y / 2);
   _listView = new ListView(sf::Vector2f(x,y), listItemSize);
   _title.setCharacterSize(18);
   _title.setStyle(0);
@@ -43,6 +46,7 @@ void	View::draw(sf::RenderWindow& target)
 {
   _background.rotate(0.015);
   target.draw(_background);
+  target.draw(_logo);
   target.draw(_title);
   _listView->draw(target);
   if (_buttonOne)
