@@ -16,7 +16,7 @@
 
 # define	PLAYER_NB	4
 # define	MONSTER_NB	100
-# define	ROCKET_NB	300
+# define	ROCKET_NB	250
 
 
 class UnitPool

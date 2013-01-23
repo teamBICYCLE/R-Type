@@ -26,7 +26,7 @@ void Sound::play(const std::string& name)
 {
   for (auto& p : _players) {
     if (p.getStatus() == sf::SoundSource::Stopped) {
-      std::cout << "reuse ! " << _players.size() << std::endl;
+      //std::cout << "reuse ! " << _players.size() << std::endl;
       p.setBuffer(_buffers[name]);
       p.play();
       return ;
