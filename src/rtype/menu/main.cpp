@@ -10,15 +10,37 @@
 #include <system/network/Addr.hh>
 #include <iostream>
 #include "PreGame.hh"
+#ifdef _WIN32
+# include <tchar.h>
+#endif
 
 std::string resourcesPath;
 
-int	main(int argc, char *argv[])
+#ifdef _WIN32
+int WINAPI WinMain(HINSTANCE hInstance,
+                   HINSTANCE hPrevInstance,
+                   LPSTR lpCmdLine,
+                   int nCmdShow)
 {
+	TCHAR cmdline[4096] ;
+    TCHAR* argv[4096] ;
+    int argc = 0 ;
+    _tcscpy( cmdline, GetCommandLine() ) ;
+    argv[argc] = _tcstok( cmdline, TEXT(" \t") ) ;
+    while( argv[argc] != 0 )
+    {
+        argc++ ;
+        argv[argc] = _tcstok( 0, TEXT(" \t") ) ;
+    }
+#elif defined __gnu_linux__
+int main(int argc, char* argv[])
+{
+#endif
   if (argc < 4) {
-    std::cerr << "Usage: ./client <ip> <port> <resources_path>" << std::endl;
+    TBSystem::log::err << "Usage: ./client <ip> <port> <resources_path>" << TBSystem::log::endl;
     return EXIT_FAILURE;
   }
+  TBSystem::log::err << argv[1] << " " << argv[2] << " " << argv[3] << TBSystem::log::endl;
   resourcesPath = argv[3];
   try {
     PreGame  pregame(argv[1], argv[2]);

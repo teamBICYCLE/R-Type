@@ -3,8 +3,12 @@
 RoomListItem::RoomListItem(const sf::Vector2f& dimension, const std::string& id,
 			   const std::string& minPlayer, const std::string& maxPlayer,
 			   const std::string& texture)
-  : ListItem(dimension, "#"+id, texture), _minPlayerLabel(minPlayer), _maxPlayerLabel("/" + maxPlayer)
+  : ListItem(dimension, "#"+id, texture)
 {
+	sf::String minPlayerLabelString(minPlayer), maxPlayerLabelString("/" + maxPlayer);
+
+	_minPlayerLabel.setString(minPlayerLabelString);
+	_maxPlayerLabel.setString(maxPlayerLabelString);
   _minPlayerLabel.setPosition(sf::Vector2f(0,0));
   _maxPlayerLabel.setPosition(sf::Vector2f(0,0));
   _minPlayerLabel.setCharacterSize(14);
