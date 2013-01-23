@@ -18,37 +18,38 @@
 #include <string.h>
 #include <tchar.h>
 #endif
+#include "audio/Sound.hh"
 
 using namespace std;
 using namespace TBSystem;
+
+Sound sounds;
 
 //static const std::chrono::milliseconds g_frameDelta(1000 / 60);
 //static const std::chrono::milliseconds g_maxFrameTime(25);
 static const int  g_frameDelta(16);
 static const int  g_maxFrameTime(25);
 
-#ifdef _WIN32
-int WINAPI WinMain(HINSTANCE hInstance,
-                   HINSTANCE hPrevInstance,
-                   LPSTR lpCmdLine,
-                   int nCmdShow)
-#elif defined __gnu_linux__
-int main(int argc, char* argv[])
-#endif
+//#ifdef _WIN32
+//int WINAPI WinMain(HINSTANCE hInstance,
+                   //HINSTANCE hPrevInstance,
+                   //LPSTR lpCmdLine,
+                   //int nCmdShow)
+//#elif defined __gnu_linux__
+//int main(int argc, char* argv[])
+//#endif
+
+void client(const std::string& ip, const std::string& port, int id,
+            sf::RenderWindow& window)
 {
   network::sockets::Udp s;
-  network::Addr server(argv[1], argv[2], "UDP");
+  network::Addr server(ip, port, "UDP");
   Input::Config cfg;
   cfg._top = sf::Keyboard::Up;
   cfg._bot = sf::Keyboard::Down;
   cfg._left = sf::Keyboard::Left;
   cfg._right = sf::Keyboard::Right;
   cfg._fire = sf::Keyboard::Space;
-
-  sf::RenderWindow window(sf::VideoMode(GraphicGameState::WINDOW_WIDTH, GraphicGameState::WINDOW_HEIGHT),
-                          "RForceType v"
-                          + std::to_string(RTYPE_VERSION_MAJOR)
-                          + "." + std::to_string(RTYPE_VERSION_MINOR));
 
   //GPlayer *player = GUnitPool::getInstance()->get<GPlayer>();
   //player->setId(std::stoi(argv[3]));
@@ -58,7 +59,7 @@ int main(int argc, char* argv[])
   std::shared_ptr<Sprite::AnimationManager> animationM = std::shared_ptr<Sprite::AnimationManager>(new Sprite::AnimationManager());
   animationM->addSourceFolder("resources/sprites");
 
-  GPlayer *player = new GPlayer(std::stoi(argv[3]), Vector2D(0.1f, 0.1f), Vector2D(0.f, 0.f));
+  GPlayer *player = new GPlayer(id, Vector2D(0.1f, 0.1f), Vector2D(0.f, 0.f));
   player->setAnimationManager(animationM);
   GraphicGameState  g(pool, animationM, std::shared_ptr<GPlayer>(player));
 
@@ -93,7 +94,7 @@ int main(int argc, char* argv[])
       uint8_t buf[256];
 
       Input::Data i = cfg.getInput();
-      i.setId(std::stoi(argv[3]));
+      i.setId(id);
       g.simulate(i);
       int ret = i.pack(buf, sizeof(buf));
 
@@ -125,5 +126,4 @@ int main(int argc, char* argv[])
     window.display();
     timeDraw++;
   }
-  return EXIT_SUCCESS;
 }

@@ -29,18 +29,21 @@ void	ListView::update(const std::list<Room>& list)
     }
 }
 
-void	ListView::update(const std::list<Player>& list)
+void	ListView::update(const std::list<gooey::Player>& list)
 {
+  sf::Color	t[4] = {sf::Color(50,149,255), sf::Color(214,19,19),
+			sf::Color(63,178,24), sf::Color(255,227,20)};
   _list.clear();
   for (auto it = list.begin(); it != list.end(); it++)
     {
-      PlayerListItem	*item = new PlayerListItem(_itemSize, std::to_string((*it).getId()), "READY");
+      PlayerListItem	*item = new PlayerListItem(_itemSize, std::to_string((*it).getId()),
+						   "READY", t[_list.size()]);
       this->addItemToList(item);
     }
   if (list.size() != 4)
     {
       for (int i = list.size(); i < 4; ++i) {
-	PlayerListItem	*item = new PlayerListItem(_itemSize, "", "EMPTY");
+	PlayerListItem	*item = new PlayerListItem(_itemSize, "", "EMPTY", t[_list.size()]);
 	this->addItemToList(item);
       }
     }

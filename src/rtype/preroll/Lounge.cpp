@@ -70,9 +70,18 @@ bool  Lounge::acceptClient(std::shared_ptr<
 
 void  Lounge::handleClientDisconnect(const Client& c)
 {
-  removePlayerFromRoom(c.getId());
+  int id = c.getId();
+
   _clients.erase(std::find(_clients.begin(), _clients.end(), c));
+  removePlayerFromRoom(id);
   // pensay a enlevay de la room si nessessaire
+}
+
+void Lounge::sendRoomlistGlobally(void)
+{
+  for (auto& c : _clients) {
+    sendRoomlist(c.getSocket(), "");
+  }
 }
 
 bool Lounge::sendRoomlist(std::shared_ptr<
@@ -83,7 +92,9 @@ bool Lounge::sendRoomlist(std::shared_ptr<
 
   ret  = "rep roomlist start\r\n";
   for (auto& r : _rooms) {
-    ret += "rep roomlist room " + r.toString() + "\r\n";
+    if (!r.isInGame()) {
+      ret += "rep roomlist room " + r.toString() + "\r\n";
+    }
   }
   ret += "rep roomlist end\r\n";
   socket->send(ret.c_str(), ret.size());
@@ -152,10 +163,11 @@ bool Lounge::createRoom(std::shared_ptr<
   log::debug << "hello" << log::endl;
   _rooms.emplace_back(4, *this);
 
-  std::string rep("rep create OK " + std::to_string(_rooms.back().getId())
+  std::string rep("rep join " + std::to_string(_rooms.back().getId())
                   + "\r\n");
   movePlayerToRoom(playerId, _rooms.back().getId());
   socket->send(rep.c_str(), rep.size());
+  sendRoomlistGlobally();
   return true;
 }
 
@@ -175,6 +187,7 @@ bool Lounge::movePlayerToRoom(int playerId, int roomId)
     return false;
   }
   playerIt->setInRoom(true);
+  sendUpdateToRoomPlayers(roomId);
   return true;
 }
 
@@ -186,8 +199,13 @@ bool Lounge::removePlayerFromRoom(int playerId)
   for (auto it = _rooms.begin(); it != _rooms.end(); ++it) {
     ret |= it->removePlayer(playerId);
     if (it->isEmpty()) itVect.push_back(it);
+    else {
+      sendUpdateToRoomPlayers(it->getId());
+    }
   }
-  for (auto& it : itVect) _rooms.erase(it);
+  bool edit = false;
+  for (auto& it : itVect) _rooms.erase(it); edit = true;
+  if (edit) sendRoomlistGlobally();
   return ret;
 }
 
@@ -207,9 +225,29 @@ bool  Lounge::removePlayerFromRoom(int playerId, int roomId)
   }
   if (roomIt->removePlayer(playerId)) {
     if (roomIt->isEmpty()) _rooms.erase(roomIt);
+    else {
+      sendUpdateToRoomPlayers(roomId);
+    }
+    sendRoomlistGlobally();
     return true;
   }
   return false;
+}
+
+void Lounge::sendUpdateToRoomPlayers(int roomId) {
+  auto roomIt = std::find_if(_rooms.begin(), _rooms.end(),
+                             [roomId](const Room& r) -> bool {
+                             return r.getId() == roomId;
+                             });
+
+  for (int p : roomIt->getPlayersIds()) {
+    auto it = std::find_if(_clients.begin(), _clients.end(),
+                           [p](const Client& c) {
+                           return c.getId() == p;
+                           });
+
+    sendRoomDetails(it->getSocket(), "trash " + std::to_string(roomId) + "\r\n");
+  }
 }
 
 bool Lounge::tryStartRoom(int playerId, int roomId)
@@ -225,6 +263,12 @@ bool Lounge::tryStartRoom(int playerId, int roomId)
 
 const std::list<Client>&
 Lounge::getClients() const
+{
+  return _clients;
+}
+
+std::list<Client>&
+Lounge::getClients()
 {
   return _clients;
 }

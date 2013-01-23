@@ -35,10 +35,12 @@ public:
   bool    addPlayer(int c);
   bool    removePlayer(int c);
   bool    isEmpty() const;
-
-  void    launchGame(const Lounge& lounge);
+  const std::vector<int>& getPlayersIds() const;
+  void    launchGame(Lounge& lounge);
 
   bool    isIn(int playerId);
+
+  bool  isInGame() const;
 
 private:
   static int          _s_lastID;
@@ -47,6 +49,7 @@ private:
   unsigned int           _maxplayers;
   std::vector<int>    _playersIds;
   Lounge&             _lounge;
+  bool                _inGame;
   Thread              t;
 };
 

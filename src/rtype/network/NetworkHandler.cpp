@@ -81,26 +81,27 @@ void  NetworkHandler::broadcast(const ServerGameState& g)
 
     endGamePacket.setReliable(true);
     addReliablePacket(endGamePacket.getData(), endGamePacket.getDataSize());
-    return;
   }
-  //send player update to other players
-  for (auto& p : g.getPlayers()) {
-    sendEntity(p);
-  }
+  else {
+    //send player update to other players
+    for (auto& p : g.getPlayers()) {
+      sendEntity(p);
+    }
 
-  //send monsters update
-  for (auto& monster : g.getEnemies()) {
-    sendEntity(monster);
-  }
+    //send monsters update
+    for (auto& monster : g.getEnemies()) {
+      sendEntity(monster);
+    }
 
-  //send monster missiles update
-  for (auto& monsterMissile : g.getMonsterMissiles()) {
-    sendEntity(monsterMissile);
-  }
+    //send monster missiles update
+    for (auto& monsterMissile : g.getMonsterMissiles()) {
+      sendEntity(monsterMissile);
+    }
 
-  //send player missiles update
-  for (auto& playerMissile : g.getPlayerMissiles()) {
-    sendEntity(playerMissile);
+    //send player missiles update
+    for (auto& playerMissile : g.getPlayerMissiles()) {
+      sendEntity(playerMissile);
+    }
   }
 
   trySendAll();

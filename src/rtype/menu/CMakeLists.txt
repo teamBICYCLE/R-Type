@@ -6,35 +6,34 @@
 # this stuff is worth it, you can buy me a beer in return. Thomas Duplomb
 ################################################################################
 
-project(client)
+list(APPEND MENU_HEADERS
+  ${CMAKE_CURRENT_LIST_DIR}/Button.hh
+  ${CMAKE_CURRENT_LIST_DIR}/ListItem.hh
+  ${CMAKE_CURRENT_LIST_DIR}/ListView.hh
+  ${CMAKE_CURRENT_LIST_DIR}/View.hh
+  ${CMAKE_CURRENT_LIST_DIR}/PreGame.hh
+  ${CMAKE_CURRENT_LIST_DIR}/Room.hh
+  ${CMAKE_CURRENT_LIST_DIR}/RoomListItem.hh
+  ${CMAKE_CURRENT_LIST_DIR}/Room.hh
+  ${CMAKE_CURRENT_LIST_DIR}/PlayerListItem.hh
+  ${CMAKE_CURRENT_LIST_DIR}/Player.hh
+ )
 
-include_directories(${PROJECT_SOURCE_DIR})
-
-add_executable(preroll_client
-  Button.cpp
-  Button.hh
-  ListItem.cpp
-  ListItem.hh
-  ListView.cpp
-  ListView.hh
-  main.cpp
-  View.cpp
-  View.hh
-  PreGame.cpp
-  PreGame.hh
-  Room.cpp
-  Room.hh
-  RoomListItem.cpp
-  RoomListItem.hh
-  Room.cpp
-  Room.hh
-  PlayerListItem.cpp
-  PlayerListItem.hh
-  Player.cpp
-  Player.hh
+list(APPEND MENU_SOURCES
+  ${CMAKE_CURRENT_LIST_DIR}/Button.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/ListItem.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/ListView.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/main.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/View.hh
+  ${CMAKE_CURRENT_LIST_DIR}/ListView.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/main.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/View.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/PreGame.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/Room.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/RoomListItem.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/Room.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/PlayerListItem.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/Player.cpp
 )
 
-target_link_libraries(preroll_client
-  system
-  ${SFML_LIBRARIES}
-)
+set(MENU ${MENU_HEADERS} ${MENU_SOURCES})

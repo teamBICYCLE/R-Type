@@ -4,6 +4,7 @@
 # include <string>
 # include <sstream>
 
+namespace gooey {
 class Player {
 public:
   Player(const std::string& infos);
@@ -14,5 +15,6 @@ public:
 private:
   int	_id;
 };
+}
 
 #endif // !_PLAYER_HH__
