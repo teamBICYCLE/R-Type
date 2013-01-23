@@ -69,11 +69,29 @@ server  : `notif gameend ROOM_ID`
                                                                            
 Serialisation                                                              
 =============                                                              
-                                                                           
-Joueur                                                                     
+                                                 
 ------                                                                     
 `id ip login`                                                              
                                                                            
 Room                                                                       
 ----                                                                       
 `id status playercount playermax`
+
+
+rep
+	cmd
+		start
+		end
+
+notif                  /
+	gamestart         /
+	gameend          /
+	player          /
+		join       /
+		ready     /
+		!ready   /
+		leave  \/
+err 	         /
+	msg        \/
+hi 				 /
+	id_player; \/
