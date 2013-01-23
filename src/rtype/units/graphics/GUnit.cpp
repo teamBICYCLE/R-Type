@@ -31,8 +31,8 @@ void GUnit::setAnimationManager(const AnimationM &m)
 
 	try {
 		_anim.reset((*(m.get()))["resources/sprites/" + path + ".bmp"]->generateAnimInfo());
-	} catch (cosnt std::invalid_argument &e) {
-		log::warn << e.what() << log::endl;
+	} catch (const std::invalid_argument &e) {
+		TBSystem::log::warn << e.what() << TBSystem::log::endl;
 	}
 }
 
@@ -44,12 +44,13 @@ void GUnit::setId(const uint32_t id)
 bool GUnit::playerAnimation(void) const
 {
 	bool valid = false;
+	std::string path = std::to_string(_id);
 	if (_dir.y > 0)
-		valid = _anim->setAnimationName("bot"); // recuperer l'id
+		valid = _anim->setAnimationName("bot" + path); // recuperer l'id
 	else if (_dir.y < 0)
-		valid = _anim->setAnimationName("top");
+		valid = _anim->setAnimationName("top" + path);
 	else
-		valid = _anim->setAnimationName("mid");	
+		valid = _anim->setAnimationName("mid" + path);
 	return valid;
 }
 
@@ -61,7 +62,7 @@ void GUnit::draw(sf::RenderTarget &target, sf::RenderStates states) const
 
 	if (_resourceId < PLAYERS_ID)
 		valid = GUnit::playerAnimation();
-	if (_resourceId == MISSILE_ID)
+	else if (_resourceId == MISSILE_ID)
 		valid = _anim->setAnimationName("mid");
 	else
 		valid = _anim->setAnimationName("mid");
