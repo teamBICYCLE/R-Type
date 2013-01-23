@@ -1,4 +1,5 @@
 #include <iostream>
+#include <system/log/Log.hh>
 #include "gamestate/GameState.hh"
 #include "GUnit.hh"
 
@@ -24,16 +25,15 @@ GUnit::~GUnit(void)
 
 void GUnit::setAnimationManager(const AnimationM &m)
 {
-	// player
 	std::string path = "player";
 	if (_resourceId > 3)
 		path = std::to_string(_resourceId);
 
-	//std::cout << "----> img ---> " << "resources/sprites/" + path + ".bmp" << std::endl;
-	_anim.reset((*(m.get()))["resources/sprites/" + path + ".bmp"]->generateAnimInfo());
-	// throw ---^
-	//_currentResourceId = _resourceId;
-  	//_anim.reset((*(a.get()))["resources/sprites/vaisseau.bmp"]->generateAnimInfo());
+	try {
+		_anim.reset((*(m.get()))["resources/sprites/" + path + ".bmp"]->generateAnimInfo());
+	} catch (cosnt std::invalid_argument &e) {
+		log::warn << e.what() << log::endl;
+	}
 }
 
 void GUnit::setId(const uint32_t id)
@@ -62,7 +62,7 @@ void GUnit::draw(sf::RenderTarget &target, sf::RenderStates states) const
 	if (_resourceId < PLAYERS_ID)
 		valid = GUnit::playerAnimation();
 	if (_resourceId == MISSILE_ID)
-		valid = _anim->setAnimationName("mid3");
+		valid = _anim->setAnimationName("mid");
 	else
 		valid = _anim->setAnimationName("mid");
 
@@ -75,7 +75,7 @@ void GUnit::draw(sf::RenderTarget &target, sf::RenderStates states) const
 
 		//target.draw(_circle, sf::Transform().translate(pos));
 		pos.x -= (sprite.getGlobalBounds().width / 2);
-		pos.y -= (sprite.getGlobalBounds().height / 4);  
+		pos.y -= (sprite.getGlobalBounds().height / 2);  
 		target.draw(_anim->getSprite(), sf::Transform().translate(pos));
 	}
 }
