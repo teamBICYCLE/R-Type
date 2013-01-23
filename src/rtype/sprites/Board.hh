@@ -23,7 +23,7 @@ namespace Sprite
 		virtual ~Board(void);
 
 		bool hasSpriteNamed(const std::string &name) const;
-		sf::Sprite &getSprite(const std::string &animName, std::chrono::milliseconds time);
+		sf::Sprite &getSprite(const std::string &animName, std::chrono::milliseconds time, int nbPlay);
 		AnimationInfos *generateAnimInfo(void);
 	private:
 		void refreshMap(const std::string &boardFile, const std::string &boardCfg);

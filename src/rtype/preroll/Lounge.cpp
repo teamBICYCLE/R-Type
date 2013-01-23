@@ -150,7 +150,7 @@ bool Lounge::createRoom(std::shared_ptr<
     log::debug << "MAIS iH " << err << log::endl;
     hasErr = true;
   }
-  if (_rooms.size() > 3) {
+  if (_rooms.size() > 50) {
     err = "err to much room already exist, try later\r\n";
     log::debug << "MAIS aH " << err << log::endl;
     hasErr = true;

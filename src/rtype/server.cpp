@@ -77,10 +77,12 @@ void  runServer(const std::vector<std::string>& clientsIps,
     if (accumulator < g_serverUpdateRate)//sleep to the next frame
       std::this_thread::sleep_for(g_serverUpdateRate - accumulator);
   }
-  while (nh.allReliablePacketsSent() == false) {
+  int i = 0;
+  while (nh.allReliablePacketsSent() == false && i < 10) {
     g.update(nh.getIncomingPackets());
     nh.trySendAll();
-    //std::this_thread::sleep_for(g_serverUpdateRate - accumulator);
+    std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    ++i;
   }
   log::debug << "BOUCLE INF !!!! ========" << log::endl;
 }

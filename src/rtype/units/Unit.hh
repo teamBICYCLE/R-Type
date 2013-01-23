@@ -72,6 +72,7 @@ class   Unit : public IPackable
         void    setCanShoot(bool b);
         void    setTimeToReload(const std::chrono::milliseconds &);
         void    setFireFrequence(const std::chrono::milliseconds &);
+        void    getHit(void);
 
     public:
         virtual size_t  pack(uint8_t *out, size_t outSize) const;

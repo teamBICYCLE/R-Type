@@ -50,3 +50,47 @@ client  : `leave ID`
 server  : `rep leave OK`                                                     
 OU                                                                           
 server  : `err reason`                                              
+                                                                             
+Notifications                                                                
+=============                                                              
+                                                                           
+Joueur                                                                     
+------                                                                     
+server  : `notif player join ROOM_ID PLAYERSERIALIZATION`                  
+server  : `notif player ready ROOM_ID PLAYERSERIALIZATION`                 
+server  : `notif player not_ready ROOM_ID PLAYERSERIALIZATION`             
+server  : `notif player leave ROOM_ID PLAYERSERIALIZATION`                 
+                                                                           
+Partie                                                                     
+------                                                                     
+server  : `notif gamestart ROOM_ID`                                        
+server  : `notif gameend ROOM_ID`                                          
+                                                                           
+Serialisation                                                              
+=============                                                              
+                                                 
+------                                                                     
+`id ip login`                                                              
+                                                                           
+Room                                                                       
+----                                                                       
+`id status playercount playermax`
+
+
+rep
+	cmd
+		start
+		end
+
+notif                  /
+	gamestart         /
+	gameend          /
+	player          /
+		join       /
+		ready     /
+		!ready   /
+		leave  \/
+err 	         /
+	msg        \/
+hi 				 /
+	id_player; \/
