@@ -42,6 +42,7 @@ static const int  g_maxFrameTime(25);
 void client(const std::string& ip, const std::string& port, int id,
             sf::RenderWindow& window)
 {
+  std::cout << "connect on " << ip << ":" << port << std::endl;
   network::sockets::Udp s;
   network::Addr server(ip, port, "UDP");
   Input::Config cfg;

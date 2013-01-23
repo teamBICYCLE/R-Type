@@ -80,4 +80,5 @@ void  runServer(const std::vector<std::string>& clientsIps,
   while (nh.allReliablePacketsSent() == false) {
     nh.trySendAll();
   }
+  log::debug << "BOUCLE INF !!!! ========" << log::endl;
 }
