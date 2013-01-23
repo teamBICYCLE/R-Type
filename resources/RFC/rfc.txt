@@ -23,7 +23,8 @@ Table of Contents
     3.	 Client commands. . . . . . . . . . . . . . . . . . . .  . .4
     4.	 Server notifications.. . . . . . . . . . . . . . . .. . . .5
     5	 Serialization specification. . . . . . . . . . .  . . . . .6
-
+    6	 In game udp protocol . . . . . . . . . . . . . . . . . . ..7
+ta[MAX_PACKET
 Epitech		      	   R-TYPE-PROTOCOL     	      	      	[Page 1]
 
 
@@ -42,7 +43,7 @@ RFC 1	  		       R-TYPE-Protocol		                Jan 2013
 
 	2.	  Server greeting
 
-		  When the a client is connected, the server MUST send to the client a greeting message with the folowing format :
+		  When the a client is connected, the server MUST send to the client a greeting message with the following format :
 		  	"hi $ID_CLIENT"
 		  	where $ID_CLIENT is the current id of the client on the server.
 
@@ -140,6 +141,37 @@ RFC 1	  		       R-TYPE-Protocol		                Jan 2013
     	ROOMSERIALIZATION
     	"$ID $STATUS $PLAYERCOUNT $PLAYERMAX"
     	 Where $ID is the room ID, $STATUS is the room Status, $PLAYERCOUNT is the number of goats, and $PLAYERMAX is the maximum number of player that the room can accept.
+
+
+Epitech 	      	   R-TYPE-PROTOCOL     	      	      	[Page 6]
+
+RFC 1	  		       R-TYPE-Protocol		                Jan 2013
+
+	8     In game UDP-protocol
+		During the game the client/server communication MUST use a UDP Protocol. Each packet has to have the following format :
+
+
+		1 Byte About the reliability of the packet, the value MUST be
+		       one if the client/server HAVE to acknowledge.
+		       0 Otherwise.
+
+		4 Bytes Designing an unique number to identify the packet.
+
+		1 Byte about the packet type, possible values are :
+			0 : position packet,
+			1 : input packet,
+			2 : death packet,
+			3 : acknowledge packet,
+			4 : end game packet.
+
+		4 Bytes About the player id
+
+		2 Bytes About the graphic id to draw
+
+		256 Bytes containing additional informations.
+
+		8 Bytes designing the size of the packet
+
 
 
 Epitech 	      	   R-TYPE-PROTOCOL     	      	      	[Page 6]

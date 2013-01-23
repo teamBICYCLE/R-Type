@@ -3,14 +3,14 @@
 using namespace Sprite;
 
 AnimationInfos::AnimationInfos(const Board &spriteBoard)
-: _spriteBoard(spriteBoard)
+: _spriteBoard(spriteBoard), _nbPlay(-1)
 {
 	
 }
 
 AnimationInfos::AnimationInfos(const AnimationInfos &other)
 : _currentAnim(other._currentAnim), _currentSpriteTime(other._currentSpriteTime),
-_spriteBoard(other._spriteBoard)
+_spriteBoard(other._spriteBoard), _nbPlay(other._nbPlay)
 {}
 
 AnimationInfos &AnimationInfos::operator=(const AnimationInfos &other)
@@ -19,6 +19,7 @@ AnimationInfos &AnimationInfos::operator=(const AnimationInfos &other)
 		_currentAnim = other._currentAnim;
 		_currentSpriteTime = other._currentSpriteTime;
 		_spriteBoard = other._spriteBoard;
+		_nbPlay = other._nbPlay;
 	}
 	return (*this);
 }
@@ -51,5 +52,10 @@ std::chrono::milliseconds AnimationInfos::getDurationAnimation(void)
 
 sf::Sprite &AnimationInfos::getSprite(void)
 {
-	return _spriteBoard.getSprite(_currentAnim, getDurationAnimation());
+	return _spriteBoard.getSprite(_currentAnim, getDurationAnimation(), _nbPlay);
+}
+
+void AnimationInfos::setPlayAnimNumber(int nbPlay)
+{
+	_nbPlay = nbPlay;
 }
