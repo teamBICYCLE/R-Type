@@ -67,7 +67,8 @@ void  ServerGameState::updateWithInput(const communication::Packet& packet)
 
 template<typename UnitType>
 void  ServerGameState::updateEntities(std::list<UnitType*>& entities,
-                                      std::function<bool(const Unit *unit)> collideFun)
+                                      std::function<bool(const Unit *unit)> collideFun,
+                                      std::function<void(Unit *unit)> fireFun)
 {
   for (auto entityIt = entities.begin(); entityIt != entities.end(); ) {
     if ((*entityIt)->isDead() == true) {//if entity is dead..
@@ -79,6 +80,7 @@ void  ServerGameState::updateEntities(std::list<UnitType*>& entities,
     }
     else {//entity alive
       (*entityIt)->move();
+      fireFun(*entityIt); 
       if ((*entityIt)->isOffScreen(GameState::WINDOW_WIDTH) == true ||
           collideFun(*entityIt) == true) {
         //std::cout << "Seting dead" << std::endl;
@@ -142,9 +144,22 @@ void  ServerGameState::updateWorld(void)
     return false;
   };
 
-  updateEntities<Missile>(_monsterMissiles, monsterMissileCollision);
-  updateEntities<Missile>(_playerMissiles, [] (const Unit*) -> bool {return false;});
-  updateEntities<Monster>(_enemies, monsterCollision);
+  std::function<void(Unit *)> noFire = [](Unit *u) -> void {
+    (void)u;
+  };
+
+  std::function<void(Unit *)> monsterFire = [this](Unit *u) -> void {
+    Missile *m = u->fire(this->_pool.get());
+    if (m)
+    {
+      //m->setDir(Vector2D(-1.f, 0));
+      _monsterMissiles.push_back(m);
+    }
+  };
+
+  updateEntities<Missile>(_monsterMissiles, monsterMissileCollision, noFire);
+  updateEntities<Missile>(_playerMissiles, [] (const Unit*) -> bool {return false;}, noFire);
+  updateEntities<Monster>(_enemies, monsterCollision, monsterFire);
   ++_turn;
   //for (auto enemyIt = _enemies.begin(); enemyIt != _enemies.end(); ) {
   //  if ((*enemyIt)->isDead() == true) {//if enemy is dead..

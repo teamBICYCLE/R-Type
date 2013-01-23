@@ -22,8 +22,8 @@ public:
 public:
   template<typename UnitType>
   void  updateEntities(std::list<UnitType*>& entities,
-                       std::function<bool(const Unit *unit)> collideFun/* =
-                       [](const Unit*) -> bool {return false;}*/);
+                       std::function<bool(const Unit *unit)> collideFun,
+                       std::function<void(Unit *unit)> fireFun);
 
 private:
   void  setPlayerDirection(uint32_t id, const Vector2D& dir);

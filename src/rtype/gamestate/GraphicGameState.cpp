@@ -101,7 +101,6 @@ void  GraphicGameState::updateWithDeath(const communication::Packet& packet)
     GUnit *entity = findEntityById(id);
 
     if (entity != nullptr) {
-      std::cout << "Entity with id=" << entity->getId() << " died" << std::endl;
       _others.remove(entity);
       _deadUnits.push_back(entity);
     }

@@ -135,11 +135,6 @@ bool  Unit::wereOthersNotifiedOfDeath(void) const
   return _othersNotifiedOfDeath;
 }
 
-// const std::string &Unit::getSpritePath(void) const
-// {
-//   return _spritePath;
-// }
-
 void  Unit::move(void)
 {
     _pos += _dir;
@@ -164,6 +159,7 @@ Missile *Unit::fire(UnitPool *pool)
     if (newMissile != nullptr) {
       newMissile->setPos(_pos + Vector2D(((_hitboxRadius * 2.f) / GameState::WINDOW_WIDTH), (_hitboxRadius / GameState::WINDOW_HEIGHT)));
       newMissile->setDir(Vector2D(_dir.x, 0.f));
+      newMissile->setMissileMoveStyle();
       _lastFire = now;
     }
   }

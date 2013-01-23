@@ -33,8 +33,8 @@ void  Missile::setMissileMoveStyle(void)
     Vector2D v;
 
     (void)pos;
-    v.x += (1.f / MISSILE_SPEED);
-    //v.y += (1.f / MISSILE_SPEED);
+    float dir = ((this->_dir.x >= 0.f) ? (1.f) : (-1.f));
+    v.x = (dir / MISSILE_SPEED);
     return v;
   };
 }

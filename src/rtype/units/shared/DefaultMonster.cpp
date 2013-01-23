@@ -30,6 +30,6 @@ extern "C"
 
 	int fireFrequence(void)
 	{
-		return 2;
+		return 2500;
 	}
 }
