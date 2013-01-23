@@ -24,7 +24,7 @@ Lounge::Lounge(std::shared_ptr<network::sockets::ITcpSocket>& serverSocket)
   _listener.addSocket(
                       serverSocket,
                       std::bind(&Lounge::acceptClient, this, _1),
-                      std::bind(std::plus<int>(), 0, 0)
+					  [](){}
                      );
 }
 

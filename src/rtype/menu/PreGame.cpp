@@ -14,7 +14,7 @@ PreGame::PreGame(const std::string &ip, const std::string &port)
  , _serverIp(ip)
  , _window(sf::VideoMode(GameState::WINDOW_WIDTH, GameState::WINDOW_HEIGHT),
            "SFML RType")
- , _menu(resourcesPath + "/menu_background.jpg", _window.getSize(),
+ , _menu(resourcesPath + "/menu_background.png", _window.getSize(),
        sf::Vector2f(500.0,50.0))
 {
   using namespace std::placeholders;

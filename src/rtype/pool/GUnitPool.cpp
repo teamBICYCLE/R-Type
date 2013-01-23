@@ -16,16 +16,3 @@ GUnitPool::~GUnitPool(void)
 {
 
 }
-
-// GUnitPool *GUnitPool::getInstance(void)
-// {
-// 	if (!_instance)
-// 		_instance = new GUnitPool();
-// 	return _instance;
-// }
-
-// void	GUnitPool::deleteInstance(void)
-// {
-// 	delete _instance;
-// 	_instance = NULL;
-// }

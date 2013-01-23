@@ -16,7 +16,7 @@
 
 # define	PLAYER_NB	4
 # define	MONSTER_NB	100
-# define	ROCKET_NB	350
+# define	ROCKET_NB	250
 
 
 class UnitPool
@@ -42,14 +42,15 @@ public:
 		auto it = _collection.find(type);
 		if (it != _collection.end())
 		{
-			T *ptr = NULL;
+			T *ptr = nullptr;
 			if (!_collection[type].empty())
 			{
 				ptr = dynamic_cast<T *>(_collection[type].front());
 				_collection[type].pop_front();
 			}
-			else
+			else {
 				ptr = _factory->create<T>();
+			}
 			ptr->setId(_currentId++);
 			return ptr;
 		}
