@@ -3,15 +3,19 @@
 Missile::Missile(int id, const Vector2D& pos, const Vector2D& dir)
   : Monster(id, pos, dir)
   , MISSILE_SPEED(100.f)
+  //, _resourceId(5)
 {
   setMissileMoveStyle();
+  Unit::setResourceId(5);
 }
 
 Missile::Missile(void)
 	: Monster()
   , MISSILE_SPEED(100.f)
+  //, _resourceId(5)
 {	
   setMissileMoveStyle();
+  Unit::setResourceId(5);
 }
 
 Missile::~Missile(void)
@@ -29,8 +33,8 @@ void  Missile::setMissileMoveStyle(void)
     Vector2D v;
 
     (void)pos;
-    v.x += (1.f / MISSILE_SPEED);
-    //v.y += (1.f / MISSILE_SPEED);
+    float dir = ((this->_dir.x >= 0.f) ? (1.f) : (-1.f));
+    v.x = (dir / MISSILE_SPEED);
     return v;
   };
 }

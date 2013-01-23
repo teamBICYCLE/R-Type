@@ -43,10 +43,6 @@ void GPlayer::setId(const uint32_t id)
 	}
 }
 
-const sf::Drawable *GPlayer::render(void) const
-{
-}
-
 Unit *GPlayer::clone(void)
 {
 	return (new GPlayer(*this));

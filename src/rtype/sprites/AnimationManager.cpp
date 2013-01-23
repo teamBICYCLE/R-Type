@@ -62,7 +62,7 @@ bool AnimationManager::findAssociatedFile(std::vector<std::string> &files)
 
 	while ((cfgFile = findCfgFile(files)) != files.end()) {
 		std::vector<std::string>::iterator imgFile = findAssociatedImg(files, *cfgFile);
-	
+
 		if (imgFile != files.end()) {
 			try {
 				if (!addSource(*imgFile, *cfgFile)) {

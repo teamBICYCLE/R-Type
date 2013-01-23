@@ -17,13 +17,16 @@ public:
 public:
 	virtual void    move(void);
 	void 	setMoveStyle(const moveStyle &);
-  virtual bool  isOffScreen(const float screenWidth) const;
+	bool 	isBoss(void);
+	void    setBoss(bool v);
+  	virtual bool  isOffScreen(const float screenWidth) const;
 
 public:
 	Monster *clone(void);
 
 protected:
 	moveStyle _movefct;
+	bool      _boss;
 };
 
 #endif /*!_MONSTER_HH_*/

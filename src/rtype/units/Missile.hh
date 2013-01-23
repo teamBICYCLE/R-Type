@@ -15,7 +15,7 @@ public:
 	Missile *clone(void);
   virtual bool  isOffScreen(const float screenWidth) const;
 
-private:
+public:
   void  setMissileMoveStyle(void);
 
 private:

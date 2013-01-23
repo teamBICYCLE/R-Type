@@ -16,9 +16,7 @@ public:
 	virtual ~GPlayer(void);
 
 public:
-	//using Player::move;
 	virtual void move(void);
-	virtual const sf::Drawable *render(void) const;
 	Unit *clone(void);
 
 public:

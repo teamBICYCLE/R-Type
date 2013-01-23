@@ -1,0 +1,145 @@
+Epitech Group   		      				            Team Bicycle
+Request for Comments : 	        	      	       	         Epitech
+Category : R-TYPE-Protocol        			                Jan 2013
+RFC : 1
+
+			             R-TYPE PROTOCOL
+
+Status of this Memo
+
+   This memo provides information for the Internet community.  This
+   memo specify an Internet standard communication protocol for all
+   R-TYPE clients and servers.
+   Distribution of this memo is unlimited.
+
+Copyright Notice
+
+   Copyright (C) Epitech.  All Rights Reserved.
+
+Table of Contents
+
+    1.	 Introduction . . . . . . . . . . . . . . . . . . . . . . ..2
+    2.	 Server greeting. . . . . . . . . . . . . . . . . . . . . ..3
+    3.	 Client commands. . . . . . . . . . . . . . . . . . . .  . .4
+    4.	 Server notifications.. . . . . . . . . . . . . . . .. . . .5
+    5	 Serialization specification. . . . . . . . . . .  . . . . .6
+
+Epitech		      	   R-TYPE-PROTOCOL     	      	      	[Page 1]
+
+
+
+RFC 1	  		   R-TYPE-Protocol		                    Jan 2013
+
+    1.    Introduction
+
+    	  The R-TYPE-Protocol provides information about the
+ 	  communication between clients and R-TYPE pre-game's server.
+ 	  The R-TYPE pre-game protocol is a TCP protocol.
+
+Epitech 	      	   R-TYPE-PROTOCOL     	      	      	[Page 2]
+
+RFC 1	  		       R-TYPE-Protocol		                Jan 2013
+
+	2.	  Server greeting
+
+		  When the a client is connected, the server MUST send to the client a greeting message with the folowing format :
+		  	"hi $ID_CLIENT"
+		  	where $ID_CLIENT is the current id of the client on the server.
+
+
+Epitech		      	   R-TYPE-PROTOCOL     	      	      	[Page 3]
+
+RFC 1	  		       R-TYPE-Protocol		                Jan 2013
+
+    3.	 Client commands
+
+ 		The client MAY ask to a R-TYPE server informations about rooms. R-TYPE server MUST handle the following commands :
+
+ 		"roomlist"
+ 			Ask to the server a list of available rooms.
+ 			Server response MUST have the following format :
+ 			
+ 			server  : `rep roomlist start`                                               
+			server  : `rep roomlist room ROOMSERIALIZATION`                              
+			server  : `...`                                                              
+			server  : `rep roomlist room ROOMSERIALIZATION`                              
+			server  : `rep roomlist end`
+			
+
+		"room_details $ID" (where $ID is a room id)
+ 			Ask details about a specified room
+
+ 		"join $ID" (where $ID is a room id)
+ 			Ask server to join a specified room.
+ 			Server response MUST have the following format :
+
+ 			client  : `room_details ID`                                              
+			client  : `rep room_details ID tart` 
+			server  : `rep room_details ID room ROOMSERIALIZATION`
+			server  : `rep room_details ID player status PLAYERSERIALIZATION`
+			server  : `rep room_details ID player ...` 
+			server  : `rep room_details ID end`
+
+ 		"create"
+ 			Ask server to create a new room. The server MUST
+ 			reply to this request with a unique valid room id or
+ 			with an adapted error message.
+
+ 		"leave $ID" (where $ID is a room id)
+ 			Notify the server that the client leaved the room.
+
+Epitech		      	   R-TYPE-PROTOCOL     	      	      	[Page 4]
+
+RFC 1	  		   R-TYPE-Protocol		   Jan 2013
+
+    4	 Server notifications
+    	R-TYPE client MUST be able to handle at anytime the following notifications :
+
+    	"notif gamestart $ID" (where $ID is a room id)
+    		The client is notified that a game start in the $ID room.
+
+    	"notif gameend $ID" (where $ID is a room id)
+    		The client is notified that a game has ended in the $ID
+    		room.
+
+    	"notif player join $ID $PLAYER"
+    		(where $ID is a room id and $PLAYER is a player 
+    		serialization)
+    		The client is notified that a player has join the $ID 
+    		room.
+
+    	"notif player ready $ID $PLAYER"
+    		(where $ID is a room id and $PLAYER is a player 
+    		serialization)
+    		The client is notified that a player is ready to start
+    		the game
+
+    	"notif player not_ready $ID $PLAYER"
+    		(where $ID is a room id and $PLAYER is a player 
+    		serialization)
+    		The client is notified that a player is not ready
+    		anymore to start the game.
+
+    	"notif player leave $ID $PLAYER"
+    		(where $ID is a room id and $PLAYER is a player 
+    		serialization)
+    		The client is notified that a player has leave the $ID
+    		room.
+
+
+Epitech 	      	   R-TYPE-PROTOCOL     	      	      	[Page 5]
+
+RFC 1	  		       R-TYPE-Protocol		                Jan 2013
+
+    7	 Serialization specification
+    	Here is presented the format of serialization that both client and server MUST adopt.
+
+    	PLAYERSERIALIZATION
+    	"$ID $IP $LOGIN" where $ID is the client ID, $IP is the client IP, and $LOGIN is the client login.
+
+    	ROOMSERIALIZATION
+    	"$ID $STATUS $PLAYERCOUNT $PLAYERMAX"
+    	 Where $ID is the room ID, $STATUS is the room Status, $PLAYERCOUNT is the number of goats, and $PLAYERMAX is the maximum number of player that the room can accept.
+
+
+Epitech 	      	   R-TYPE-PROTOCOL     	      	      	[Page 6]

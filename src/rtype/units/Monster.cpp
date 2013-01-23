@@ -2,12 +2,12 @@
 #include "Monster.hh"
 
 Monster::Monster(int id, const Vector2D& pos, const Vector2D& dir)
-    : Unit(id, pos, dir)
+    : Unit(id, pos, dir), _boss(false)
 {
 }
 
 Monster::Monster(void)
-	: Unit()
+	: Unit(), _boss(false)
 {	
 }
 
@@ -19,6 +19,16 @@ Monster::~Monster(void)
 void Monster::setMoveStyle(const moveStyle &m)
 {
 	_movefct = m;
+}
+
+bool Monster::isBoss(void)
+{
+	return _boss;
+}
+
+void Monster::setBoss(bool v)
+{
+	_boss = v;
 }
 
 Monster *Monster::clone(void)

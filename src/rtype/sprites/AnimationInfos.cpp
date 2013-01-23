@@ -30,7 +30,10 @@ AnimationInfos::~AnimationInfos(void)
 bool AnimationInfos::setAnimationName(const std::string &animName)
 {
 	if (_spriteBoard.hasSpriteNamed(animName)) {
-		_currentAnim = animName;
+		if (_currentAnim != animName) {
+			_currentAnim = animName;
+			startAnimation();
+		}
 		return (true);
 	}
 	return (false);

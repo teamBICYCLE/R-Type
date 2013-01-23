@@ -4,6 +4,8 @@
 # include "GameState.hh"
 # include "PatternManager.hh"	
 
+# define  BOSS_SPAWN 5000
+
 class ServerGameState : public GameState {
 public:
   ServerGameState(const std::shared_ptr<UnitPool> &, const std::vector<Player*>& v);
@@ -20,8 +22,8 @@ public:
 public:
   template<typename UnitType>
   void  updateEntities(std::list<UnitType*>& entities,
-                       std::function<bool(const Unit *unit)> collideFun/* =
-                       [](const Unit*) -> bool {return false;}*/);
+                       std::function<bool(const Unit *unit)> collideFun,
+                       std::function<void(Unit *unit)> fireFun);
 
 private:
   void  setPlayerDirection(uint32_t id, const Vector2D& dir);
@@ -42,6 +44,8 @@ private:
   std::chrono::time_point<std::chrono::system_clock> _lastMonsterSpawn;
   const std::chrono::seconds  _levelIncreaseTick;
   std::chrono::milliseconds   _monsterSpawnRate;
+  unsigned int _turn;
+  bool _bossAppear;
 };
 
 #endif /* !_SERVERGAMESTATE_H__ */

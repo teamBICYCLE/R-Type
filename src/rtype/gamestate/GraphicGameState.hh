@@ -31,6 +31,7 @@ public:
 public:
   void  updateWithPosition  (const communication::Packet& packet);
   void  updateWithDeath     (const communication::Packet& packet);
+  void  endGame             (const communication::Packet& packet);
   void  simulate            (const Input::Data& input);
   void  animationUpdate     (void);
 
@@ -48,6 +49,7 @@ private:
   Vector2D    _backgroundDirection;
   std::shared_ptr<GPlayer>  _player;
   std::list<GUnit*>         _others;
+  std::list<GUnit*>         _deadUnits;
   std::shared_ptr<Sprite::AnimationManager>  _animationManager;
 };
 

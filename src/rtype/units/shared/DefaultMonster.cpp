@@ -10,7 +10,7 @@ extern "C"
 
 	unsigned int getResourceId(void)
 	{
-		return 1;
+		return 6;
 	}
 
 	unsigned int getPv(void)
@@ -30,6 +30,6 @@ extern "C"
 
 	int fireFrequence(void)
 	{
-		return 2;
+		return 2500;
 	}
 }

@@ -12,7 +12,6 @@ Pattern::Pattern(const std::string &path)
 
 void Pattern::loadFile(const std::string &path)
 {
-	std::cout << "Pattern loadFile -> " << path << std::endl;
 	using namespace TBSystem;
 	std::ifstream ifs(path);
     std::string content;
@@ -41,7 +40,7 @@ void Pattern::loadFile(const std::string &path)
     	_valid = true;
     }
     else
-    	std::cout << "not valid !" << std::endl;
+    	log::warn << "Not valid pattern file !" << log::endl;
 
 }
 
@@ -58,7 +57,7 @@ void Pattern::loadDrawing(const std::string &data)
     std::vector<std::string> rows;
 
     // get defined Char
-    for (int i = 0; i != _definition->rowCount(); ++i)
+    for (unsigned int i = 0; i != _definition->rowCount(); ++i)
         definedChar.append((*_definition)[i]["char"]);
 
     // get Data line by line

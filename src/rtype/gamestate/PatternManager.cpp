@@ -50,7 +50,6 @@ void PatternManager::loadShared(void)
 
 void PatternManager::checkShared(const std::string &file)
 {
-	std::cout << "load shared " << file << std::endl;
 	DLoader loader(file);
 	std::shared_ptr<MonsterDefinition> def = std::shared_ptr<MonsterDefinition>(new MonsterDefinition());
 	std::function<const char*(void)>n = loader.load<const char*(void)>("getName");
@@ -95,38 +94,41 @@ std::list<Monster*> PatternManager::get(const std::shared_ptr<UnitPool> &pool) c
 {
 	using namespace TBSystem;
 
-	int random = (std::rand() % _patterns.size());
-	std::list<std::shared_ptr<Pattern::Element>> elements;
-	elements = _patterns[random]->getPatternElements();
 	std::list<Monster*> ret;
-
-	for (auto item  = elements.begin(); item != elements.end(); ++item)
+	if (_patterns.size())
 	{
-		auto sharedm = _monsters.find((*item)->type);
-		if (sharedm != _monsters.end())
-		{
-			std::shared_ptr<MonsterDefinition> sharedDef = sharedm->second;
-			Monster *monster = pool->get<Monster>();
-			if (monster)
-			{
-				// load definition in monster
-				monster->setResourceId(sharedDef->resourceId);
-				monster->setPv(sharedDef->pv);
-				monster->setMunition(sharedDef->munition);
-				monster->setTimeToReload(std::chrono::milliseconds(sharedDef->timeToReload));
-				monster->setFireFrequence(std::chrono::milliseconds(sharedDef->fireFrenquence));
+		int random = (std::rand() % _patterns.size());
+		std::list<std::shared_ptr<Pattern::Element>> elements;
+		elements = _patterns[random]->getPatternElements();
 
-				// load pattern informations in monster
-				monster->setPos(Vector2D((*item)->posx, (*item)->posy));
-				auto style = _moveStyles.find((*item)->moveStyle);
-				if (style == _moveStyles.end())
-					style = _moveStyles.find("linear");
-				monster->setMoveStyle(style->second);
-				ret.push_back(monster);
+		for (auto item  = elements.begin(); item != elements.end(); ++item)
+		{
+			auto sharedm = _monsters.find((*item)->type);
+			if (sharedm != _monsters.end())
+			{
+				std::shared_ptr<MonsterDefinition> sharedDef = sharedm->second;
+				Monster *monster = pool->get<Monster>();
+				if (monster)
+				{
+					// load definition in monster
+					monster->setResourceId(sharedDef->resourceId);
+					monster->setPv(sharedDef->pv);
+					monster->setMunition(sharedDef->munition);
+					monster->setTimeToReload(std::chrono::milliseconds(sharedDef->timeToReload));
+					monster->setFireFrequence(std::chrono::milliseconds(sharedDef->fireFrenquence));
+
+					// load pattern informations in monster
+					monster->setPos(Vector2D((*item)->posx, (*item)->posy));
+					auto style = _moveStyles.find((*item)->moveStyle);
+					if (style == _moveStyles.end())
+						style = _moveStyles.find("linear");
+					monster->setMoveStyle(style->second);
+					ret.push_back(monster);
+				}
 			}
+			else
+				log::warn << "Undefined reference to Monster " << (*item)->type << " (passed)" << log::endl;
 		}
-		else
-			log::warn << "Undefined reference to Monster " << (*item)->type << " (passed)" << log::endl;
 	}
 	return ret;
 }
