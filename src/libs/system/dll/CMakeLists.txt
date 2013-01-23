@@ -17,6 +17,7 @@ endif()
 
 list(APPEND ${PROJECT_NAME}_HEADERS
     ${CMAKE_CURRENT_LIST_DIR}/DLoader.hh
+    ${CMAKE_CURRENT_LIST_DIR}/DllExportMacros.h
 )
 
 if(${UNIX})

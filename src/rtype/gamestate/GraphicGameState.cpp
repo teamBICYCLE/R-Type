@@ -42,7 +42,7 @@ GraphicGameState::GraphicGameState(const std::shared_ptr<UnitPool> &p,
    _updateMap[communication::Packet::Type::CLIENT_DISCONNECTED] =
       std::bind(&GraphicGameState::clientDisconnected, this, _1);
 
-  _backgroundTexture->loadFromFile(resourcesPath + "/background.jpg");
+  _backgroundTexture->loadFromFile(resourcesPath + "/background.png");
   _backgroundSprite1->setTexture(*_backgroundTexture);
   _backgroundSprite2->setTexture(*_backgroundTexture);
 }

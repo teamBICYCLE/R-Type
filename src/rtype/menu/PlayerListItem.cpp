@@ -3,8 +3,11 @@
 PlayerListItem::PlayerListItem(const sf::Vector2f& dimension, const std::string& id,
 			       const std::string& status, const sf::Color& color, 
 			       const std::string& texture)
-  : ListItem(dimension, "#"+id, texture), _status(status), _color(sf::Vector2f(20,50))
+  : ListItem(dimension, "#"+id, texture), _color(sf::Vector2f(20,50))
 {
+	sf::String statusString(status);
+
+	_status.setString(statusString);
   _status.setPosition(sf::Vector2f(0,0));
   _status.setCharacterSize(14);
   _color.setPosition(sf::Vector2f(0,0));

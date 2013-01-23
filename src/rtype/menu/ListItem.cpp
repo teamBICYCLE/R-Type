@@ -1,8 +1,11 @@
 #include "ListItem.hh"
 
 ListItem::ListItem(const sf::Vector2f& dimension, const std::string& label, const std::string& texture)
-  : Button(dimension, sf::Vector2f(0,0), texture), _label(sf::String(label)), _id(0)
+  : Button(dimension, sf::Vector2f(0,0), texture), _id(0)
 {
+	sf::String labelString(label);
+
+	_label.setString(labelString);
   _label.setPosition(sf::Vector2f(0,0));
   _label.setCharacterSize(14);
 }

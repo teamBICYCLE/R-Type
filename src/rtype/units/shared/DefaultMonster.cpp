@@ -1,31 +1,33 @@
+#include <system/dll/DllExportMacros.h>
+
 extern "C" 
 {
-	const char *getName(void)
+	const char DLLEXPORT *getName(void)
 	{
 		return "defaultMonster";
 	}
 
-	unsigned int getResourceId(void)
+	unsigned int DLLEXPORT getResourceId(void)
 	{
 		return 6;
 	}
 
-	unsigned int getPv(void)
+	unsigned int DLLEXPORT getPv(void)
 	{
 		return 1;
 	}
 
-	unsigned int getMunition(void)
+	unsigned int DLLEXPORT getMunition(void)
 	{
 		return 10;
 	}
 
-	int timeToReload(void)
+	int DLLEXPORT timeToReload(void)
 	{
 		return 50;
 	}
 
-	int fireFrequence(void)
+	int DLLEXPORT fireFrequence(void)
 	{
 		return 2500;
 	}
