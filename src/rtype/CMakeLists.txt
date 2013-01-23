@@ -23,6 +23,8 @@ include("gamestate/CMakeLists.txt")
 include("network/CMakeLists.txt")
 include("sprites/CMakeLists.txt")
 include("pool/CMakeLists.txt")
+include("menu/CMakeLists.txt")
+include("preroll/CMakeLists.txt")
 
 add_executable(client
     ${GUI_TYPE} # Prevent windows from spawning a terminal window
@@ -33,6 +35,7 @@ add_executable(client
     ${CLIENT_GAMESTATE}
     ${SPRITES}
     ${CLIENT_POOL}
+    ${MENU}
     client.cpp
 )
 
@@ -42,6 +45,7 @@ add_executable(server
     ${SERVER_NETWORK}
     ${SERVER_GAMESTATE}
     ${SERVER_POOL}
+    ${LOUNGE}
     input/Data.hh
     input/Data.cpp
     server.cpp
@@ -57,8 +61,3 @@ target_link_libraries(server
     csv-parser
     system
 )
-
-# temporary
-
-add_subdirectory(preroll)
-add_subdirectory(menu)
