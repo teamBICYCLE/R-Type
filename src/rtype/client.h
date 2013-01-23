@@ -12,7 +12,9 @@
 
 #include <string>
 
-class sf::RenderWindow;
+namespace sf {
+class RenderWindow;
+}
 
 void client(const std::string& ip, const std::string& port, int id,
             sf::RenderWindow& window);

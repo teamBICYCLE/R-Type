@@ -13,12 +13,12 @@ Music::Music()
 {
   auto pair = std::make_pair("menu", std::shared_ptr<sf::Music>(new sf::Music));
   _musics.insert(pair);
-  _musics["menu"]->openFromFile("./resources/audio/menu.flac");
+  _musics["menu"]->openFromFile("./resources/audio/menu.ogg");
   _musics["menu"]->setLoop(true);
 
   pair = std::make_pair("game", std::shared_ptr<sf::Music>(new sf::Music));
   _musics.insert(pair);
-  _musics["game"]->openFromFile("./resources/audio/game.flac");
+  _musics["game"]->openFromFile("./resources/audio/game.ogg");
   _musics["game"]->setLoop(true);
 }
 
