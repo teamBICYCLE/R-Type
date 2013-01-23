@@ -3,6 +3,8 @@
 #include "gamestate/GameState.hh"
 #include "GUnit.hh"
 
+extern std::string resourcesPath;
+
 GUnit::GUnit(int id, const Vector2D& pos, const Vector2D& dir)
 	: Unit(id, pos, dir)
   	, sf::Drawable()
@@ -30,7 +32,7 @@ void GUnit::setAnimationManager(const AnimationM &m)
 		path = std::to_string(_resourceId);
 
 	try {
-		_anim.reset((*(m.get()))["resources/sprites/" + path + ".bmp"]->generateAnimInfo());
+		_anim.reset((*(m.get()))[resourcesPath + "/sprites/" + path + ".bmp"]->generateAnimInfo());
 	} catch (const std::invalid_argument &e) {
 		TBSystem::log::warn << e.what() << TBSystem::log::endl;
 	}

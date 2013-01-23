@@ -5,6 +5,8 @@
 #include "system/log/Log.hh"
 #include "client.h"
 
+extern std::string resourcesPath;
+
 PreGame::PreGame(const std::string &ip, const std::string &port)
  : _gameIsLaunched(false)
  , _currentRoom(-1)
@@ -12,7 +14,7 @@ PreGame::PreGame(const std::string &ip, const std::string &port)
  , _serverIp(ip)
  , _window(sf::VideoMode(GameState::WINDOW_WIDTH, GameState::WINDOW_HEIGHT),
            "SFML RType")
- , _menu("./resources/menu_background.jpg", _window.getSize(),
+ , _menu(resourcesPath + "/menu_background.jpg", _window.getSize(),
        sf::Vector2f(500.0,50.0))
 {
   using namespace std::placeholders;
@@ -302,7 +304,7 @@ void PreGame::updateHallway(void)
   if (_state == eHALLWAY) {
     _menu.setButtonOne(sf::Vector2f(100.0f, 50.0f),
                        std::bind(&PreGame::createRoom, this),
-                       "./resources/create_button.png");
+                       resourcesPath + "/create_button.png");
     _menu.unsetButtonTwo();
     _menu.update(_rooms);
     _menu.setGlobalCallback(std::bind(&PreGame::tryJoinRoom, this, _1));
@@ -314,10 +316,10 @@ void PreGame::updateRoom(void)
   if (_state == eROOM) {
     _menu.setButtonOne(sf::Vector2f(100.0f, 50.0f),
                        std::bind(&PreGame::startGame, this),
-                       "./resources/play_button.png");
+                       resourcesPath + "/play_button.png");
     _menu.setButtonTwo(sf::Vector2f(100.0f, 50.0f),
                        std::bind(&PreGame::leaveRoom, this),
-                       "./resources/leave_button.png");
+                       resourcesPath + "/leave_button.png");
     _menu.update(_players);
   }
 }

@@ -24,6 +24,7 @@ using namespace std;
 using namespace TBSystem;
 
 Sound sounds;
+extern std::string resourcesPath;
 
 //static const std::chrono::milliseconds g_frameDelta(1000 / 60);
 //static const std::chrono::milliseconds g_maxFrameTime(25);
@@ -55,7 +56,7 @@ void client(const std::string& ip, const std::string& port, int id,
 
   std::shared_ptr<UnitPool> pool = std::shared_ptr<UnitPool>(new GUnitPool());
   std::shared_ptr<Sprite::AnimationManager> animationM = std::shared_ptr<Sprite::AnimationManager>(new Sprite::AnimationManager());
-  animationM->addSourceFolder("resources/sprites");
+  animationM->addSourceFolder(resourcesPath + "/sprites");
 
   GPlayer *player = new GPlayer(id, Vector2D(0.1f, 0.1f), Vector2D(0.f, 0.f));
   player->setAnimationManager(animationM);

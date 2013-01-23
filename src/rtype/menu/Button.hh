@@ -5,7 +5,9 @@
 # include <functional>
 # include <SFML/Graphics.hpp>
 
-# define DEFAULT_BUTTON_TEXTURE "./resources/default_button.png"
+extern std::string resourcesPath;
+
+# define DEFAULT_BUTTON_TEXTURE (resourcesPath + "/default_button.png")
 
 class Button {
 protected:

@@ -11,7 +11,9 @@
 # include <SFML/Graphics.hpp>
 # include <functional>
 
-# define LOGO_PATH "./resources/logo.png"
+extern std::string resourcesPath;
+
+# define LOGO_PATH (resourcesPath + "/logo.png")
 
 class View {
 private:

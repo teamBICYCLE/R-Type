@@ -11,8 +11,15 @@
 #include <iostream>
 #include "PreGame.hh"
 
+std::string resourcesPath;
+
 int	main(int argc, char *argv[])
 {
+  if (argc < 4) {
+    std::cerr << "Usage: ./client <ip> <port> <resources_path>" << std::endl;
+    return EXIT_FAILURE;
+  }
+  resourcesPath = argv[3];
   try {
     PreGame  pregame(argv[1], argv[2]);
 

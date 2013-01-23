@@ -6,7 +6,9 @@
 # include <SFML/Graphics/Text.hpp>
 # include "Button.hh"
 
-# define DEFAULT_LISTITEM_TEXTURE "./resources/default_listitem.png"
+extern std::string resourcesPath;
+
+# define DEFAULT_LISTITEM_TEXTURE (resourcesPath + "/default_listitem.png")
 
 class ListItem : public Button {
 protected:

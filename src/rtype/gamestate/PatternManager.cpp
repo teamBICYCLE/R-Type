@@ -8,6 +8,8 @@
 #include "pool/UnitPool.hh"
 #include "PatternManager.hh"
 
+extern std::string resourcesPath;
+
 PatternManager::PatternManager(void)
 {
 	std::srand(std::time(0));
@@ -24,7 +26,7 @@ PatternManager::~PatternManager(void)
 void PatternManager::load(void)
 {
 	using namespace TBSystem;
-	std::vector<std::string> files = ExploreDir::run(PATTERNS_PATH);
+	std::vector<std::string> files = ExploreDir::run(resourcesPath + "/patterns");
 	if (files.size() == 0)
 		log::warn << "No patterns defined for generate random Monsters" << log::endl;
 	for (auto it : files)
@@ -35,7 +37,7 @@ void PatternManager::loadShared(void)
 {
 	using namespace TBSystem;
 
-	std::vector<std::string> files = ExploreDir::run(SHARED_PATH, SHARED_EXT);
+	std::vector<std::string> files = ExploreDir::run(resourcesPath + "/shared", SHARED_EXT);
 	if (files.size() == 0)
 		log::warn << "No shared libraries for Monster" << log::endl;
 	for (auto it : files)

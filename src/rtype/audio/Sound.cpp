@@ -10,10 +10,12 @@
 #include "Sound.hh"
 #include <iostream>
 
+extern std::string resourcesPath;
+
 Sound::Sound()
 {
-  _buffers["shoot"].loadFromFile("./resources/audio/samples/shoot.wav");
-  _buffers["boom"].loadFromFile("./resources/audio/samples/boom.ogg");
+  _buffers["shoot"].loadFromFile(resourcesPath + "/audio/samples/shoot.wav");
+  _buffers["boom"].loadFromFile(resourcesPath + "/audio/samples/boom.ogg");
 }
 
 Sound::~Sound()

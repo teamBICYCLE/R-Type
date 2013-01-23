@@ -12,10 +12,6 @@
 # include "pool/UnitPool.hh"
 # include "utilities/Vector2D.hh"
 
-# define RESOURCES_PATH	"resources/"
-# define PATTERNS_PATH	RESOURCES_PATH "patterns"
-# define SHARED_PATH	RESOURCES_PATH "shared"
-# define SPRITE_PATH	RESOURCES_PATH "sprites/monster/"
 # define MONSTER_SPEED	500.f
 
 # ifdef     __gnu_linux__
