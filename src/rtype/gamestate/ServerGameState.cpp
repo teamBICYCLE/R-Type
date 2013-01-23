@@ -81,10 +81,11 @@ void  ServerGameState::updateEntities(std::list<UnitType*>& entities,
     else {//entity alive
       (*entityIt)->move();
       fireFun(*entityIt); 
-      if ((*entityIt)->isOffScreen(GameState::WINDOW_WIDTH) == true ||
-          collideFun(*entityIt) == true) {
-        //std::cout << "Seting dead" << std::endl;
+      if ((*entityIt)->isOffScreen(GameState::WINDOW_WIDTH) == true) {
         (*entityIt)->setDead(true);
+      }
+      if (collideFun(*entityIt) == true) {
+        (*entityIt)->getHit();
       }
       ++entityIt;
     }
@@ -118,7 +119,7 @@ void  ServerGameState::updateWorld(void)
     for (auto& playerMissile : _playerMissiles) {
       //check monster against player missiles
       if (playerMissile->collideWith(*monster) == true) {
-        playerMissile->setDead(true);
+        playerMissile->getHit();
         return true;
       }
     }
@@ -127,7 +128,7 @@ void  ServerGameState::updateWorld(void)
       //check monster against players. Monsters do not die upon collision
       if (player->isDead() == false &&
           player->collideWith(*monster) == true) {
-        player->setDead(true);
+        player->getHit();
       }
       if (player->isDead() == false) {
         allDead = false;
@@ -144,7 +145,7 @@ void  ServerGameState::updateWorld(void)
       //check monster missiles against players
       if (player->isDead() == false &&
           player->collideWith(*monsterMissile) == true) {
-        player->setDead(true);
+        player->getHit();
         return true;
       }
     }
