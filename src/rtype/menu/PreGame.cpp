@@ -166,6 +166,7 @@ void PreGame::handleGamestart(const std::string& id)
   _musicPlayer.play("game");
   _state = eHALLWAY;
   client(_serverIp, std::to_string(port), intid, _window);
+  _musicPlayer.play("menu");
   updateHallway();
   requestRoomlist();
 }

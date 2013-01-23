@@ -13,9 +13,9 @@
 
 int	main(int argc, char *argv[])
 {
-  PreGame  pregame(argv[1], argv[2]);
-
   try {
+    PreGame  pregame(argv[1], argv[2]);
+
     pregame.run();
   }
   catch (std::exception& e) {
